@@ -16,8 +16,6 @@ const Aside = styled('aside')(({ theme }) => ({
   },
 }));
 
-// @TODO Do not hardcode this.
-// @TODO Create menu server side and pass down from page props.
 const items = [
   {
     href: '/',

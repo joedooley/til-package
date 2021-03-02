@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { app as constants } from '@util/constants';
 import usePageTitle from '@hooks/usePageTitle';
-import Header from '../header/component';
+import Header from '../header';
 import Sidebar from '../sidebar';
 import { SkipNavContent } from '@components/core/skip-nav';
 

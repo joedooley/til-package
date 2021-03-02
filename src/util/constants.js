@@ -18,7 +18,7 @@ export const propTypes = {
 
 export const app = {
   meta: {
-    title: 'Cooking School | Central Market',
-    description: 'Central Market Cooking School',
+    title: 'TIL | Today I Learned',
+    description: 'A simple solution to share knowledge within your organization or community.',
   },
 };
