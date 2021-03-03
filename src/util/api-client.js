@@ -11,7 +11,7 @@ export function client(endpoint, { body, ...customConfig } = {}) {
     config.body = JSON.stringify(body);
   }
 
-  return fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/${endpoint}`, config).then(async response => {
+  return fetch(`api/${endpoint}`, config).then(async response => {
     const data = await response.json();
 
     if (response.ok) {
