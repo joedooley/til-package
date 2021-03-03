@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import Head from 'next/head';
+import { css } from '@emotion/react';
 import { app as constants } from '@util/constants';
 import usePageTitle from '@hooks/usePageTitle';
 import Header from '../header';
@@ -18,20 +19,23 @@ export default function Layout({ children, pageTitle }) {
         <meta name="description" content={constants.meta.description} />
       </Head>
       <Header />
+
       <main
-        css={{
-          display: 'flex',
-          minHeight: '100vh',
-        }}
+        css={css`
+          display: flex;
+          min-height: 100vh;
+        `}
       >
         <Sidebar />
+
         <article
-          css={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-            alignContent: 'flex-start',
-          }}
+          css={theme => css`
+            align-content: flex-start;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            padding: ${theme.space[4]};
+          `}
         >
           <SkipNavContent>{children}</SkipNavContent>
         </article>

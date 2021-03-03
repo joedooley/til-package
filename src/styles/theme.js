@@ -67,15 +67,6 @@ const fonts = {
 };
 
 const fontSizes = ['12px', '13px', '14px', '15px', '16px', '20px', '28px', '32px'];
-[
-  fontSizes.xsmall,
-  fontSizes.small,
-  fontSizes.medium,
-  fontSizes.large,
-  fontSizes.xlarge,
-  fontSizes.xxlarge,
-  fontSizes.xxxlarge,
-] = fontSizes;
 
 const fontWeights = {
   light: 300,
@@ -87,7 +78,6 @@ const fontWeights = {
 };
 
 const gutters = ['0px', '4px', '8px', '16px', '24px', '32px'];
-[gutters.none, gutters.xsmall, gutters.small, gutters.medium, gutters.large, gutters.xlarge] = gutters;
 
 const lineHeights = {
   condensedUltra: 1,
@@ -118,7 +108,6 @@ const shadows = {
 };
 
 const space = ['0', '6px', '8px', '12px', '16px', '32px', '64px', '128px'];
-[space.none, space.xsmall, space.ss, space.small, space.medium, space.large, space.xlarge, space.xxlarge] = space;
 
 const timings = [250, 400, 600, 1000, 4000];
 

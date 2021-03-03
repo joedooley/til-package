@@ -1,9 +1,8 @@
 import { useAuth } from '@lib/firebase/auth';
+import LoginButtons from '@components/auth/login-buttons';
 
 export default function Index() {
   const auth = useAuth();
-
-  console.log(`auth`, auth);
 
   return auth.user ? (
     <div>
@@ -12,6 +11,6 @@ export default function Index() {
       <button onClick={e => auth.signout()}>Sign Out</button>
     </div>
   ) : (
-    <button onClick={e => auth.signinWithGitHub()}>Sign In</button>
+    <LoginButtons />
   );
 }
