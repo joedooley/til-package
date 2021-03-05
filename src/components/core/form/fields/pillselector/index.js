@@ -16,8 +16,8 @@ const SelectedCSS = ({ theme }) => css`
   border: ${theme.borders[1]};
   border-radius: ${theme.radii[4]};
   box-shadow: 0px 1px 2px #dde4e7;
-  background-color: ${theme.colors.green.primary};
-  color: ${theme.colors.white.primary};
+  background-color: ${theme.colors.brand.primary};
+  color: ${theme.colors.text};
   cursor: ${'pointer'};
   display: flex;
   font-size: ${theme.fontSizes[0]};
@@ -28,7 +28,7 @@ const SelectedCSS = ({ theme }) => css`
   margin: 0px 12px 0px 0px;
 
   &:active {
-    background-color: ${theme.colors.white.primary};
+    background-color: ${theme.colors.text};
     color: ${theme.colors.black.primary};
   }
   &:focus {
@@ -41,8 +41,8 @@ const UnselectedCSS = ({ theme }) => css`
   border: ${theme.borders[1]};
   border-radius: ${theme.radii[4]};
   box-shadow: 0px 1px 2px #dde4e7;
-  background-color: ${theme.colors.white.primary};
-  border-color: ${theme.colors.grey.border};
+  background-color: ${theme.colors.text};
+  border-color: ${theme.colors.text};
   cursor: ${'pointer'};
   display: flex;
   font-size: ${theme.fontSizes[0]};
@@ -53,8 +53,8 @@ const UnselectedCSS = ({ theme }) => css`
   margin: 0px 12px 0px 0px;
 
   &:active {
-    background-color: ${theme.colors.green.primary};
-    color: ${theme.colors.white.primary};
+    background-color: ${theme.colors.brand.primary};
+    color: ${theme.colors.text};
   }
 
   &:focus {

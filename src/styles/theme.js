@@ -1,64 +1,26 @@
 const borders = ['0', '1px solid', '2px solid', '3px solid'];
 borders.primary = `${borders[1]} #ced4da`;
-borders.secondary = `${borders[2]} #ced4da`;
-borders.green = `${borders[2]} #01683a`;
 
 const breakpoints = ['320px', '480px', '768px', '1024px', '1140px', '1600px'];
-[
-  breakpoints.xsmall,
-  breakpoints.small,
-  breakpoints.medium,
-  breakpoints.large,
-  breakpoints.xlarge,
-  breakpoints.xxlarge,
-] = breakpoints;
 
 const colors = {
-  green: {
-    primary: '#01683a',
-    secondary: '#00683b',
-    light: '#80bb00',
-    gradient: 'linear-gradient(90.17deg, #00683b 0%, #005530 100%)',
-    gradients: {
-      light: 'linear-gradient(0deg, rgba(0, 85, 48, 0.1), rgba(0, 85, 48, 0.1)), #ffffff',
-      dark: 'linear-gradient(90.17deg, #00683b 0%, #005530 100%)',
-    },
+  text: 'var(--text-color)',
+  brand: {
+    primary: 'var(--primary)',
+    hover: 'var(--primary-hover)',
+    focus: 'var(--primary-focus)',
   },
-  grey: {
-    primary: '#eef0f2',
-    secondary: '#424c55',
-    inactive: '#6c757d',
-    border: '#ced4da',
-    disabledText: '#606060',
+  error: {
+    primary: 'var(--error)',
+    hover: 'var(--error-hover)',
+    focus: 'var(--error-focus)',
+  },
+  disabled: {
+    bg: 'var(--disabled)',
+    text: 'var(--disabled-text)',
   },
   black: {
-    primary: '#414142',
-    secondary: '#343a40',
-    backdrop: 'rgb(61 69 75 / 50%)',
-  },
-  white: {
-    primary: '#fff',
-  },
-  blue: {
-    primary: '#42a2dc',
-    secondary: '#17a2b8',
-  },
-  purple: {
-    primary: '#6610f2',
-    secondary: '#6f42c1',
-  },
-  pink: {
-    primary: '#e83e8c',
-  },
-  red: {
-    primary: '#dc3545',
-    secondary: '#ca0200',
-  },
-  orange: {
-    primary: '#fb8539',
-  },
-  yellow: {
-    primary: '#ffc107',
+    primary: 'hsla(var(--base-text), 0%, 100%)',
   },
 };
 

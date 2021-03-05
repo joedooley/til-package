@@ -9,6 +9,7 @@ import Layout from '@components/layout/sidebar-content';
 
 export default function App({ Component, pageProps }) {
   console.log(`useRouter()`, useRouter());
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalCss theme={theme} />

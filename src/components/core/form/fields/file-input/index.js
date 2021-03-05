@@ -21,10 +21,10 @@ const BaseFileInput = React.forwardRef(({ onChange, value, ...rest }, ref) => {
         tabIndex="0"
         css={theme => css`
           align-items: center;
-          background: ${theme.colors.white.primary};
+          background: ${theme.colors.text};
           border: ${theme.borders.primary};
           border-radius: ${theme.radii[2]};
-          color: ${theme.colors.grey.secondary};
+          color: ${theme.colors.text};
           display: flex;
           font-size: ${theme.fontSizes[2]};
           justify-content: space-between;

@@ -14,9 +14,9 @@ const StyledSelect = styled.div`
 const Button = styled.button(
   ({ theme, isOpen }) => css`
     align-items: center;
-    background: ${theme.colors.white.primary};
+    background: ${theme.colors.text};
     border: none;
-    color: ${theme.colors.green.secondary};
+    color: ${theme.colors.brand.hover};
     cursor: pointer;
     display: flex;
     font-size: ${theme.fontSizes[1]};
@@ -40,8 +40,8 @@ const DownArrowIcon = styled(Icon)(
     margin-left: 3px;
 
     path {
-      fill: ${theme.colors.grey.secondary};
-      stroke: ${theme.colors.grey.secondary};
+      fill: ${theme.colors.text};
+      stroke: ${theme.colors.text};
     }
   `
 );
@@ -53,7 +53,7 @@ const MenuContainer = styled.div`
 
 const Menu = styled.ul(
   ({ theme, isOpen }) => css`
-    background: ${theme.colors.white.primary};
+    background: ${theme.colors.text};
     border: ${isOpen && theme.borders.primary};
     border-radius: ${theme.radii[2]};
     box-shadow: ${theme.shadows.menu};
@@ -73,8 +73,8 @@ const Menu = styled.ul(
 
 const Item = styled(motion.li)(
   ({ theme, isSelected, isHighlighted }) => css`
-    background: ${isHighlighted || isSelected ? theme.colors.green.gradients.light : theme.colors.white.primary};
-    color: ${isSelected ? theme.colors.green.primary : theme.colors.grey.secondary};
+    background: ${isHighlighted || isSelected ? theme.colors.brand.primary : theme.colors.text};
+    color: ${isSelected ? theme.colors.brand.primary : theme.colors.text};
     cursor: pointer;
     font-size: ${theme.fontSizes[4]};
     font-weight: ${isSelected ? theme.fontWeights.bold : theme.fontWeights.normal};
@@ -88,7 +88,7 @@ const Item = styled(motion.li)(
       padding-bottom: ${theme.space[1]};
     }
     &:hover {
-      background: ${theme.colors.green.gradients.light};
+      background: ${theme.colors.brand.primary};
     }
   `
 );

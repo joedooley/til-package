@@ -27,7 +27,7 @@ export default function Field({ name, label, children, ...rest }) {
         width: 100%;
 
         .count {
-          color: ${hasError ? theme.colors.red.primary : theme.colors.grey.inactive};
+          color: ${hasError ? theme.colors.error.primary : theme.colors.text};
         }
       `}
     >
@@ -35,9 +35,9 @@ export default function Field({ name, label, children, ...rest }) {
         <Label
           htmlFor={name}
           css={theme => css`
-            color: ${hasError ? theme.colors.red.primary : theme.colors.grey.inactive};
+            color: ${hasError ? theme.colors.error.primary : theme.colors.text};
             span {
-              color: ${theme.colors.red.primary};
+              color: ${theme.colors.error.primary};
             }
           `}
         >
@@ -52,7 +52,7 @@ export default function Field({ name, label, children, ...rest }) {
               ...child.props,
               key: child.props.name,
               css: theme => css`
-                border: ${hasError ? `1px solid ${theme.colors.red.primary}` : `1px solid ${theme.colors.grey.border}`};
+                border: ${hasError ? `1px solid ${theme.colors.error.primary}` : `1px solid ${theme.colors.text}`};
                 outline: none;
               `,
             })

@@ -11,10 +11,10 @@ import Icon from 'public/assets/icons/table/down-arrow.svg';
 const Button = styled.button(
   ({ theme, isOpen, isPlaceholder }) => css`
     align-items: center;
-    background: ${theme.colors.white.primary};
+    background: ${theme.colors.text};
     border: ${theme.borders.primary};
     border-radius: ${theme.radii[2]};
-    color: ${theme.colors.grey.secondary};
+    color: ${theme.colors.text};
     display: flex;
     font-size: ${theme.fontSizes[2]};
     justify-content: space-between;
@@ -32,8 +32,8 @@ const Button = styled.button(
 const DownArrowIcon = styled(Icon)(
   ({ theme }) => css`
     path {
-      fill: ${theme.colors.grey.secondary};
-      stroke: ${theme.colors.grey.secondary};
+      fill: ${theme.colors.text};
+      stroke: ${theme.colors.text};
     }
   `
 );
@@ -45,7 +45,7 @@ const MenuContainer = styled.div`
 
 const Menu = styled.ul(
   ({ theme }) => css`
-    background: ${theme.colors.white.primary};
+    background: ${theme.colors.text};
     border-radius: ${theme.radii[2]};
     border-top: 0;
     list-style: none;
@@ -62,8 +62,8 @@ const Menu = styled.ul(
 
 const Item = styled(motion.li)(
   ({ theme, isSelected, isHighlighted }) => css`
-    background: ${isHighlighted ? theme.colors.green.gradients.light : theme.colors.white.primary};
-    color: ${isSelected ? theme.colors.green.primary : theme.colors.grey.secondary};
+    background: ${isHighlighted ? theme.colors.brand.primary : theme.colors.text};
+    color: ${isSelected ? theme.colors.brand.primary : theme.colors.text};
     cursor: pointer;
     font-size: ${theme.fontSizes[4]};
     font-weight: ${isSelected ? theme.fontWeights.bold : theme.fontWeights.normal};
@@ -77,7 +77,7 @@ const Item = styled(motion.li)(
       padding-bottom: ${theme.space[1]};
     }
     &:hover {
-      background: ${theme.colors.green.gradients.light};
+      background: ${theme.colors.brand.primary};
     }
   `
 );

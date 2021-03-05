@@ -4,9 +4,9 @@ import styled from '@emotion/styled';
 
 const base = ({ theme }) => css`
   .heading {
-    background: ${theme.colors.grey.primary};
+    background: ${theme.colors.text};
     border-radius: ${theme.radii[2]};
-    color: ${theme.colors.grey.secondary};
+    color: ${theme.colors.text};
     font-weight: ${theme.fontWeights.semiBold};
     font-size: ${theme.fontSizes[4]};
     line-height: ${theme.lineHeights.default};

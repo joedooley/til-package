@@ -19,7 +19,7 @@ export default function AlertDialog({
       <div css={css({ display: 'flex', flexDirection: 'column', alignItems: 'center' })}>
         <h2
           css={theme => ({
-            color: theme.colors.black.secondary,
+            color: theme.colors.black.primary,
             fontSize: theme.fontSizes[4],
             fontWeight: theme.fontWeights.bold,
             lineHeight: theme.lineHeights.default,

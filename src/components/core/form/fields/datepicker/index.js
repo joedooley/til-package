@@ -26,8 +26,8 @@ const FormFieldIcon = ({ variant, ...rest }) => {
 
           &.down-arrow {
             path {
-              fill: ${theme.colors.grey.secondary};
-              stroke: ${theme.colors.grey.secondary};
+              fill: ${theme.colors.text};
+              stroke: ${theme.colors.text};
             }
           }
         }

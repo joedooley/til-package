@@ -27,7 +27,7 @@ const base = ({ theme }) => css`
     }
 
     .sortable {
-      color: ${theme.colors.green.primary};
+      color: ${theme.colors.brand.primary};
       display: flex;
     }
   }
@@ -44,7 +44,7 @@ const base = ({ theme }) => css`
   }
 
   th {
-    color: ${theme.colors.grey.inactive};
+    color: ${theme.colors.text};
     font-weight: ${theme.fontWeights.bold};
     font-size: ${theme.fontSizes[0]};
     line-height: 18px;
@@ -67,13 +67,13 @@ const base = ({ theme }) => css`
     }
 
     .sortable {
-      color: ${theme.colors.green.primary};
+      color: ${theme.colors.brand.primary};
       display: flex;
     }
   }
 
   td {
-    color: ${theme.colors.grey.secondary};
+    color: ${theme.colors.text};
     font-size: ${theme.fontSizes[2]};
     line-height: ${theme.lineHeights.default};
     padding-bottom: 10px;

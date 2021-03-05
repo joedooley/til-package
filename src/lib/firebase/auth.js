@@ -37,7 +37,7 @@ function useProvideAuth() {
     }
   };
 
-  const signinWithGitHub = redirect => {
+  const signinWithGitHub = (redirect = '/dashboard') => {
     setLoading(true);
 
     return firebase
@@ -52,7 +52,7 @@ function useProvideAuth() {
       });
   };
 
-  const signinWithGoogle = redirect => {
+  const signinWithGoogle = (redirect = '/dashboard') => {
     setLoading(true);
 
     return firebase
@@ -68,19 +68,25 @@ function useProvideAuth() {
       .catch(error => console.error(error));
   };
 
+  const signout = (redirect = '/') => {
+    return firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        handleUser(false);
+
+        if (redirect) {
+          Router.push(redirect);
+        }
+      });
+  };
+
   // eslint-disable-next-line no-unused-vars
   const linkProviderAccount = provider => {
     return firebase
       .auth()
       .currentUser.linkWithPopup(provider)
       .catch(error => console.error(error));
-  };
-
-  const signout = () => {
-    return firebase
-      .auth()
-      .signOut()
-      .then(() => handleUser(false));
   };
 
   React.useEffect(() => {

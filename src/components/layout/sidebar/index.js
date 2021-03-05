@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Menu from '@components/core/menu/list';
 
 const Aside = styled('aside')(({ theme }) => ({
-  backgroundColor: theme.colors.grey.primary,
+  backgroundColor: theme.colors.text,
   boxShadow: theme.shadows.small,
   display: 'flex',
   flexDirection: 'column',
@@ -19,8 +19,11 @@ const Aside = styled('aside')(({ theme }) => ({
 const items = [
   {
     href: '/',
-    icon: '/assets/icons/menu/class-schedule.svg',
     value: 'TIL',
+  },
+  {
+    href: '/dashboard',
+    value: 'Dashboard',
   },
 ];
 

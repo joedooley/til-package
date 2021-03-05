@@ -6,10 +6,10 @@ import styled from '@emotion/styled';
 
 const base = ({ theme }) => css`
   align-items: center;
-  background-color: ${theme.colors.green.primary};
+  background-color: ${theme.colors.brand.primary};
   border: none;
   border-radius: ${theme.radii[2]};
-  color: ${theme.colors.white.primary};
+  color: ${theme.colors.text};
   display: inline-flex;
   font-size: ${theme.fontSizes[0]};
   font-weight: ${theme.fontWeights.bold};
@@ -31,7 +31,7 @@ const variantStyles = ({ theme, value }) => {
       &:focus,
       &:hover {
         background-color: ${theme.colors.orange.primary};
-        color: ${theme.colors.white.primary};
+        color: ${theme.colors.text};
       }
     `;
   }
@@ -50,12 +50,12 @@ const variantStyles = ({ theme, value }) => {
 
   if (value === 'Published') {
     return css`
-      background-color: ${theme.colors.green.light};
+      background-color: ${theme.colors.brand.focus};
 
       &:active,
       &:focus,
       &:hover {
-        background-color: ${theme.colors.green.light};
+        background-color: ${theme.colors.brand.focus};
       }
     `;
   }

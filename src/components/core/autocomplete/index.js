@@ -31,7 +31,7 @@ const Input = styled.input(
 
 const ToggleButton = styled('button')(
   ({ theme }) => css`
-    background-color: ${theme.colors.white.primary};
+    background-color: ${theme.colors.text};
     border: none;
     cursor: pointer;
     display: flex;
@@ -46,9 +46,9 @@ const ToggleButton = styled('button')(
 
 const Menu = styled('ul')(
   ({ theme, isOpen }) => css`
-    background: ${theme.colors.white.primary};
+    background: ${theme.colors.text};
     border: ${isOpen ? '1px solid #ced4da' : 'none'};
-    border-color: ${isOpen ? theme.colors.grey.border : 'none'};
+    border-color: ${isOpen ? theme.colors.text : 'none'};
     border-top: 0;
     box-shadow: ${isOpen ? theme.shadows.menu : 'none'};
     border-radius: ${theme.radii[2]};
@@ -66,8 +66,8 @@ const Menu = styled('ul')(
 
 const Item = styled('li')(
   ({ theme, isSelected, isHighlighted }) => css`
-    background: ${isHighlighted ? theme.colors.green.gradients.light : theme.colors.white.primary};
-    color: ${isSelected ? theme.colors.green.primary : theme.colors.grey.secondary};
+    background: ${isHighlighted ? theme.colors.brand.primary : theme.colors.text};
+    color: ${isSelected ? theme.colors.brand.primary : theme.colors.text};
     cursor: pointer;
     font-size: ${theme.fontSizes[4]};
     font-weight: ${isSelected ? theme.fontWeights.bold : theme.fontWeights.normal};
@@ -81,7 +81,7 @@ const Item = styled('li')(
       padding-bottom: ${theme.space[1]};
     }
     &:hover {
-      background: ${theme.colors.green.gradients.light};
+      background: ${theme.colors.brand.primary};
     }
   `
 );

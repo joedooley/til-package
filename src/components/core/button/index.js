@@ -8,35 +8,33 @@ import Spinner from './spinner';
 const base = ({ theme, isLoading }) => css`
   align-items: center;
   appearance: none;
-  background-color: ${theme.colors.green.primary};
+  background-color: ${theme.colors.brand.primary};
   border: none;
   box-shadow: ${theme.shadows.small};
   border-radius: ${theme.radii[2]};
-  color: ${theme.colors.white.primary};
+  color: ${theme.colors.text};
   cursor: ${isLoading ? 'not-allowed' : 'pointer'};
   display: flex;
   font-size: ${theme.fontSizes[2]};
   font-weight: ${theme.fontWeights.bold};
   justify-content: center;
   line-height: ${theme.lineHeights.default};
-  outline-color: ${theme.colors.green.primary};
+  outline-color: ${theme.colors.brand.focus};
   padding: ${theme.space[1]} ${theme.space[3]};
   transition: background-color 300ms ease-in-out, color 150ms linear;
 
-  &:active,
-  &:focus,
   &:hover {
-    background-color: ${theme.colors.green.secondary};
+    background-color: ${theme.colors.brand.hover};
   }
 
-  &:visited {
-    outline-width: 1px;
+  &:focus {
+    background-color: ${theme.colors.brand.focus};
   }
 
   &:disabled,
   &:disabled:hover {
-    background: ${theme.colors.grey.primary};
-    color: ${theme.colors.grey.disabledText};
+    background: ${theme.colors.disabled.bg};
+    color: ${theme.colors.disabled.text};
     cursor: not-allowed;
   }
 `;
@@ -44,29 +42,32 @@ const base = ({ theme, isLoading }) => css`
 let dynamicStyle = ({ theme, variant }) => {
   if (variant === 'warning') {
     return css`
-      background-color: ${theme.colors.red.primary};
-      outline-color: ${theme.colors.red.primary};
+      background-color: ${theme.colors.error.primary};
+      outline-color: ${theme.colors.error.primary};
 
-      &:active,
-      &:focus,
       &:hover {
-        background-color: ${theme.colors.red.secondary};
+        background-color: ${theme.colors.error.hover};
+      }
+
+      &:focus {
+        background-color: ${theme.colors.error.focus};
       }
     `;
   }
 
   if (variant === 'outline') {
     return css`
-      background-color: ${theme.colors.white.primary};
-      border: ${theme.borders[1]} ${theme.colors.green.primary};
-      color: ${theme.colors.green.primary};
+      background-color: ${theme.colors.text};
+      border: ${theme.borders[1]} ${theme.colors.brand.primary};
+      color: ${theme.colors.brand.primary};
       padding: 5px 11px;
 
-      &:active,
-      &:focus,
       &:hover {
-        background-color: ${theme.colors.green.primary};
-        color: ${theme.colors.white.primary};
+        background-color: ${theme.colors.brand.hover};
+      }
+
+      &:focus {
+        background-color: ${theme.colors.brand.focus};
       }
     `;
   }
@@ -75,17 +76,16 @@ let dynamicStyle = ({ theme, variant }) => {
     return css`
       appearance: none;
       background-color: transparent;
-      border-color: transparent;
+      border: none;
       box-shadow: none;
       margin: 0;
       padding: 0;
 
-      &:active,
       &:focus,
       &:hover {
         background-color: transparent;
-        border-color: transparent;
-        outline-color: ${theme.colors.grey.border};
+        border: none;
+        outline-color: ${theme.colors.brand.focus};
       }
     `;
   }

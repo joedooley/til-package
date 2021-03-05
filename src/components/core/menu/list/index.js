@@ -1,20 +1,17 @@
 import PropTypes from 'prop-types';
-import MenuItem from './menu-item';
-import { SkipNavLink } from '@components/core/skip-nav';
+import MenuItem from '../menu-item';
 
-export default function Menu({ items = [] }) {
+export default function Menu({ items = [], ...rest }) {
   return items.length ? (
-    <>
-      <SkipNavLink />
-
-      <nav>
-        <ul css={{ listStyle: 'none', margin: 0, padding: 0 }}>
-          {items.map(x => (
-            <MenuItem key={x.href} item={x} />
-          ))}
-        </ul>
-      </nav>
-    </>
+    <nav {...rest}>
+      <ul css={{ listStyle: 'none', margin: 0, padding: 0 }}>
+        {items.map(x => (
+          <li key={x.href} css={{ marginBottom: '1em' }}>
+            <MenuItem href={x.href}>{x.value}</MenuItem>
+          </li>
+        ))}
+      </ul>
+    </nav>
   ) : null;
 }
 
@@ -23,8 +20,6 @@ Menu.propTypes = {
     PropTypes.shape({
       href: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
-      icon: PropTypes.string,
-      protected: PropTypes.bool,
     })
   ),
 };

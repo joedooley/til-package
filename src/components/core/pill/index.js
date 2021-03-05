@@ -6,10 +6,10 @@ import styled from '@emotion/styled';
 
 const base = ({ theme }) => css`
   align-items: center;
-  background-color: ${theme.colors.green.primary};
+  background-color: ${theme.colors.brand.primary};
   border-radius: ${theme.radii[5]};
   box-shadow: 0 1px 2px #dde4e7;
-  color: ${theme.colors.white.primary};
+  color: ${theme.colors.text};
   display: flex;
   font-size: ${theme.fontSizes[0]};
   font-weight: ${theme.fontWeights.normal};
@@ -20,7 +20,7 @@ const base = ({ theme }) => css`
   white-space: nowrap;
 
   &:hover {
-    background-color: ${theme.colors.green.secondary};
+    background-color: ${theme.colors.brand.hover};
   }
 `;
 

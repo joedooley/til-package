@@ -13,20 +13,20 @@ const base = ({ theme, error }) => css`
   width: 100%;
 
   label {
-    color: ${error ? theme.colors.red.primary : theme.colors.grey.inactive};
+    color: ${error ? theme.colors.error.primary : theme.colors.text};
 
     .required {
-      color: ${theme.colors.red.primary};
+      color: ${theme.colors.error.primary};
     }
   }
 
   & > div {
-    border-color: ${error ? theme.colors.red.primary : theme.colors.grey.border} !important;
-    outline-color: ${error ? theme.colors.red.primary : theme.colors.grey.border} !important;
+    border-color: ${error ? theme.colors.error.primary : theme.colors.text} !important;
+    outline-color: ${error ? theme.colors.error.primary : theme.colors.text} !important;
   }
 
   .toolbar {
-    background: ${theme.colors.white.primary} !important;
+    background: ${theme.colors.text} !important;
     padding: ${theme.space[2]};
 
     button {

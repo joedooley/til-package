@@ -1,24 +1,44 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
-import { useAuth } from '@lib/firebase/auth';
+import { useRouter } from 'next/router';
 import Flex from '@components/core/html/flex';
 import Button from '@components/core/button';
+import GitHubIcon from 'public/assets/icons/login/github.svg';
+import GoogleIcon from 'public/assets/icons/login/google.svg';
 
-export default function LoginButtons({ className }) {
-  const auth = useAuth();
+export default function LoginButtons({ auth, ...rest }) {
+  const router = useRouter();
+  const buttonLabel = router.pathname === '/login' ? 'Login' : 'Sign up';
 
   return (
-    <Flex className={className} vAlign="flex-start">
+    <Flex
+      className={rest.className}
+      direction="column"
+      vAlign="flex-start"
+      css={css`
+        button {
+          padding-left: 40px;
+          padding-right: 40px;
+        }
+      `}
+    >
       <Button
         type="button"
         ariaLabel="Click button to login with a GitHub account"
         onClick={e => auth.signinWithGitHub()}
         css={theme => css`
-          margin-right: ${theme.space[3]};
+          margin-bottom: ${theme.space[3]};
         `}
       >
-        Sign In w/GitHub
+        <GitHubIcon
+          css={theme => css`
+            height: 17px;
+            margin-right: ${theme.space[1]};
+            width: 17px;
+          `}
+        />
+        {buttonLabel}
       </Button>
 
       <Button
@@ -26,12 +46,19 @@ export default function LoginButtons({ className }) {
         ariaLabel="Click button to login with a Google account"
         onClick={e => auth.signinWithGoogle()}
       >
-        Sign In w/Google
+        <GoogleIcon
+          css={theme => css`
+            height: 17px;
+            margin-right: ${theme.space[1]};
+            width: 17px;
+          `}
+        />
+        {buttonLabel}
       </Button>
     </Flex>
   );
 }
 
 LoginButtons.propTypes = {
-  className: PropTypes.string,
+  auth: PropTypes.object.isRequired,
 };
