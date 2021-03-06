@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { css } from '@emotion/react';
 import { motion } from 'framer-motion';
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 import '@reach/dialog/styles.css';
@@ -19,33 +20,33 @@ const Dialog = React.forwardRef(
         {...rest}
         onDismiss={onClose}
         initialFocusRef={ref}
-        css={{
-          background: 'transparent',
-        }}
+        css={css`
+          background: transparent;
+        `}
       >
         <motion.div initial="hidden" animate="visible" transition={{ duration: 0.5 }} variants={variants}>
           <DialogContent
             aria-label={ariaLabel}
-            css={theme => ({
-              backgroundColor: theme.colors.black.primary,
-              borderRadius: theme.radii[2],
-              boxShadow: theme.shadows.modal,
-              padding: '20px',
-              position: 'relative',
-              width,
-            })}
+            css={theme => css`
+              background-color: ${theme.colors.black[300]};
+              border-radius: ${theme.radii[2]};
+              box-shadow: ${theme.shadows.modal};
+              padding: 40px 20px 20px;
+              position: relative;
+              width: ${width};
+            `}
           >
             {hasCloseButton && (
               <Button
                 variant="unstyled"
                 onClick={onClose}
                 ariaLabel="Click button to close the login dialog"
-                css={{
-                  margin: 0,
-                  padding: 0,
-                  position: 'absolute',
-                  right: '20px',
-                }}
+                css={css`
+                  margin: 0;
+                  padding: 0;
+                  position: absolute;
+                  right: 20px;
+                `}
               >
                 <VisuallyHidden>Close</VisuallyHidden>
                 <CloseIcon aria-hidden />

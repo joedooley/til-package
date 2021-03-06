@@ -21,6 +21,10 @@ const colors = {
   },
   black: {
     primary: 'hsla(var(--base-text), 0%, 100%)',
+    100: 'hsla(var(--base-text), 5%, 100%)',
+    200: 'hsla(var(--base-text), 7%, 100%)',
+    300: 'hsla(var(--base-text), 10%, 100%)',
+    400: 'hsla(var(--base-text), 15%, 100%)',
   },
 };
 
