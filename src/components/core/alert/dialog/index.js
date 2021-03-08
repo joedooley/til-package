@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
-import Button from '@components/core/button';
+import { Button } from '@components/core/html';
 import BaseDialog from '@components/core/dialog';
 
 export default function AlertDialog({

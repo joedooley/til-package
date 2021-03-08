@@ -5,14 +5,14 @@ import { motion } from 'framer-motion';
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 import '@reach/dialog/styles.css';
 import CloseIcon from 'public/assets/icons/close-icon.svg';
-import Button from '@components/core/button';
+import { Button } from '@components/core/html';
 import VisuallyHidden from '@components/core/visually-hidden';
 
 const Dialog = React.forwardRef(
-  ({ onClose, ariaLabel, children, hasCloseButton = true, width = '400px', ...rest }, ref) => {
+  ({ onClose, ariaLabel, children, hasCloseButton = true, height, width = '400px', ...rest }, ref) => {
     const variants = {
-      visible: { y: 130, opacity: 1 },
       hidden: { y: 0, opacity: 0 },
+      visible: { y: 130, opacity: 1 },
     };
 
     return (
@@ -24,14 +24,16 @@ const Dialog = React.forwardRef(
           background: transparent;
         `}
       >
-        <motion.div initial="hidden" animate="visible" transition={{ duration: 0.5 }} variants={variants}>
+        <motion.div initial="hidden" animate="visible" exit="exit" transition={{ duration: 0.5 }} variants={variants}>
           <DialogContent
             aria-label={ariaLabel}
             css={theme => css`
-              background-color: ${theme.colors.black[300]};
+              background-color: ${theme.colors.black[400]};
               border-radius: ${theme.radii[2]};
               box-shadow: ${theme.shadows.modal};
-              padding: 40px 20px 20px;
+              margin: auto;
+              min-height: ${height ?? 'auto'};
+              padding: 20px;
               position: relative;
               width: ${width};
             `}
@@ -65,6 +67,7 @@ Dialog.propTypes = {
   ariaLabel: PropTypes.string.isRequired,
   children: PropTypes.node,
   hasCloseButton: PropTypes.bool,
+  height: PropTypes.string,
   width: PropTypes.string,
 };
 

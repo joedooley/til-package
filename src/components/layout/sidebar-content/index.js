@@ -2,21 +2,13 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { css, jsx } from '@emotion/react';
+import { css } from '@emotion/react';
 import { useAuth } from '@lib/firebase/auth';
 import { app as constants } from '@util/constants';
 import usePageTitle from '@hooks/usePageTitle';
 import Header from '../header';
 import Sidebar from '../sidebar';
 import { SkipNavContent } from '@components/core/skip-nav';
-
-const cloneElement = (element, props) =>
-  jsx(element.type, {
-    key: element.key,
-    ref: element.ref,
-    ...element.props,
-    ...props,
-  });
 
 export default function Layout({ children, pageTitle }) {
   const title = usePageTitle(pageTitle);
@@ -34,7 +26,12 @@ export default function Layout({ children, pageTitle }) {
         <meta name="description" content={constants.meta.description} />
       </Head>
 
-      <Header auth={auth} />
+      <Header
+        auth={auth}
+        css={theme => css`
+          border-bottom: ${theme.borders.secondary};
+        `}
+      />
 
       <main
         css={css`
@@ -42,12 +39,18 @@ export default function Layout({ children, pageTitle }) {
           min-height: 100vh;
         `}
       >
-        {router.pathname === '/dashboard' && <Sidebar />}
+        {router.pathname === '/dashboard' && (
+          <Sidebar
+            css={theme => css`
+              border-right: ${theme.borders.secondary};
+            `}
+          />
+        )}
 
         <article
           css={theme => css`
             align-content: flex-start;
-            background-color: ${theme.colors.black.primary};
+            border-left: ${theme.borders.secondary};
             display: flex;
             flex-direction: column;
             flex-grow: 1;

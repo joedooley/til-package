@@ -14,13 +14,13 @@ import PillSelect from './fields/pillselector';
 
 const FormContext = React.createContext();
 
-export default function Form({ schema, defaultValues, mode = 'onBlur', children }) {
+export default function Form({ schema, defaultValues, mode = 'onBlur', children, ...rest }) {
   const methods = useForm({ defaultValues, mode, resolver: yupResolver(schema) });
 
   return (
     <FormContext.Provider value={defaultValues}>
       <ReactHookFormProvider {...methods}>
-        <form autoComplete="off" noValidate>
+        <form autoComplete="off" noValidate className={rest.className}>
           {children}
         </form>
       </ReactHookFormProvider>

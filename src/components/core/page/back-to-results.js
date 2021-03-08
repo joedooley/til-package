@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Link from 'next/link';
+import { Link } from '@components/core/html';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import ArrowIcon from 'public/assets/icons/arrows/left.svg';

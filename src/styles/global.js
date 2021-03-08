@@ -16,16 +16,16 @@ export default function GlobalCss() {
         }
 
         :root {
-          --base-primary: 174, 100%;
+          --base-primary: 158, 67%;
           --base-error: 339, 100%;
           --base-text: 0, 0%;
 
           --text-color: hsla(var(--base-text), 100%, 80%);
           --text-color-disabled: hsla(var(--base-text), 100%, 30%);
 
-          --primary: hsla(var(--base-primary), 29%, 100%);
-          --primary-hover: hsla(var(--base-primary), 19%, 100%);
-          --primary-focus: hsla(var(--base-primary), 9%, 100%);
+          --primary: hsla(var(--base-primary), 42%, 100%);
+          --primary-hover: hsla(var(--base-primary), 37%, 100%);
+          --primary-focus: hsla(var(--base-primary), 32%, 100%);
 
           --error: hsla(var(--base-error), 50%, 100%);
           --error-hover: hsla(var(--base-error), 40%, 100%);
@@ -33,10 +33,12 @@ export default function GlobalCss() {
 
           --disabled: hsla(var(--base-text), 17%, 100%);
           --disabled-text: hsla(var(--base-text), 100%, 30%);
+
+          --border: hsla(158, 67%, 42%, 100%);
         }
 
         :focus {
-          outline-color: ${theme.colors.brand.focus};
+          outline-color: ${theme.colors.border.primary};
         }
 
         html,
@@ -52,6 +54,7 @@ export default function GlobalCss() {
         }
 
         body {
+          background: ${theme.colors.black[300]};
           margin: 0;
           padding: 0;
         }
@@ -78,7 +81,6 @@ export default function GlobalCss() {
         a {
           color: ${theme.colors.brand.primary};
           font-style: normal;
-          font-weight: ${theme.fontWeights.bold};
           font-size: ${theme.fontSizes[2]};
           line-height: ${theme.lineHeights.condensed};
           text-decoration: none;
@@ -87,8 +89,7 @@ export default function GlobalCss() {
             color: ${theme.colors.brand.hover};
           }
 
-          &:focus,
-          &:visited {
+          &:focus {
             color: ${theme.colors.brand.focus};
           }
         }
@@ -135,12 +136,16 @@ export default function GlobalCss() {
         input,
         select,
         textarea {
-          background: ${theme.colors.text};
-          border: 1px solid ${theme.colors.text};
+          background: transparent;
+          border: ${theme.borders.dark};
           border-radius: ${theme.radii[2]};
           color: ${theme.colors.disabled.text};
-          padding: ${theme.space[1]} 8px;
+          padding: ${theme.space[3]} 8px;
           width: 100%;
+
+          &:focus {
+            border-color: ${theme.colors.border.primary};
+          }
         }
       `}
     />

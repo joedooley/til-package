@@ -20,7 +20,7 @@ const base = ({ theme, isLoading }) => css`
   justify-content: center;
   line-height: ${theme.lineHeights.default};
   outline-color: ${theme.colors.brand.focus};
-  padding: ${theme.space[1]} ${theme.space[3]};
+  padding: ${theme.space[3]};
   transition: background-color 300ms ease-in-out, color 150ms linear;
 
   &:hover {
@@ -39,7 +39,7 @@ const base = ({ theme, isLoading }) => css`
   }
 `;
 
-let dynamicStyle = ({ theme, variant }) => {
+let dynamicStyle = ({ theme, variant, inverted }) => {
   if (variant === 'warning') {
     return css`
       background-color: ${theme.colors.error.primary};
@@ -57,17 +57,24 @@ let dynamicStyle = ({ theme, variant }) => {
 
   if (variant === 'outline') {
     return css`
-      background-color: ${theme.colors.text};
-      border: ${theme.borders[1]} ${theme.colors.brand.primary};
-      color: ${theme.colors.brand.primary};
-      padding: 5px 11px;
+      background-color: transparent;
+      border: ${inverted ? theme.borders.dark : theme.borders.primary};
+      border-radius: ${theme.radii[6]};
+      color: ${inverted ? theme.colors.text : theme.colors.brand.primary};
+      padding: 11px;
 
       &:hover {
         background-color: ${theme.colors.brand.hover};
+        border: ${inverted && theme.borders.transparent};
+        color: ${theme.colors.text};
       }
 
       &:focus {
         background-color: ${theme.colors.brand.focus};
+        border: ${inverted && theme.borders.transparent};
+        border-radius: 30px;
+        color: ${theme.colors.text};
+        outline: none;
       }
     `;
   }
@@ -97,7 +104,7 @@ const StyledComponent = styled(motion.button)`
 `;
 
 const buttonVariants = (variant, disabled) => {
-  if (disabled || variant === 'outline' || variant === 'unstyled') {
+  if (disabled || variant === 'unstyled') {
     return {
       hover: { scale: 1 },
       pressed: { scale: 1 },
@@ -130,6 +137,7 @@ const Button = React.forwardRef(
       onKeyDown,
       children,
       variant = 'primary',
+      inverted,
       ...rest
     },
     ref
@@ -155,6 +163,7 @@ const Button = React.forwardRef(
         disabled={disabled}
         isLoading={!disabled && loading}
         variant={variant}
+        inverted={inverted}
         initial="rest"
         whileHover="hover"
         whileTap="pressed"
@@ -179,6 +188,7 @@ Button.propTypes = {
   onKeyDown: PropTypes.func,
   children: PropTypes.node,
   variant: PropTypes.oneOf(['primary', 'outline', 'warning', 'unstyled']),
+  inverted: PropTypes.bool,
 };
 
 Button.displayName = 'Button';

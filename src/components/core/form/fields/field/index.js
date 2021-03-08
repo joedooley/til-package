@@ -2,6 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css, jsx } from '@emotion/react';
 import { useFormContext } from 'react-hook-form';
+import VisuallyHidden from '@components/core/visually-hidden/index.js';
 import Label from '../../label';
 
 const cloneElement = (element, props) =>
@@ -22,7 +23,7 @@ export default function Field({ name, label, children, ...rest }) {
       css={theme => css`
         display: flex;
         flex-direction: column;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         position: relative;
         width: 100%;
 
@@ -32,18 +33,20 @@ export default function Field({ name, label, children, ...rest }) {
       `}
     >
       {label && (
-        <Label
-          htmlFor={name}
-          css={theme => css`
-            color: ${hasError ? theme.colors.error.primary : theme.colors.text};
-            span {
-              color: ${theme.colors.error.primary};
-            }
-          `}
-        >
-          {label}
-          {rest.required && <span>*</span>}
-        </Label>
+        <VisuallyHidden>
+          <Label
+            htmlFor={name}
+            css={theme => css`
+              color: ${hasError ? theme.colors.error.primary : theme.colors.text};
+              span {
+                color: ${theme.colors.error.primary};
+              }
+            `}
+          >
+            {label}
+            {rest.required && <span>*</span>}
+          </Label>
+        </VisuallyHidden>
       )}
 
       {React.Children.map(children, child => {

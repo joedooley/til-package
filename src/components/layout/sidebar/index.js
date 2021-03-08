@@ -2,8 +2,6 @@ import styled from '@emotion/styled';
 import Menu from '@components/core/menu/list';
 
 const Aside = styled('aside')(({ theme }) => ({
-  backgroundColor: theme.colors.text,
-  boxShadow: theme.shadows.small,
   display: 'flex',
   flexDirection: 'column',
   flexShrink: 0,

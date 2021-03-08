@@ -25,7 +25,7 @@ Flex.propTypes = {
   children: PropTypes.node,
   direction: PropTypes.oneOf(['column', 'row']),
   vAlign: PropTypes.oneOf(['flex-start', 'center', 'flex-end']),
-  hAlign: PropTypes.oneOf(['flex-start', 'center', 'flex-end']),
+  hAlign: PropTypes.oneOf(['flex-start', 'center', 'flex-end', 'space-between', 'space-around', 'space-evenly']),
 };
 
 Flex.displayName = 'Flex';

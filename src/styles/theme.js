@@ -1,6 +1,3 @@
-const borders = ['0', '1px solid', '2px solid', '3px solid'];
-borders.primary = `${borders[1]} #ced4da`;
-
 const breakpoints = ['320px', '480px', '768px', '1024px', '1140px', '1600px'];
 
 const colors = {
@@ -19,17 +16,32 @@ const colors = {
     bg: 'var(--disabled)',
     text: 'var(--disabled-text)',
   },
+  border: {
+    primary: 'var(--primary)',
+    secondary: 'hsla(var(--base-text), 27%, 100%)',
+    dark: 'var(--text-color)',
+  },
   black: {
     primary: 'hsla(var(--base-text), 0%, 100%)',
     100: 'hsla(var(--base-text), 5%, 100%)',
     200: 'hsla(var(--base-text), 7%, 100%)',
-    300: 'hsla(var(--base-text), 10%, 100%)',
+    300: 'hsla(var(--base-text), 12%, 100%)',
     400: 'hsla(var(--base-text), 15%, 100%)',
+    500: 'hsla(var(--base-text), 20%, 100%)',
+    600: 'hsla(var(--base-text), 27%, 100%)',
   },
 };
 
+const borders = ['0', '1px solid', '2px solid', '3px solid'];
+borders.primary = `${borders[1]} ${colors.border.primary}`;
+borders.secondary = `${borders[1]} ${colors.border.secondary}`;
+borders.dark = `${borders[1]} ${colors.border.dark}`;
+
+borders.transparent = `${borders[1]} transparent`;
+
 const fonts = {
-  normal: '"Lato", sans-serif',
+  normal: '"Roboto", sans-serif',
+  heading: '"Raleway", sans-serif',
 };
 
 const fontSizes = ['12px', '13px', '14px', '15px', '16px', '20px', '28px', '32px'];
@@ -42,8 +54,6 @@ const fontWeights = {
   bold: 700,
   heavy: 900,
 };
-
-const gutters = ['0px', '4px', '8px', '16px', '24px', '32px'];
 
 const lineHeights = {
   condensedUltra: 1,
@@ -63,15 +73,18 @@ const maxWidths = {
   xxlarge: 1600,
 };
 
-const radii = ['0', '2px', '4px', '8px', '12px', '20px'];
+const radii = ['0', '2px', '4px', '8px', '12px', '20px', '30px'];
 
 const shadows = {
   small: '-1px -1px 3px rgba(0, 0, 0, 0.1), 1px 1px 3px rgba(0, 0, 0, 0.1)',
   large: '0 0.25px 1px rgb(0 0 0 / 4%), 0 0.85px 3px rgb(0 0 0 / 19%)',
   menu: '0 0.5px 1.75px rgba(0, 0, 0, 0.039), 0 1.85px 6.25px rgba(0, 0, 0, 0.19)',
-  modal: '0 0.5px 5px rgba(0, 0, 0, 0.039), 0 3.75px 11px rgba(0, 0, 0, 0.19)',
   thead: '5px -3px 4px rgba(255, 255, 255, 0.75), -5px -3px 0 rgba(255, 255, 255, 0.75), 0 2px 5px rgba(0, 0, 0, 0.1)',
+  modal:
+    '0 0 transparent, 0 0 transparent, 0 0 transparent, 0 0 transparent, 0 7px 14px 0 rgba(0,0,0,0.5),0 3px 6px 0 rgba(0,0,0,0.5), 0 0 transparent, 0 7px 14px 0 rgba(0,0,0,0.5),0 3px 6px 0 rgba(0,0,0,0.5)',
 };
+
+const gutters = ['0', '4px', '8px', '16px', '24px', '32px'];
 
 const space = ['0', '6px', '8px', '12px', '16px', '32px', '64px', '128px'];
 

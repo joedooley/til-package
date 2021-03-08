@@ -2,18 +2,15 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import Link from 'next/link';
+import { Link } from '@components/core/html';
 import { useRouter } from 'next/router';
 
-const MenuLink = styled.a(
+const MenuLink = styled(Link)(
   ({ theme, isActive }) => css`
-    align-items: center;
     color: ${isActive ? theme.colors.brand.primary : theme.colors.text};
-    display: flex;
     font-size: ${theme.fontSizes[3]};
-    font-weight: ${isActive ? theme.fontWeights.bold : theme.fontWeights.normal};
+    font-weight: ${theme.fontWeights.normal};
     line-height: ${theme.lineHeights.condensed};
-    text-decoration: none;
   `
 );
 
@@ -22,11 +19,9 @@ const MenuItem = React.forwardRef(({ href, onClick, children, ...rest }, ref) =>
   const isActive = router?.asPath === href;
 
   return (
-    <Link {...rest} passHref href={href}>
-      <MenuLink onClick={onClick} ref={ref} isActive={isActive}>
-        {children}
-      </MenuLink>
-    </Link>
+    <MenuLink {...rest} ref={ref} href={href} onClick={onClick} isActive={isActive}>
+      {children}
+    </MenuLink>
   );
 });
 
