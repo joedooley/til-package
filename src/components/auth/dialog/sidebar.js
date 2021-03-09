@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
+import { motion, useSpring } from 'framer-motion';
 import { Flex, Text, Button, Heading } from '@components/core/html';
 
 const MotionContainer = styled(motion.div)(

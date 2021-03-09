@@ -88,15 +88,6 @@ const gutters = ['0', '4px', '8px', '16px', '24px', '32px'];
 
 const space = ['0', '6px', '8px', '12px', '16px', '32px', '64px', '128px'];
 
-const timings = [250, 400, 600, 1000, 4000];
-
-const zIndices = {
-  contentMask: 500,
-  header: 1000,
-  modal: 2000,
-  googleMapsAutocomplete: 2100,
-};
-
 export default {
   borders,
   breakpoints,
@@ -110,6 +101,4 @@ export default {
   radii,
   shadows,
   space,
-  timings,
-  zIndices,
 };

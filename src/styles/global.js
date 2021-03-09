@@ -20,8 +20,8 @@ export default function GlobalCss() {
           --base-error: 339, 100%;
           --base-text: 0, 0%;
 
-          --text-color: hsla(var(--base-text), 100%, 80%);
-          --text-color-disabled: hsla(var(--base-text), 100%, 30%);
+          --text-color: hsla(var(--base-text), 87%, 100%);
+          --text-color-disabled: hsla(var(--base-text), 30%, 100%);
 
           --primary: hsla(var(--base-primary), 42%, 100%);
           --primary-hover: hsla(var(--base-primary), 37%, 100%);
@@ -72,10 +72,41 @@ export default function GlobalCss() {
           margin: 0;
         }
 
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+          font-family: ${theme.fonts.heading};
+          font-weight: bold;
+        }
+
         h1 {
           font-size: ${theme.fontSizes[5]};
           font-weight: ${theme.fontWeights.normal};
           line-height: ${theme.lineHeights.default};
+          margin-bottom: ${theme.space[5]};
+        }
+
+        h2 {
+          margin-bottom: 24px;
+        }
+
+        h3 {
+          margin-bottom: 20px;
+        }
+
+        h4 {
+          margin-bottom: ${theme.space[4]};
+        }
+
+        h5 {
+          margin-bottom: ${theme.space[3]};
+        }
+
+        h6 {
+          margin-bottom: ${theme.space[2]};
         }
 
         a {

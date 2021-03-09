@@ -9,9 +9,7 @@ const Heading = React.forwardRef(({ level, align = 'center', children, ...rest }
     <Component
       {...rest}
       ref={ref}
-      css={theme => css`
-        font-family: ${theme.fonts.heading};
-        font-weight: bold;
+      css={css`
         text-align: ${align};
       `}
     >
