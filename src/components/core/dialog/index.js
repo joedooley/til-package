@@ -9,7 +9,7 @@ import { Button } from '@components/core/html';
 import VisuallyHidden from '@components/core/visually-hidden';
 
 const Dialog = React.forwardRef(
-  ({ onClose, ariaLabel, children, hasCloseButton = true, height, width = '400px', ...rest }, ref) => {
+  ({ onClose, ariaLabel, children, hasCloseButton, height, width = '400px', ...rest }, ref) => {
     const variants = {
       hidden: { y: 0, opacity: 0 },
       visible: { y: 130, opacity: 1 },

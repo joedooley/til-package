@@ -37,14 +37,7 @@ export default function AuthDialog({ isOpen, onClose, router, ...rest }) {
 
   return (
     isOpen && (
-      <Dialog
-        {...rest}
-        onClose={onClose}
-        ariaLabel="Dialog with login options"
-        hasCloseButton={false}
-        height="585px"
-        width="700px"
-      >
+      <Dialog {...rest} onClose={onClose} ariaLabel="Dialog with login options" height="585px" width="700px">
         <Logo
           css={css`
             position: absolute;
