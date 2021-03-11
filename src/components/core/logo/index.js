@@ -13,6 +13,8 @@ const SiteTitle = styled(Flex)(
 
     h1 {
       color: ${theme.colors.text};
+      font-size: ${theme.fontSizes[5]};
+      margin-bottom: 0;
       margin-left: 0.5rem;
     }
   `

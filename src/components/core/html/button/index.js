@@ -20,7 +20,7 @@ const base = ({ theme, isLoading }) => css`
   justify-content: center;
   line-height: ${theme.lineHeights.default};
   outline-color: ${theme.colors.brand.focus};
-  padding: ${theme.space[3]};
+  padding: ${theme.space[2]} ${theme.space[4]};
   transition: background-color 300ms ease-in-out, color 150ms linear;
 
   &:hover {
@@ -42,15 +42,12 @@ const base = ({ theme, isLoading }) => css`
 let dynamicStyle = ({ theme, variant, inverted }) => {
   if (variant === 'warning') {
     return css`
-      background-color: ${theme.colors.error.primary};
-      outline-color: ${theme.colors.error.primary};
+      background-color: ${theme.colors.black[600]};
+      outline-color: none;
 
-      &:hover {
-        background-color: ${theme.colors.error.hover};
-      }
-
+      &:hover,
       &:focus {
-        background-color: ${theme.colors.error.focus};
+        background-color: ${theme.colors.black[400]};
       }
     `;
   }

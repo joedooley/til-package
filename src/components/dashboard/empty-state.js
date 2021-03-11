@@ -4,9 +4,10 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { Flex, Text, Button, Heading } from '@components/core/html';
 
-export default function EmptyState(props) {
+export default function EmptyState({ onActionClick, ...rest }) {
   return (
     <Flex
+      className={rest.className}
       direction="column"
       css={theme => css`
         background-color: ${theme.colors.black[400]};
@@ -19,6 +20,7 @@ export default function EmptyState(props) {
       <Text>Welcome. Let&apos;s get started</Text>
 
       <Button
+        onClick={onActionClick}
         ariaLabel="Click button to start adding content"
         variant="outline"
         css={theme => css`
@@ -32,4 +34,6 @@ export default function EmptyState(props) {
   );
 }
 
-EmptyState.propTypes = {};
+EmptyState.propTypes = {
+  onActionClick: PropTypes.func.isRequired,
+};

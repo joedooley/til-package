@@ -1,9 +1,8 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { useAuth } from '@lib/firebase/auth';
-import { Flex } from '@components/core/html';
 import useForm from '../form/useForm';
 import Dialog from '@components/core/dialog';
 import LoginForm from '../form';

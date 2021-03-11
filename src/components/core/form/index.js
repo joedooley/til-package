@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { css } from '@emotion/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, FormProvider as ReactHookFormProvider } from 'react-hook-form';
 import Input from './fields/input';
@@ -20,7 +21,16 @@ export default function Form({ schema, defaultValues, mode = 'onBlur', children,
   return (
     <FormContext.Provider value={defaultValues}>
       <ReactHookFormProvider {...methods}>
-        <form autoComplete="off" noValidate className={rest.className}>
+        <form
+          autoComplete="off"
+          noValidate
+          className={rest.className}
+          css={css`
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+          `}
+        >
           {children}
         </form>
       </ReactHookFormProvider>

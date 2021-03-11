@@ -6,13 +6,12 @@ import { useSelect } from 'downshift';
 import { useFormContext, Controller } from 'react-hook-form';
 import { motion, AnimatePresence } from 'framer-motion';
 import Field from '../field';
-import Icon from 'public/assets/icons/table/down-arrow.svg';
+import Icon from 'public/assets/icons/down-arrow.svg';
 
 const Button = styled.button(
   ({ theme, isOpen, isPlaceholder }) => css`
     align-items: center;
-    background: ${theme.colors.text};
-    border: ${theme.borders.primary};
+    background: transparent;
     border-radius: ${theme.radii[2]};
     color: ${theme.colors.text};
     display: flex;
@@ -29,15 +28,6 @@ const Button = styled.button(
   `
 );
 
-const DownArrowIcon = styled(Icon)(
-  ({ theme }) => css`
-    path {
-      fill: ${theme.colors.text};
-      stroke: ${theme.colors.text};
-    }
-  `
-);
-
 const MenuContainer = styled.div`
   background: transparent;
   position: relative;
@@ -45,7 +35,7 @@ const MenuContainer = styled.div`
 
 const Menu = styled.ul(
   ({ theme }) => css`
-    background: ${theme.colors.text};
+    background: ${theme.colors.black[400]};
     border-radius: ${theme.radii[2]};
     border-top: 0;
     list-style: none;
@@ -62,7 +52,7 @@ const Menu = styled.ul(
 
 const Item = styled(motion.li)(
   ({ theme, isSelected, isHighlighted }) => css`
-    background: ${isHighlighted ? theme.colors.brand.primary : theme.colors.text};
+    background: ${isHighlighted ? theme.colors.brand.primary : theme.colors.black[400]};
     color: ${isSelected ? theme.colors.brand.primary : theme.colors.text};
     cursor: pointer;
     font-size: ${theme.fontSizes[4]};
@@ -77,7 +67,7 @@ const Item = styled(motion.li)(
       padding-bottom: ${theme.space[1]};
     }
     &:hover {
-      background: ${theme.colors.brand.primary};
+      background: ${theme.colors.black[600]};
     }
   `
 );
@@ -124,7 +114,7 @@ const BaseSelect = React.forwardRef(({ name, label, options, ...rest }, ref) => 
         })}
       >
         <span>{buttonText}</span>
-        <DownArrowIcon />
+        <Icon />
       </Button>
 
       <MenuContainer>

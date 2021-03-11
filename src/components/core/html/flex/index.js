@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 
 const Flex = React.forwardRef(
-  ({ children, direction = 'row', vAlign = 'center', hAlign = 'flex-start', ...rest }, ref) => {
+  ({ children, direction = 'row', vAlign = 'center', hAlign = 'flex-start', as, ...rest }, ref) => {
+    const Component = as ?? 'div';
+
     return (
-      <div
+      <Component
         {...rest}
         ref={ref}
         css={css`
@@ -16,7 +18,7 @@ const Flex = React.forwardRef(
         `}
       >
         {children}
-      </div>
+      </Component>
     );
   }
 );
@@ -26,6 +28,7 @@ Flex.propTypes = {
   direction: PropTypes.oneOf(['column', 'row']),
   vAlign: PropTypes.oneOf(['flex-start', 'center', 'flex-end']),
   hAlign: PropTypes.oneOf(['flex-start', 'center', 'flex-end', 'space-between', 'space-around', 'space-evenly']),
+  as: PropTypes.string,
 };
 
 Flex.displayName = 'Flex';

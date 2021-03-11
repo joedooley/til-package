@@ -17,8 +17,11 @@ export const propTypes = {
 };
 
 export const app = {
+  site: {
+    title: 'til',
+  },
   meta: {
-    title: 'TIL | Today I Learned',
+    title: 'til | Today I Learned',
     description: 'A simple solution to share knowledge within your organization or community.',
   },
 };

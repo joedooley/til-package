@@ -15,16 +15,12 @@ export default function LoginForm({ auth, type, formProps, ...rest }) {
     start: {
       x: isLogin ? -220 : 1,
       transition: {
-        // type: 'spring',
-        // bounce: 0.25,
         duration: 1,
       },
     },
     end: {
       x: isLogin ? 1 : -220,
       transition: {
-        // type: 'spring',
-        // bounce: 0.25,
         duration: 1,
       },
     },

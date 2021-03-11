@@ -1,17 +1,9 @@
 import db from './firebase-admin';
 
-export async function getAllFeedback(siteId) {
-  try {
-    const snapshot = await db.collection('feedback').where('siteId', '==', siteId).get();
-    const feedback = [];
-    snapshot.forEach(doc => {
-      feedback.push({ id: doc.id, ...doc.data() });
-    });
-    return { feedback };
-  } catch (error) {
-    return { error };
-  }
-}
+const timestamps = doc => ({
+  created: doc.createTime.seconds,
+  updated: doc.updateTime.seconds,
+});
 
 export async function getAllUsers() {
   try {
@@ -19,9 +11,24 @@ export async function getAllUsers() {
     const users = [];
 
     snapshot.forEach(doc => {
-      users.push({ id: doc.id, ...doc.data() });
+      users.push({ id: doc.id, ...timestamps(doc), ...doc.data() });
     });
     return { users };
+  } catch (error) {
+    return { error };
+  }
+}
+
+export async function getAllPosts() {
+  try {
+    const snapshot = await db.collection('post').get();
+    const posts = [];
+
+    snapshot.forEach(doc => {
+      posts.push({ id: doc.id, ...timestamps(doc), ...doc.data() });
+    });
+
+    return { posts };
   } catch (error) {
     return { error };
   }

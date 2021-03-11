@@ -26,9 +26,10 @@ const colors = {
     100: 'hsla(var(--base-text), 5%, 100%)',
     200: 'hsla(var(--base-text), 7%, 100%)',
     300: 'hsla(var(--base-text), 12%, 100%)',
-    400: 'hsla(var(--base-text), 15%, 100%)',
+    400: 'hsla(var(--base-text), 16%, 100%)',
     500: 'hsla(var(--base-text), 20%, 100%)',
     600: 'hsla(var(--base-text), 27%, 100%)',
+    700: 'hsla(var(--base-text), 40%, 100%)',
   },
 };
 

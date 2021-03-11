@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import { useRouter } from 'next/router';
 import { Flex } from '@components/core/html';
 import { Button } from '@components/core/html';
 import GitHubIcon from 'public/assets/icons/login/github.svg';
@@ -63,33 +62,14 @@ const ButtonContainer = styled(Flex)(
 );
 
 export default function LoginButtons({ auth, ...rest }) {
-  const router = useRouter();
-  const buttonLabel = router.pathname === '/login' ? 'Login' : 'Sign up';
-
   return (
     <ButtonContainer className={rest.className} hAlign="space-between">
-      <Button
-        type="button"
-        ariaLabel="Click button to login with a GitHub account"
-        onClick={e => auth.signinWithGitHub()}
-      >
+      <Button type="button" ariaLabel="Click button to login with a GitHub account" onClick={auth.signinWithGitHub}>
         <GitHubIcon title="github" />
       </Button>
 
-      <Button
-        type="button"
-        ariaLabel="Click button to login with a Google account"
-        onClick={e => auth.signinWithGoogle()}
-      >
+      <Button type="button" ariaLabel="Click button to login with a Google account" onClick={auth.signinWithGoogle}>
         <GoogleIcon title="google" />
-      </Button>
-
-      <Button
-        type="button"
-        ariaLabel="Click button to login with a GitHub account"
-        onClick={e => auth.signinWithGitHub()}
-      >
-        <GitHubIcon title="github" />
       </Button>
     </ButtonContainer>
   );

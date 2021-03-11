@@ -83,8 +83,7 @@ export default function GlobalCss() {
         }
 
         h1 {
-          font-size: ${theme.fontSizes[5]};
-          font-weight: ${theme.fontWeights.normal};
+          font-size: ${theme.fontSizes[7]};
           line-height: ${theme.lineHeights.default};
           margin-bottom: ${theme.space[5]};
         }
@@ -136,6 +135,7 @@ export default function GlobalCss() {
           font-weight: ${theme.fontWeights.normal};
           font-size: ${theme.fontSizes[2]};
           line-height: ${theme.lineHeights.default};
+          margin-bottom: ${theme.space[4]};
         }
 
         label {
@@ -168,9 +168,9 @@ export default function GlobalCss() {
         select,
         textarea {
           background: transparent;
-          border: ${theme.borders.dark};
+          border: ${theme.borders.secondary};
           border-radius: ${theme.radii[2]};
-          color: ${theme.colors.disabled.text};
+          color: ${theme.colors.text};
           padding: ${theme.space[3]} 8px;
           width: 100%;
 

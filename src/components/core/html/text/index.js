@@ -7,7 +7,9 @@ const Text = React.forwardRef(({ align = 'center', children, ...rest }, ref) => 
     <p
       {...rest}
       ref={ref}
-      css={css`
+      css={theme => css`
+        font-size: ${theme.fontSizes[3]};
+        line-height: 21px;
         text-align: ${align};
       `}
     >

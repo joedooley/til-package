@@ -55,7 +55,9 @@ export default function Field({ name, label, children, ...rest }) {
               ...child.props,
               key: child.props.name,
               css: theme => css`
-                border: ${hasError ? `1px solid ${theme.colors.error.primary}` : `1px solid ${theme.colors.text}`};
+                border: ${hasError
+                  ? `1px solid ${theme.colors.error.primary}`
+                  : `1px solid ${theme.colors.border.secondary}`};
                 outline: none;
               `,
             })

@@ -4,16 +4,16 @@ import firebase from './firebase';
 import Router from 'next/router';
 import { createUser } from './db';
 
-const authContext = React.createContext();
+const AuthContext = React.createContext();
 
 export function AuthProvider({ children }) {
   const auth = useProvideAuth();
 
-  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => {
-  return React.useContext(authContext);
+  return React.useContext(AuthContext);
 };
 
 function useProvideAuth() {

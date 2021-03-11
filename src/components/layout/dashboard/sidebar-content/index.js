@@ -4,11 +4,11 @@ import Head from 'next/head';
 import { css } from '@emotion/react';
 import { useAuth } from '@lib/firebase/auth';
 import { app as constants } from '@util/constants';
-import usePageTitle from '@hooks/usePageTitle';
-import Header from '../header';
 import { SkipNavContent } from '@components/core/skip-nav';
+import usePageTitle from '@hooks/usePageTitle';
+import Sidebar from '../sidebar';
 
-export default function Layout({ children, pageTitle }) {
+export default function DashboardLayout({ children, pageTitle }) {
   const title = usePageTitle(pageTitle);
   const auth = useAuth();
 
@@ -23,19 +23,14 @@ export default function Layout({ children, pageTitle }) {
         <meta name="description" content={constants.meta.description} />
       </Head>
 
-      <Header
-        auth={auth}
-        css={theme => css`
-          border-bottom: ${theme.borders.secondary};
-        `}
-      />
-
       <main
         css={css`
           display: flex;
           min-height: 100vh;
         `}
       >
+        <Sidebar siteTitle={constants.site.title} />
+
         <article
           css={theme => css`
             align-content: flex-start;
@@ -53,7 +48,7 @@ export default function Layout({ children, pageTitle }) {
   );
 }
 
-Layout.propTypes = {
+DashboardLayout.propTypes = {
   children: PropTypes.node,
   pageTitle: PropTypes.string,
 };

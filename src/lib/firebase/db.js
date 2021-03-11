@@ -12,3 +12,7 @@ export function createUser(uid, data) {
     .doc(uid)
     .set({ uid, ...data }, { merge: true });
 }
+
+export function createPost(data) {
+  return firestore.collection('post').add(data);
+}
