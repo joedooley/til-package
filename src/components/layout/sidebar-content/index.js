@@ -1,27 +1,20 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Head from 'next/head';
 import { css } from '@emotion/react';
 import { useAuth } from '@lib/firebase/auth';
 import { app as constants } from '@util/constants';
-import usePageTitle from '@hooks/usePageTitle';
+import Head from '../head';
 import Header from '../header';
 import { SkipNavContent } from '@components/core/skip-nav';
 
-export default function Layout({ children, pageTitle }) {
-  const title = usePageTitle(pageTitle);
+export default function Layout({ children }) {
   const auth = useAuth();
 
   console.log(`auth`, auth);
 
   return (
     <>
-      <Head>
-        <title>{title}</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta name="description" content={constants.meta.description} />
-      </Head>
+      <Head meta={constants.meta} />
 
       <Header
         auth={auth}
@@ -54,6 +47,5 @@ export default function Layout({ children, pageTitle }) {
 }
 
 Layout.propTypes = {
-  children: PropTypes.node,
-  pageTitle: PropTypes.string,
+  children: PropTypes.node.isRequired,
 };

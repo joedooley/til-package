@@ -171,6 +171,7 @@ export default function GlobalCss() {
           border: ${theme.borders.secondary};
           border-radius: ${theme.radii[2]};
           color: ${theme.colors.text};
+          font-size: ${theme.fontSizes[4]};
           padding: ${theme.space[3]} 8px;
           width: 100%;
 

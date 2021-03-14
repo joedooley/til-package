@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import { Flex, Text, Button, Heading } from '@components/core/html';
+import { SkipNavLink } from '@components/core/skip-nav';
+import { Flex, Text, Heading } from '@components/core/html';
 import Menu from '@components/core/menu/list';
 
 const InnerWrap = styled(Flex)``;
@@ -78,7 +79,7 @@ const Aside = styled('aside')(
 
     header {
       border-bottom: ${theme.borders.secondary};
-      padding: ${theme.space[3]} 0 ${theme.space[3]} 25px;
+      padding: 15px 0 15px 25px;
       place-self: flex-start;
       width: 100%;
 
@@ -105,7 +106,7 @@ const items = [
     heading: 'Organizations',
     items: [
       {
-        href: '/orgs/content-board',
+        href: '/dashboard/orgs',
         value: 'Content Board',
       },
     ],
@@ -114,11 +115,11 @@ const items = [
     heading: 'Account',
     items: [
       {
-        href: '/account/preferences',
-        value: 'Preferences',
+        href: '/dashboard/account',
+        value: 'Edit Profile',
       },
       {
-        href: '/account/logout',
+        href: '#',
         value: 'Logout',
       },
     ],
@@ -143,6 +144,7 @@ export default function Sidebar({ siteTitle, ...rest }) {
     <Aside className={rest.className}>
       <InnerWrap direction="column" vAlign="flex-start">
         <Flex as="header">
+          <SkipNavLink />
           <SiteTitle level={4}>{siteTitle}</SiteTitle>
         </Flex>
 

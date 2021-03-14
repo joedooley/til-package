@@ -74,11 +74,10 @@ export default function LoginForm({ auth, type, formProps, ...rest }) {
             width: 350px;
           `}
         >
-          {!isLogin && <Form.Input name="username" label="Username" type="text" placeholder="Username" required />}
-          <Form.Input name="email" label="Email" type="text" placeholder="Email" required />
+          {!isLogin && <Form.Input name="username" type="text" placeholder="Username" required />}
+          <Form.Input name="email" type="text" placeholder="Email" required />
           <Form.Input
             name="password"
-            label="Password"
             type="password"
             placeholder="Password"
             required

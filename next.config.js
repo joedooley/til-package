@@ -3,7 +3,18 @@ const webpack = require('webpack');
 module.exports = {
   reactStrictMode: true,
   poweredByHeader: false,
+  productionBrowserSourceMaps: true,
   experimental: { optimizeFonts: true },
+
+  async redirects() {
+    return [
+      {
+        source: '/dashboard',
+        destination: '/dashboard/projects',
+        permanent: true,
+      },
+    ];
+  },
 
   webpack(config) {
     config.module.rules.push({

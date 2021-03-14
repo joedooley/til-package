@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { css } from '@emotion/react';
 import { getAllPosts } from '@lib/firebase/db-admin.js';
 import { Flex, Text, Button, Heading } from '@components/core/html';
 import useDialog from '@hooks/useDialog';
@@ -12,7 +13,13 @@ export default function Dashboard(props) {
   console.log(`props`, props);
 
   return (
-    <Flex direction="column" vAlign="flex-start">
+    <Flex
+      direction="column"
+      vAlign="flex-start"
+      css={theme => css`
+        width: 100%;
+      `}
+    >
       <PageTitle {...props} value="Dashboard" />
       <EmptyState onActionClick={togglePanel} />
       {isOpen && <CreatePostPanel onCancel={togglePanel} />}

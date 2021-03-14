@@ -26,6 +26,15 @@ export default function App({ Component, pageProps }) {
   );
 }
 
+/**
+ * Measuring performance
+ * @link https://nextjs.org/docs/advanced-features/measuring-performance
+ * @param {*} metric
+ */
+// export function reportWebVitals(metric) {
+//   console.log(metric);
+// }
+
 App.propTypes = {
   Component: PropTypes.func,
   pageProps: PropTypes.object,

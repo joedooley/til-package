@@ -1,10 +1,10 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import styled from '@emotion/styled';
+import Image from 'next/image';
 import { css } from '@emotion/react';
-import { Flex, Text, Button, Heading } from '@components/core/html';
+import { Flex, Button, Heading } from '@components/core/html';
 
-export default function EmptyState({ onActionClick, ...rest }) {
+export default function EmptyState({ onActionClick, content, ...rest }) {
   return (
     <Flex
       className={rest.className}
@@ -16,19 +16,27 @@ export default function EmptyState({ onActionClick, ...rest }) {
         width: 100%;
       `}
     >
-      <Heading level={2}>You haven&apos;t added any content.</Heading>
-      <Text>Welcome. Let&apos;s get started</Text>
+      <Image src="/assets/images/content-structure.svg" height="200" width="200" />
+
+      <Heading
+        level={2}
+        css={theme => css`
+          margin-top: ${theme.space[5]};
+        `}
+      >
+        {content.heading}
+      </Heading>
 
       <Button
         onClick={onActionClick}
-        ariaLabel="Click button to start adding content"
+        ariaLabel={content.button.ariaLabel}
         variant="outline"
         css={theme => css`
           padding-left: ${theme.space[5]};
           padding-right: ${theme.space[5]};
         `}
       >
-        Add Content
+        {content.button.label}
       </Button>
     </Flex>
   );
@@ -36,4 +44,11 @@ export default function EmptyState({ onActionClick, ...rest }) {
 
 EmptyState.propTypes = {
   onActionClick: PropTypes.func.isRequired,
+  content: PropTypes.shape({
+    heading: PropTypes.string.isRequired,
+    button: PropTypes.shape({
+      ariaLabel: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    }),
+  }),
 };

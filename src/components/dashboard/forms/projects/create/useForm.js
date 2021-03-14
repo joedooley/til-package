@@ -19,7 +19,7 @@ const schema = yup.object().shape({
   }),
 });
 
-export default function usePostForm() {
+export default function useProjectForm() {
   const methods = useBaseForm({
     defaultValues: formValues,
     mode: 'onBlur',

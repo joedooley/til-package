@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import nookies from 'nookies';
 import firebase from './firebase';
 import Router from 'next/router';
 import { createUser } from './db';
@@ -12,26 +13,26 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }
 
-export const useAuth = () => {
-  return React.useContext(AuthContext);
-};
-
 function useProvideAuth() {
   const [user, setUser] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
 
-  const handleUser = rawUser => {
+  const handleUser = async rawUser => {
     if (rawUser) {
-      const user = formatUser(rawUser);
+      const user = await formatUser(rawUser);
+      const { token, ...userWithoutToken } = user;
 
-      createUser(user.uid, user);
-      setLoading(false);
+      createUser(user.uid, userWithoutToken);
       setUser(user);
+
+      setLoading(false);
+      nookies.set(undefined, 'token', token, { path: '/' });
 
       return user;
     } else {
-      setLoading(false);
+      nookies.set(undefined, 'token', '', { path: '/' });
       setUser(false);
+      setLoading(false);
 
       return false;
     }
@@ -45,10 +46,7 @@ function useProvideAuth() {
       .signInWithPopup(new firebase.auth.GithubAuthProvider())
       .then(response => {
         handleUser(response.user);
-
-        if (redirect) {
-          Router.push(redirect);
-        }
+        Router.push(redirect);
       });
   };
 
@@ -60,25 +58,32 @@ function useProvideAuth() {
       .signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then(response => {
         handleUser(response.user);
-
-        if (redirect) {
-          Router.push(redirect);
-        }
+        Router.push(redirect);
       })
       .catch(error => console.error(error));
   };
 
+  // eslint-disable-next-line no-unused-vars
+  const signinWithEmail = (email, password, redirect = '/dashboard') => {
+    setLoading(true);
+
+    return firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(response => {
+        handleUser(response.user);
+        Router.push(redirect);
+      });
+  };
+
   const signout = (redirect = '/') => {
+    Router.push(redirect);
+
     return firebase
       .auth()
       .signOut()
-      .then(() => {
-        handleUser(false);
-
-        if (redirect) {
-          Router.push(redirect);
-        }
-      });
+      .then(() => handleUser(false))
+      .catch(error => console.error(error));
   };
 
   // eslint-disable-next-line no-unused-vars
@@ -95,6 +100,16 @@ function useProvideAuth() {
     return () => unsubscribe();
   }, []);
 
+  React.useEffect(() => {
+    const refreshHandler = setInterval(async () => {
+      const user = firebase.auth().currentUser;
+
+      if (user) await user.getIdToken(true);
+    }, 10 * 60 * 1000);
+
+    return () => clearInterval(refreshHandler);
+  }, []);
+
   return {
     user,
     loading,
@@ -104,8 +119,15 @@ function useProvideAuth() {
   };
 }
 
-const formatUser = user => {
-  console.log(`user`, user);
+export const useAuth = () => {
+  return React.useContext(AuthContext);
+};
+
+const formatUser = async user => {
+  const token = await user.getIdToken();
+
+  console.log(`formatUser`, user);
+  console.log(`formatUser token`, token);
 
   return {
     uid: user.uid,
@@ -113,6 +135,7 @@ const formatUser = user => {
     name: user.displayName,
     provider: user.providerData[0].providerId,
     photoUrl: user.photoURL,
+    token,
   };
 };
 

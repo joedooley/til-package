@@ -26,7 +26,7 @@ const Input = React.forwardRef(({ name, label, prefix, ...rest }, _ref) => {
         }
       `}
     >
-      <input {...rest} ref={ref} name={name} {...inputProps} />
+      <input ref={ref} name={name} {...inputProps} />
       {<CharacterCount max={rest.max} value={inputProps.value} />}
       {<Adornment value={prefix} />}
     </Field>
@@ -35,7 +35,7 @@ const Input = React.forwardRef(({ name, label, prefix, ...rest }, _ref) => {
 
 Input.propTypes = {
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   prefix: PropTypes.any,
 };
 

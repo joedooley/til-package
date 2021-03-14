@@ -1,161 +1,44 @@
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import { Flex, Text, Button, Heading } from '@components/core/html';
-import Menu from '@components/core/menu/list';
+import { Flex, Text, Link, Heading } from '@components/core/html';
+import RightArrow from 'public/assets/icons/arrows/right.svg';
 
-const InnerWrap = styled(Flex)``;
+const BreadcrumbsWrap = styled(Flex)(
+  ({ theme }) => css`
+    place-self: flex-start;
 
-const SiteTitle = styled(Heading)`
-  margin-bottom: 0;
-`;
+    svg {
+      color: ${theme.colors.black[700]};
+    }
+  `
+);
 
-const NavHeading = styled(Text)(
+const Crumb = styled(Link)(
   ({ theme }) => css`
     color: ${theme.colors.black[700]};
-    font-family: ${theme.fonts.heading};
+    font-size: ${theme.fontSizes[1]};
+    line-height: 1.25rem;
+    padding: ${theme.space[1]} ${theme.space[2]};
+  `
+);
+
+const LastCrumb = styled.p(
+  ({ theme }) => css`
+    color: ${theme.colors.black[700]};
+    font-size: ${theme.fontSizes[1]};
+    line-height: 1.25rem;
     margin-bottom: 0;
-    padding-bottom: ${theme.space[2]};
-    padding-left: ${theme.space[2]};
-    padding-top: ${theme.space[2]};
-    text-align: left;
   `
 );
-
-const NavSection = styled('div')(
-  ({ theme }) => css`
-    margin-bottom: 20px;
-    margin-top: 20px;
-
-    li {
-      padding-bottom: ${theme.space[2]};
-      padding-left: ${theme.space[2]};
-      padding-top: ${theme.space[2]};
-
-      &:hover {
-        background-color: rgb(15, 15, 15);
-      }
-
-      a {
-        color: hsla(0, 0%, 88%, 100%);
-        font-family: ${theme.fonts.heading};
-        font-size: ${theme.fontSizes[3]};
-        line-height: 21px;
-
-        &:hover,
-        &:focus {
-          color: hsla(0, 0%, 88%, 100%);
-        }
-      }
-    }
-  `
-);
-
-const NavWrap = styled('div')(
-  ({ theme }) => css`
-    padding-left: ${theme.space[2]};
-    padding-right: ${theme.space[2]};
-    width: 100%;
-
-    ${NavSection} {
-      border-bottom: ${theme.borders.secondary};
-    }
-  `
-);
-
-const Aside = styled('aside')(
-  ({ theme }) => css`
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    min-height: 100vh;
-    min-width: 271px;
-
-    & > * {
-      position: sticky;
-      top: 0;
-    }
-
-    header {
-      border-bottom: ${theme.borders.secondary};
-      padding: ${theme.space[3]} 0 ${theme.space[3]} 25px;
-      place-self: flex-start;
-      width: 100%;
-
-      ${SiteTitle} {
-        color: hsla(0, 0%, 100%, 100%);
-        margin-bottom: 0;
-        text-align: left;
-      }
-    }
-  `
-);
-
-const items = [
-  {
-    heading: 'Projects',
-    items: [
-      {
-        href: '/dashboard/projects',
-        value: 'All Projects',
-      },
-    ],
-  },
-  {
-    heading: 'Organizations',
-    items: [
-      {
-        href: '/orgs/content-board',
-        value: 'Content Board',
-      },
-    ],
-  },
-  {
-    heading: 'Account',
-    items: [
-      {
-        href: '/account/preferences',
-        value: 'Preferences',
-      },
-      {
-        href: '/account/logout',
-        value: 'Logout',
-      },
-    ],
-  },
-  {
-    heading: 'Documentation',
-    items: [
-      {
-        href: '/docs/guides',
-        value: 'Guides',
-      },
-      {
-        href: '/docs/api',
-        value: 'API Reference',
-      },
-    ],
-  },
-];
 
 export default function Breadcrumbs({ siteTitle, ...rest }) {
   return (
-    <Aside className={rest.className}>
-      <InnerWrap direction="column" vAlign="flex-start">
-        <Flex as="header">
-          <SiteTitle level={4}>{siteTitle}</SiteTitle>
-        </Flex>
-
-        <NavWrap>
-          {items.map(item => (
-            <NavSection key={item.heading}>
-              <NavHeading>{item.heading}</NavHeading>
-              <Menu items={item.items} />
-            </NavSection>
-          ))}
-        </NavWrap>
-      </InnerWrap>
-    </Aside>
+    <BreadcrumbsWrap className={rest.className}>
+      <Crumb href="/dashboard/projects">{siteTitle}</Crumb>
+      <RightArrow />
+      <LastCrumb>Projects</LastCrumb>
+    </BreadcrumbsWrap>
   );
 }
 

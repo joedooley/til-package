@@ -18,10 +18,10 @@ export const propTypes = {
 
 export const app = {
   site: {
-    title: 'til',
+    title: 'Til',
   },
   meta: {
-    title: 'til | Today I Learned',
+    title: 'Til | Today I Learned',
     description: 'A simple solution to share knowledge within your organization or community.',
   },
 };

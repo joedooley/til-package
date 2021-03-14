@@ -1,27 +1,17 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Head from 'next/head';
 import { css } from '@emotion/react';
-import { useAuth } from '@lib/firebase/auth';
 import { app as constants } from '@util/constants';
-import { SkipNavContent } from '@components/core/skip-nav';
-import usePageTitle from '@hooks/usePageTitle';
+import Head from '../../head';
 import Sidebar from '../sidebar';
+import Content from '../content';
 
-export default function DashboardLayout({ children, pageTitle }) {
-  const title = usePageTitle(pageTitle);
-  const auth = useAuth();
-
-  console.log(`auth`, auth);
+export default function DashboardLayout({ children }) {
+  const siteTitle = constants.site.title;
 
   return (
     <>
-      <Head>
-        <title>{title}</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta name="description" content={constants.meta.description} />
-      </Head>
+      <Head meta={constants.meta} />
 
       <main
         css={css`
@@ -29,26 +19,13 @@ export default function DashboardLayout({ children, pageTitle }) {
           min-height: 100vh;
         `}
       >
-        <Sidebar siteTitle={constants.site.title} />
-
-        <article
-          css={theme => css`
-            align-content: flex-start;
-            border-left: ${theme.borders.secondary};
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            padding: ${theme.space[4]};
-          `}
-        >
-          <SkipNavContent>{children}</SkipNavContent>
-        </article>
+        <Sidebar siteTitle={siteTitle} />
+        <Content siteTitle={siteTitle}>{children}</Content>
       </main>
     </>
   );
 }
 
 DashboardLayout.propTypes = {
-  children: PropTypes.node,
-  pageTitle: PropTypes.string,
+  children: PropTypes.node.isRequired,
 };
