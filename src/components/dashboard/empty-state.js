@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { css } from '@emotion/react';
 import { Flex, Button, Heading } from '@components/core/html';
 
-export default function EmptyState({ onActionClick, content, ...rest }) {
+export default function EmptyState({ onActionClick, heading, btnLabel, ...rest }) {
   return (
     <Flex
       className={rest.className}
@@ -24,19 +24,19 @@ export default function EmptyState({ onActionClick, content, ...rest }) {
           margin-top: ${theme.space[5]};
         `}
       >
-        {content.heading}
+        {heading}
       </Heading>
 
       <Button
         onClick={onActionClick}
-        ariaLabel={content.button.ariaLabel}
+        ariaLabel="Click button to add new content"
         variant="outline"
         css={theme => css`
           padding-left: ${theme.space[5]};
           padding-right: ${theme.space[5]};
         `}
       >
-        {content.button.label}
+        {btnLabel}
       </Button>
     </Flex>
   );
@@ -44,11 +44,6 @@ export default function EmptyState({ onActionClick, content, ...rest }) {
 
 EmptyState.propTypes = {
   onActionClick: PropTypes.func.isRequired,
-  content: PropTypes.shape({
-    heading: PropTypes.string.isRequired,
-    button: PropTypes.shape({
-      ariaLabel: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-    }),
-  }),
+  heading: PropTypes.string.isRequired,
+  btnLabel: PropTypes.string.isRequired,
 };

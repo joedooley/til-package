@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import nookies from 'nookies';
 import firebase from './firebase';
 import Router from 'next/router';
 import { createUser } from './db';
@@ -15,28 +14,24 @@ export function AuthProvider({ children }) {
 
 function useProvideAuth() {
   const [user, setUser] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
 
-  const handleUser = async rawUser => {
+  const handleUser = React.useCallback(rawUser => {
     if (rawUser) {
-      const user = await formatUser(rawUser);
-      const { token, ...userWithoutToken } = user;
+      const user = formatUser(rawUser);
 
-      createUser(user.uid, userWithoutToken);
+      createUser(user.uid, user);
       setUser(user);
-
       setLoading(false);
-      nookies.set(undefined, 'token', token, { path: '/' });
 
       return user;
     } else {
-      nookies.set(undefined, 'token', '', { path: '/' });
       setUser(false);
       setLoading(false);
 
       return false;
     }
-  };
+  }, []);
 
   const signinWithGitHub = (redirect = '/dashboard') => {
     setLoading(true);
@@ -100,16 +95,6 @@ function useProvideAuth() {
     return () => unsubscribe();
   }, []);
 
-  React.useEffect(() => {
-    const refreshHandler = setInterval(async () => {
-      const user = firebase.auth().currentUser;
-
-      if (user) await user.getIdToken(true);
-    }, 10 * 60 * 1000);
-
-    return () => clearInterval(refreshHandler);
-  }, []);
-
   return {
     user,
     loading,
@@ -123,19 +108,13 @@ export const useAuth = () => {
   return React.useContext(AuthContext);
 };
 
-const formatUser = async user => {
-  const token = await user.getIdToken();
-
-  console.log(`formatUser`, user);
-  console.log(`formatUser token`, token);
-
+const formatUser = user => {
   return {
     uid: user.uid,
     email: user.email,
     name: user.displayName,
     provider: user.providerData[0].providerId,
     photoUrl: user.photoURL,
-    token,
   };
 };
 

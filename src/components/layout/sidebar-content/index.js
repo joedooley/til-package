@@ -1,23 +1,17 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
-import { useAuth } from '@lib/firebase/auth';
 import { app as constants } from '@util/constants';
+import { SkipNavContent } from '@components/core/skip-nav';
 import Head from '../head';
 import Header from '../header';
-import { SkipNavContent } from '@components/core/skip-nav';
 
 export default function Layout({ children }) {
-  const auth = useAuth();
-
-  console.log(`auth`, auth);
-
   return (
     <>
       <Head meta={constants.meta} />
 
       <Header
-        auth={auth}
         css={theme => css`
           border-bottom: ${theme.borders.secondary};
         `}

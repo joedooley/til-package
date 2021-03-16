@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import { Flex, Heading, Button } from '@components/core/html';
+import { Flex, Heading } from '@components/core/html';
 import Form from '@components/core/form';
 
 const Container = styled(Flex)(

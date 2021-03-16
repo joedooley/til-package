@@ -11,7 +11,7 @@ export function client(endpoint, { body, ...customConfig } = {}) {
     config.body = JSON.stringify(body);
   }
 
-  return fetch(`api/${endpoint}`, config).then(async response => {
+  return fetch(endpoint, config).then(async response => {
     const data = await response.json();
 
     if (response.ok) {

@@ -7,7 +7,7 @@ import { Flex, Text, Link, Heading } from '@components/core/html';
 import LoginButtons from '../form/login-buttons';
 import SubmitButton from '@components/core/form/submit-button';
 
-export default function LoginForm({ auth, type, formProps, ...rest }) {
+export default function LoginForm({ type, formProps, ...rest }) {
   const isLogin = type === 'login';
   const heading = isLogin ? 'Login to your account' : 'Create Account';
 
@@ -50,7 +50,6 @@ export default function LoginForm({ auth, type, formProps, ...rest }) {
         </Heading>
 
         <LoginButtons
-          auth={auth}
           css={theme => css`
             margin-bottom: ${theme.space[5]};
           `}
@@ -123,7 +122,6 @@ export default function LoginForm({ auth, type, formProps, ...rest }) {
 }
 
 LoginForm.propTypes = {
-  auth: PropTypes.object.isRequired,
   type: PropTypes.oneOf(['login', 'signup']).isRequired,
   formProps: PropTypes.object.isRequired,
 };

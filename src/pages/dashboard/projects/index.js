@@ -1,26 +1,15 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
-import { getCollection } from '@lib/firebase/db-admin.js';
+import { isAuthenticated, getCollection } from '@lib/firebase/db-admin';
 import { Flex, Button } from '@components/core/html';
 import useDialog from '@hooks/useDialog';
 import CreatePostPanel from '@components/dashboard/panels/create-post';
 import EmptyState from '@components/dashboard/empty-state';
 
-export default function Projects({ initialData, ...rest }) {
+export default function ProjectsPage({ initialData, ...rest }) {
   const [data, setData] = React.useState(initialData);
   const [isOpen, togglePanel] = useDialog();
-
-  const content = React.useMemo(
-    () => ({
-      heading: 'Add a project',
-      button: {
-        ariaLabel: 'Click button to start adding content',
-        label: 'Create Project',
-      },
-    }),
-    []
-  );
 
   console.log(`data`, data);
 
@@ -44,7 +33,7 @@ export default function Projects({ initialData, ...rest }) {
           New Project
         </Button>
       ) : (
-        <EmptyState onActionClick={togglePanel} content={content} />
+        <EmptyState onActionClick={togglePanel} heading="Add a project" btnLabel="Create project" />
       )}
 
       {isOpen && <CreatePostPanel onCancel={togglePanel} />}
@@ -52,17 +41,35 @@ export default function Projects({ initialData, ...rest }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps(context) {
+  const user = await isAuthenticated(context);
   const { entries } = await getCollection('project');
+  console.log(`ProjectsPage getServerSideProps user`, user);
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {
+      user,
       initialData: entries,
     },
-    revalidate: 1,
   };
 }
 
-Projects.propTypes = {
+ProjectsPage.propTypes = {
+  user: PropTypes.shape({
+    uid: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    photoUrl: PropTypes.string.isRequired,
+    provider: PropTypes.string.isRequired,
+  }),
   initialData: PropTypes.array.isRequired,
 };

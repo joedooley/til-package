@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { FormProvider } from 'react-hook-form';
-import { isAuthenticated } from '@lib/firebase/db-admin.js';
+import { isAuthenticated } from '@lib/firebase/db-admin';
 import { Flex, Button } from '@components/core/html';
 import useForm from '@components/dashboard/forms/account/profile/useForm';
 import EditProfileForm from '@components/dashboard/forms/account/profile';
@@ -36,12 +36,18 @@ export default function AccountPage({ user, ...rest }) {
 
 export async function getServerSideProps(context) {
   const user = await isAuthenticated(context);
+  console.log(`AccountPage getServerSideProps user`, user);
 
-  return {
-    props: {
-      user,
-    },
-  };
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: { user } };
 }
 
 AccountPage.propTypes = {
@@ -49,7 +55,6 @@ AccountPage.propTypes = {
     uid: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    authTime: PropTypes.number.isRequired,
     photoUrl: PropTypes.string.isRequired,
     provider: PropTypes.string.isRequired,
   }),

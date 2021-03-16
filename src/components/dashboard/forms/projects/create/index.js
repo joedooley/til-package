@@ -2,15 +2,15 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { Flex } from '@components/core/html';
-import mockCategories from '@test/fixtures/categories.js';
+import mockCategories from '@test/fixtures/categories';
 import Form from '@components/core/form';
 
-export default function CreateProjectForm({ className, ...rest }) {
+export default function CreateProjectForm(props) {
   return (
     <Flex
       direction="column"
       vAlign="flex-start"
-      className={className}
+      className={props.className}
       css={css`
         width: 100%;
       `}

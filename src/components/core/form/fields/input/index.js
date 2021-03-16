@@ -26,7 +26,7 @@ const Input = React.forwardRef(({ name, label, prefix, ...rest }, _ref) => {
         }
       `}
     >
-      <input ref={ref} name={name} {...inputProps} />
+      <input ref={ref} name={name} placeholder={rest.placeholder} {...inputProps} />
       {<CharacterCount max={rest.max} value={inputProps.value} />}
       {<Adornment value={prefix} />}
     </Field>

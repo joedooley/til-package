@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import { Flex } from '@components/core/html';
-import { Button } from '@components/core/html';
+import { signinWithProvider } from '@lib/firebase/auth/client';
+import { Flex, Button } from '@components/core/html';
 import GitHubIcon from 'public/assets/icons/login/github.svg';
 import GoogleIcon from 'public/assets/icons/login/google.svg';
 
@@ -61,14 +61,22 @@ const ButtonContainer = styled(Flex)(
   `
 );
 
-export default function LoginButtons({ auth, ...rest }) {
+export default function LoginButtons(props) {
   return (
-    <ButtonContainer className={rest.className} hAlign="space-between">
-      <Button type="button" ariaLabel="Click button to login with a GitHub account" onClick={auth.signinWithGitHub}>
+    <ButtonContainer className={props.className} hAlign="space-between">
+      <Button
+        type="button"
+        ariaLabel="Click button to login with a GitHub account"
+        onClick={() => signinWithProvider('github')}
+      >
         <GitHubIcon title="github" />
       </Button>
 
-      <Button type="button" ariaLabel="Click button to login with a Google account" onClick={auth.signinWithGoogle}>
+      <Button
+        type="button"
+        ariaLabel="Click button to login with a Google account"
+        onClick={() => signinWithProvider('google')}
+      >
         <GoogleIcon title="google" />
       </Button>
     </ButtonContainer>
@@ -76,5 +84,5 @@ export default function LoginButtons({ auth, ...rest }) {
 }
 
 LoginButtons.propTypes = {
-  auth: PropTypes.object.isRequired,
+  className: PropTypes.string,
 };

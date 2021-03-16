@@ -6,55 +6,35 @@ import { SkipNavLink } from '@components/core/skip-nav';
 import { Link } from '@components/core/html';
 import Logo from '@components/core/logo';
 
-export const SiteHeader = styled.header`
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 25px;
-`;
+const SiteHeader = styled.header(
+  ({ theme }) => css`
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 25px;
 
-export default function Header({ auth, ...rest }) {
+    nav {
+      a:first-of-type {
+        margin-right: ${theme.space[3]};
+      }
+    }
+  `
+);
+
+export default function Header(props) {
   return (
-    <SiteHeader className={rest.className}>
+    <SiteHeader className={props.className}>
       <SkipNavLink />
       <Logo />
 
-      <nav
-        css={theme => css`
-          a {
-            &:first-of-type {
-              margin-right: ${theme.space[3]};
-            }
-          }
-        `}
-      >
-        {auth.user ? (
-          <>
-            <Link href="/dashboard">Dashboard</Link>
-            <Link
-              href="/?logout"
-              title="Click to logout of your account"
-              onClick={e => {
-                e.preventDefault();
-                auth.signout();
-              }}
-            >
-              Logout
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link href="/login" replace>
-              Login
-            </Link>
-            <Link href="/signup">Sign up</Link>
-          </>
-        )}
+      <nav>
+        <Link href="/login">Login</Link>
+        <Link href="/signup">Signup</Link>
       </nav>
     </SiteHeader>
   );
 }
 
 Header.propTypes = {
-  auth: PropTypes.object,
+  className: PropTypes.string,
 };

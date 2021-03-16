@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as yup from 'yup';
 import { useForm as useBaseForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAuth } from '@lib/firebase/auth';
 import { updateUser } from '@lib/firebase/db.js';
 
 const formValues = user => {
@@ -18,10 +17,6 @@ const schema = yup.object().shape({
 });
 
 export default function useProfileForm(user) {
-  const auth = useAuth();
-
-  console.log(`auth`, auth);
-
   const methods = useBaseForm({
     mode: 'onBlur',
     defaultValues: formValues(user),
@@ -29,19 +24,13 @@ export default function useProfileForm(user) {
   });
 
   const onSubmit = React.useCallback(payload => {
-    console.log(`Edit Profile cb:`);
-    console.log(`Edit Profile payload:`, payload);
+    console.log(`useProfileForm cb:`);
+    console.log(`useProfileForm payload:`, payload);
 
-    return updateUser(user.uid, payload)
-      .then(docRef => {
-        console.log(`docRef`, docRef);
-
-        return docRef;
-      })
-      .catch(error => {
-        console.error('Error adding document: ', error);
-      });
-  }, []);
+    return updateUser(user.uid, payload).catch(error => {
+      console.error('Error adding document: ', error);
+    });
+  }, [user.uid]);
 
   return React.useMemo(() => {
     return {

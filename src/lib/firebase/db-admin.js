@@ -1,31 +1,56 @@
 import nookies from 'nookies';
-import { db, auth } from './firebase-admin';
+import { db } from './firebase-admin';
+import { validateCookie, clearSessionCookie } from '@lib/firebase/auth/server';
 
 const timestamps = doc => ({
   created: doc.createTime.seconds,
   updated: doc.updateTime.seconds,
 });
 
-export async function isAuthenticated(context) {
+export async function getUser(uid) {
+  const userRef = db.doc(`users/${uid}`);
+
   try {
-    const cookies = nookies.get(context);
-    const token = await auth.verifyIdToken(cookies.token);
+    const userDoc = await userRef.get();
+    const user = !userDoc.exists
+      ? false
+      : {
+          ...userDoc.data(),
+          ...timestamps(userDoc),
+        };
 
-    // FETCH STUFF HERE!! 🚀
+    return { user };
+  } catch (error) {
+    return { error };
+  }
+}
 
-    return {
-      uid: token.uid,
-      email: token.email,
-      name: token.name,
-      authTime: token.auth_time,
-      photoUrl: token.picture,
-      provider: token.firebase.sign_in_provider,
-    };
-  } catch (err) {
-    context.res.writeHead(302, { Location: '/login' });
-    context.res.end();
+export async function isAuthenticated(context) {
+  const cookies = nookies.get(context);
+  const sessionCookie = cookies.session || '';
+  const { req, res } = context;
 
-    return err;
+  try {
+    const { uid } = await validateCookie(sessionCookie);
+
+    if (!uid) {
+      clearSessionCookie(req);
+      return false;
+    }
+
+    const { user } = await getUser(uid);
+
+    if (!user) {
+      clearSessionCookie(req);
+      return false;
+    }
+
+    return user;
+  } catch (error) {
+    console.log(`isAuthenticated error:`, JSON.stringify(error));
+
+    clearSessionCookie(req);
+    return false;
   }
 }
 

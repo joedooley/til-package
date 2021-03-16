@@ -2,7 +2,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { AnimatePresence } from 'framer-motion';
-import { useAuth } from '@lib/firebase/auth';
 import useForm from '../form/useForm';
 import Dialog from '@components/core/dialog';
 import LoginForm from '../form';
@@ -10,7 +9,6 @@ import Sidebar from './sidebar';
 import Logo from '@components/core/logo';
 
 export default function AuthDialog({ isOpen, onClose, router, ...rest }) {
-  const auth = useAuth();
   const type = router.pathname.replace('/', '');
   const [formType, setFormType] = React.useState(type);
   const isLogin = formType === 'login';
@@ -31,8 +29,6 @@ export default function AuthDialog({ isOpen, onClose, router, ...rest }) {
       { shallow: false }
     );
   }, [router, formType]);
-
-  console.log(`formType`, formType);
 
   return (
     isOpen && (
@@ -62,7 +58,6 @@ export default function AuthDialog({ isOpen, onClose, router, ...rest }) {
 
             <LoginForm
               formProps={formProps}
-              auth={auth}
               type={formType}
               css={css`
                 padding-left: ${isLogin && '20px'};
