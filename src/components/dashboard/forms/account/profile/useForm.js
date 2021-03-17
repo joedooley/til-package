@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as yup from 'yup';
+import { isEmpty } from 'lodash';
 import { useForm as useBaseForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { updateUser } from '@lib/firebase/db.js';
@@ -17,25 +18,46 @@ const schema = yup.object().shape({
 });
 
 export default function useProfileForm(user) {
+  const [submittedData, setSubmittedData] = React.useState({});
+
   const methods = useBaseForm({
     mode: 'onBlur',
     defaultValues: formValues(user),
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = React.useCallback(payload => {
-    console.log(`useProfileForm cb:`);
-    console.log(`useProfileForm payload:`, payload);
+  const { uid } = user;
+  const { formState, reset } = methods;
+  const { isDirty } = formState;
 
-    return updateUser(user.uid, payload).catch(error => {
-      console.error('Error adding document: ', error);
-    });
-  }, [user.uid]);
+  React.useEffect(() => {
+    if (formState.isSubmitSuccessful) {
+      reset({ ...submittedData });
+    }
+  }, [formState, reset, submittedData]);
+
+  const handleReset = React.useCallback(() => (isEmpty(submittedData) ? reset() : reset({ ...submittedData })), [
+    reset,
+    submittedData,
+  ]);
+
+  const onSubmit = React.useCallback(
+    payload => {
+      console.log(`useProfileForm payload:`, payload);
+
+      return updateUser(uid, payload)
+        .then(() => setSubmittedData(payload))
+        .catch(error => console.error('updateUser error: ', error));
+    },
+    [uid]
+  );
 
   return React.useMemo(() => {
     return {
       methods,
+      isDirty,
+      handleReset,
       handleSubmit: methods.handleSubmit(payload => onSubmit(payload)),
     };
-  }, [methods, onSubmit]);
+  }, [handleReset, isDirty, methods, onSubmit]);
 }

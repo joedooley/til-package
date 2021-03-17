@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { FormProvider } from 'react-hook-form';
 import { isAuthenticated } from '@lib/firebase/db-admin';
-import { Flex, Button } from '@components/core/html';
+import { Flex } from '@components/core/html';
 import useForm from '@components/dashboard/forms/account/profile/useForm';
 import EditProfileForm from '@components/dashboard/forms/account/profile';
 
 export default function AccountPage({ user, ...rest }) {
-  const { methods, handleSubmit } = useForm(user);
+  const { methods, handleSubmit, handleReset, isDirty } = useForm(user);
 
   return (
     <Flex
@@ -20,16 +20,8 @@ export default function AccountPage({ user, ...rest }) {
       `}
     >
       <FormProvider {...methods}>
-        <EditProfileForm />
+        <EditProfileForm onSubmit={handleSubmit} onReset={handleReset} isDirty={isDirty} />
       </FormProvider>
-
-      <Button onClick={() => {}} ariaLabel="Click button to update your profile">
-        Cancel
-      </Button>
-
-      <Button onClick={handleSubmit} ariaLabel="Click button to update your profile">
-        Save
-      </Button>
     </Flex>
   );
 }

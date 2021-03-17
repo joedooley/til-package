@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import { Flex, Heading } from '@components/core/html';
+import { Flex, Heading, Button } from '@components/core/html';
 import Form from '@components/core/form';
 
 const Container = styled(Flex)(
@@ -13,15 +13,26 @@ const Container = styled(Flex)(
 
     header {
       border-bottom: ${theme.borders.secondary};
-      padding: 13px ${theme.space[3]};
+      width: 100%;
     }
 
     h5 {
       color: ${theme.colors.black[900]};
       font-size: 11px;
       line-height: 17px;
-      margin: 0;
+      margin: 13px ${theme.space[3]};
       text-transform: uppercase;
+    }
+
+    .button-group {
+      margin-right: ${theme.space[3]};
+    }
+
+    button {
+      padding: 6px 10px;
+      &:last-of-type {
+        margin-left: ${theme.space[2]};
+      }
     }
 
     form {
@@ -52,18 +63,23 @@ const Container = styled(Flex)(
   `
 );
 
-export default function EditProfileForm({ className }) {
+export default function EditProfileForm({ onReset, onSubmit, isDirty, ...rest }) {
   return (
-    <Container direction="column" vAlign="flex-start" className={className}>
-      <Flex
-        as="header"
-        hAlign="flex-start"
-        css={theme => css`
-          border-bottom: 1px solid ${theme.colors.black[500]};
-          width: 100%;
-        `}
-      >
+    <Container direction="column" vAlign="flex-start" className={rest.className}>
+      <Flex as="header" hAlign="space-between">
         <Heading level={5}>Profile</Heading>
+
+        {isDirty && (
+          <Flex className="button-group">
+            <Button type="reset" variant="warning" onClick={onReset} ariaLabel="Click button to update your profile">
+              Cancel
+            </Button>
+
+            <Button onClick={onSubmit} ariaLabel="Click button to update your profile">
+              Save
+            </Button>
+          </Flex>
+        )}
       </Flex>
 
       <Flex
@@ -84,5 +100,7 @@ export default function EditProfileForm({ className }) {
 }
 
 EditProfileForm.propTypes = {
-  className: PropTypes.any,
+  isDirty: PropTypes.bool.isRequired,
+  onReset: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };

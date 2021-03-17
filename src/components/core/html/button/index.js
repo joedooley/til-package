@@ -178,7 +178,7 @@ const Button = React.forwardRef(
 Button.propTypes = {
   ariaLabel: PropTypes.string.isRequired,
   role: PropTypes.string,
-  type: PropTypes.oneOf(['button', 'submit']),
+  type: PropTypes.oneOf(['button', 'submit', 'reset']),
   disabled: PropTypes.bool,
   loading: PropTypes.bool,
   onClick: PropTypes.func,

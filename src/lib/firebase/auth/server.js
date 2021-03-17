@@ -10,12 +10,6 @@ export const setSessionCookie = (req, value, exp) => {
   return serialize('session', value, { httpOnly: true, secure, path: '/', maxAge });
 };
 
-export const clearSessionCookie = req => {
-  const secure = !isLocalhost(req);
-
-  return serialize('session', '', { httpOnly: true, secure, path: '/', maxAge: 0 });
-};
-
 export const validateCookie = async function (cookie) {
   const admin = await getFirebaseAdmin();
   const nullResponse = { uid: '' };

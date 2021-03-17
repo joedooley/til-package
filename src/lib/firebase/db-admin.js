@@ -1,6 +1,6 @@
 import nookies from 'nookies';
 import { db } from './firebase-admin';
-import { validateCookie, clearSessionCookie } from '@lib/firebase/auth/server';
+import { validateCookie } from '@lib/firebase/auth/server';
 
 const timestamps = doc => ({
   created: doc.createTime.seconds,
@@ -28,28 +28,28 @@ export async function getUser(uid) {
 export async function isAuthenticated(context) {
   const cookies = nookies.get(context);
   const sessionCookie = cookies.session || '';
-  const { req, res } = context;
 
   try {
     const { uid } = await validateCookie(sessionCookie);
 
     if (!uid) {
-      clearSessionCookie(req);
+      nookies.destroy(context, 'session');
       return false;
     }
 
     const { user } = await getUser(uid);
 
     if (!user) {
-      clearSessionCookie(req);
+      nookies.destroy(context, 'session');
+
       return false;
     }
 
     return user;
   } catch (error) {
     console.log(`isAuthenticated error:`, JSON.stringify(error));
+    nookies.destroy(context, 'session');
 
-    clearSessionCookie(req);
     return false;
   }
 }
