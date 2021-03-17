@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { isEmpty } from 'lodash';
 import { useForm as useBaseForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { updateUser } from '@lib/firebase/db.js';
+import { updateUser } from '@lib/firebase/db';
 
 const formValues = user => {
   return {
