@@ -2,7 +2,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { FormProvider } from 'react-hook-form';
-import { isAuthenticated } from '@lib/firebase/db-admin';
 import { Flex } from '@components/core/html';
 import useForm from '@components/dashboard/forms/account/profile/useForm';
 import EditProfileForm from '@components/dashboard/forms/account/profile';
@@ -12,9 +11,9 @@ export default function AccountPage({ user, ...rest }) {
 
   return (
     <Flex
+      className={rest.className}
       direction="column"
       vAlign="flex-start"
-      className={rest.className}
       css={css`
         width: 100%;
       `}
@@ -27,10 +26,9 @@ export default function AccountPage({ user, ...rest }) {
 }
 
 export async function getServerSideProps(context) {
-  const user = await isAuthenticated(context);
-  console.log(`AccountPage getServerSideProps user`, user);
+  if (!context.req.cookies.session) {
+    console.log('Missing session cookie. Redirecting to the login page');
 
-  if (!user) {
     return {
       redirect: {
         destination: '/login',
@@ -39,7 +37,7 @@ export async function getServerSideProps(context) {
     };
   }
 
-  return { props: { user } };
+  return { props: {} };
 }
 
 AccountPage.propTypes = {
@@ -50,4 +48,5 @@ AccountPage.propTypes = {
     photoUrl: PropTypes.string.isRequired,
     provider: PropTypes.string.isRequired,
   }),
+  errorCode: PropTypes.number,
 };

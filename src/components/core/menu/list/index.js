@@ -1,14 +1,9 @@
-import * as React from 'react';
 import PropTypes from 'prop-types';
-import { signout } from '@lib/firebase/auth/client';
+import { useAuth } from '@hooks/useAuth';
 import MenuItem from '../menu-item';
 
 export default function Menu({ items = [], ...rest }) {
-  const handleLogout = React.useCallback(e => {
-    e.preventDefault();
-
-    return signout();
-  }, []);
+  const { logout } = useAuth();
 
   return items.length ? (
     <nav {...rest}>
@@ -18,7 +13,7 @@ export default function Menu({ items = [], ...rest }) {
             {x.value !== 'Logout' ? (
               <MenuItem href={x.href}>{x.value}</MenuItem>
             ) : (
-              <MenuItem href={x.href} onClick={e => handleLogout(e)}>
+              <MenuItem href={x.href} onClick={e => logout(e)}>
                 {x.value}
               </MenuItem>
             )}

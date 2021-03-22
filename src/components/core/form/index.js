@@ -12,6 +12,7 @@ import Search from './fields/search';
 import Toggle from './fields/toggle';
 import Wysiwyg from './fields/wysiwyg';
 import PillSelect from './fields/pillselector';
+import PhoneInput from './fields/phone';
 
 const FormContext = React.createContext();
 
@@ -47,6 +48,7 @@ Form.Search = Search;
 Form.Toggle = Toggle;
 Form.Wysiwyg = Wysiwyg;
 Form.PillSelect = PillSelect;
+Form.PhoneInput = PhoneInput;
 
 Form.propTypes = {
   schema: PropTypes.object.isRequired,

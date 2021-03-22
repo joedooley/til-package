@@ -1,17 +1,51 @@
 import Router from 'next/router';
-import { getFirebase } from '@lib/firebase/firebase';
+import firebase from '@lib/firebase/firebase';
 import { client } from '@util/api-client';
 
-const firebase = getFirebase();
+const handleError = (label, error) => {
+  console.error(`${label} error:`, JSON.stringify(error));
+  return error;
+};
 
-async function postUserToken(token) {
-  var data = { token };
-  var url = `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/login`;
-
-  return client(url, { body: data });
+function login(token) {
+  return client('/api/auth/login', { body: { token } });
 }
 
-const signinWithProvider = (type, redirect = '/dashboard/projects') => {
+const signInWithPhoneNumber = async (phone, redirect = '/dashboard/projects') => {
+  const appVerifier = new firebase.auth.RecaptchaVerifier('login-button', { size: 'invisible' });
+  const provider = new firebase.auth.PhoneAuthProvider();
+
+  return provider
+    .verifyPhoneNumber(phone, appVerifier)
+    .then(verificationId => {
+      const verificationCode = window.prompt('Please enter the verification code that was sent to your mobile device.');
+
+      return firebase.auth.PhoneAuthProvider.credential(verificationId, verificationCode);
+    })
+    .then(phoneCredential => {
+      console.log(`phoneCredential`, phoneCredential);
+
+      return firebase.auth().signInWithCredential(phoneCredential);
+    })
+    .then(async userCredential => {
+      console.log(`userCredential`, userCredential);
+      const token = await userCredential.user.getIdToken();
+      const loginResponse = await login(token);
+
+      console.log(`token`, token);
+      console.log(`loginResponse`, loginResponse);
+
+      if (loginResponse.data === 'ok') {
+        return Router.push(redirect);
+      }
+    })
+    .catch(error => {
+      appVerifier.reset('login-button');
+      handleError('signInWithPhoneNumber', JSON.stringify(error));
+    });
+};
+
+const signinWithProvider = type => {
   const provider = type === 'github' ? new firebase.auth.GithubAuthProvider() : new firebase.auth.GoogleAuthProvider();
 
   return firebase
@@ -21,30 +55,19 @@ const signinWithProvider = (type, redirect = '/dashboard/projects') => {
       response.user
         .getIdToken()
         .then(token =>
-          postUserToken(token)
-            .then(response => {
-              if (response.data === 'ok') {
-                return Router.push(redirect);
-              }
-
-              Router.reload();
-            })
-            .catch(error => console.error(`postUserToken error:`, JSON.stringify(error)))
+          login(token)
+            .then(response => response.data.user)
+            .catch(error => handleError('login', error))
         )
-        .catch(error => console.error(`getIdToken error:`, JSON.stringify(error)))
+        .catch(error => handleError('getIdToken', error))
     )
-    .catch(error => {
-      console.log(`signInWithPopup error:`, JSON.stringify(error));
-    });
+    .catch(error => handleError('signInWithPopup', error));
 };
 
 const signout = () => {
-  var url = `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/logout`;
-
-  return client(url, { body: {} }).catch(error => {
-    console.log(`signout error:`, JSON.stringify(error));
-    Router.push('/');
+  return client('/api/auth/logout', { method: 'POST' }).catch(error => {
+    console.error(`signout error:`, JSON.stringify(error));
   });
 };
 
-export { signinWithProvider, signout };
+export { signInWithPhoneNumber, signinWithProvider, signout };

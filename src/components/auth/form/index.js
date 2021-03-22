@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { motion } from 'framer-motion';
 import Form from '@components/core/form';
-import { Flex, Text, Link, Heading } from '@components/core/html';
+import { Flex, Text, Heading } from '@components/core/html';
 import LoginButtons from '../form/login-buttons';
 import SubmitButton from '@components/core/form/submit-button';
 
-export default function LoginForm({ type, formProps, ...rest }) {
+export default function LoginForm({ type, onSubmit, ...rest }) {
   const isLogin = type === 'login';
   const heading = isLogin ? 'Login to your account' : 'Create Account';
+  const submitBtnLabel = isLogin ? 'Login' : 'Signup';
 
   const position = {
     start: {
@@ -60,62 +61,36 @@ export default function LoginForm({ type, formProps, ...rest }) {
             margin-bottom: ${theme.space[4]};
           `}
         >
-          or use your email account
+          or use your phone number
         </Text>
 
-        <Form
-          schema={formProps.schema}
-          defaultValues={formProps.defaultValues}
+        <Flex
+          as="form"
+          noValidate
+          autoComplete="off"
+          direction="column"
+          hAlign="flex-start"
           css={css`
-            align-items: center;
-            display: flex;
-            flex-direction: column;
             width: 350px;
           `}
         >
-          {!isLogin && <Form.Input name="username" type="text" placeholder="Username" required />}
-          <Form.Input name="email" type="text" placeholder="Email" required />
-          <Form.Input
-            name="password"
-            type="password"
-            placeholder="Password"
-            required
-            css={theme => css`
-              margin-bottom: ${theme.space[4]};
-            `}
-          />
-
-          {isLogin && (
-            <Link
-              href="/?forgot-password"
-              title="Click to retrieve your password"
-              onClick={e => {
-                e.preventDefault();
-              }}
-              css={theme => css`
-                color: ${theme.colors.text};
-                margin-bottom: ${theme.space[5]};
-                text-decoration: underline;
-                text-underline-position: under;
-              `}
-            >
-              Forgot your password?
-            </Link>
-          )}
+          <Form.PhoneInput name="phone" type="text" placeholder="Phone number" required />
 
           <Flex hAlign="center">
             <SubmitButton
+              id="login-button"
               ariaLabel="Click button to submit form and login to your account"
-              onSubmit={formProps.onSubmit}
+              onSubmit={onSubmit}
               variant="outline"
-              css={css`
+              css={theme => css`
+                margin-top: ${theme.space[5]};
                 width: 200px;
               `}
             >
-              Login
+              {submitBtnLabel}
             </SubmitButton>
           </Flex>
-        </Form>
+        </Flex>
       </Flex>
     </motion.div>
   );
@@ -123,5 +98,5 @@ export default function LoginForm({ type, formProps, ...rest }) {
 
 LoginForm.propTypes = {
   type: PropTypes.oneOf(['login', 'signup']).isRequired,
-  formProps: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };

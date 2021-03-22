@@ -2,6 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { AnimatePresence } from 'framer-motion';
+import { FormProvider } from 'react-hook-form';
 import useForm from '../form/useForm';
 import Dialog from '@components/core/dialog';
 import LoginForm from '../form';
@@ -13,7 +14,7 @@ export default function AuthDialog({ isOpen, onClose, router, ...rest }) {
   const [formType, setFormType] = React.useState(type);
   const isLogin = formType === 'login';
 
-  const formProps = useForm(formType);
+  const { methods, handleSubmit } = useForm();
 
   const handleSwitch = React.useCallback(() => {
     const nextFormType = formType === 'login' ? 'signup' : 'login';
@@ -32,7 +33,7 @@ export default function AuthDialog({ isOpen, onClose, router, ...rest }) {
 
   return (
     isOpen && (
-      <Dialog {...rest} onClose={onClose} ariaLabel="Dialog with login options" height="585px" width="700px">
+      <Dialog {...rest} onClose={onClose} ariaLabel="Dialog with login options" width="700px">
         <Logo
           css={css`
             position: absolute;
@@ -56,14 +57,16 @@ export default function AuthDialog({ isOpen, onClose, router, ...rest }) {
               `}
             />
 
-            <LoginForm
-              formProps={formProps}
-              type={formType}
-              css={css`
-                padding-left: ${isLogin && '20px'};
-                padding-right: ${!isLogin && '20px'};
-              `}
-            />
+            <FormProvider {...methods}>
+              <LoginForm
+                type={formType}
+                onSubmit={handleSubmit}
+                css={css`
+                  padding-left: ${isLogin && '20px'};
+                  padding-right: ${!isLogin && '20px'};
+                `}
+              />
+            </FormProvider>
           </div>
         </AnimatePresence>
       </Dialog>

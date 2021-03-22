@@ -26,7 +26,6 @@ export default function useProfileForm(user) {
     resolver: yupResolver(schema),
   });
 
-  const { uid } = user;
   const { formState, reset } = methods;
   const { isDirty } = formState;
 
@@ -43,13 +42,14 @@ export default function useProfileForm(user) {
 
   const onSubmit = React.useCallback(
     payload => {
+      const { uid } = user;
       console.log(`useProfileForm payload:`, payload);
 
       return updateUser(uid, payload)
         .then(() => setSubmittedData(payload))
         .catch(error => console.error('updateUser error: ', error));
     },
-    [uid]
+    [user]
   );
 
   return React.useMemo(() => {

@@ -26,9 +26,9 @@ const Input = React.forwardRef(({ name, label, prefix, ...rest }, _ref) => {
         }
       `}
     >
-      <input ref={ref} name={name} placeholder={rest.placeholder} {...inputProps} />
+      <input ref={ref} name={name} {...rest} {...inputProps} />
       {<CharacterCount max={rest.max} value={inputProps.value} />}
-      {<Adornment value={prefix} />}
+      {prefix && <Adornment value={prefix} />}
     </Field>
   );
 });

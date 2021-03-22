@@ -18,7 +18,7 @@ export default function Sidebar({ type, onSwitch, ...rest }) {
   const heading = isLogin ? 'Hello, Friend!' : 'Welcome Back!';
   const content = isLogin
     ? 'Dont have an account? Click the Signup button to create an account.'
-    : 'Already have an account? Click the Login button to sign into your account.';
+    : 'Already have an account? Click the Login button to access your account.';
 
   const xPos = useSpring(0, { mass: 0.25, stiffness: 500, damping: 75 });
 

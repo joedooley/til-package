@@ -1,6 +1,4 @@
-import nookies from 'nookies';
-import { db } from './firebase-admin';
-import { validateCookie } from '@lib/firebase/auth/server';
+import { db } from '@lib/firebase/firebase-admin';
 
 const timestamps = doc => ({
   created: doc.createTime.seconds,
@@ -12,73 +10,17 @@ export async function getUser(uid) {
 
   try {
     const userDoc = await userRef.get();
-    const user = !userDoc.exists
-      ? false
-      : {
-          ...userDoc.data(),
-          ...timestamps(userDoc),
-        };
 
-    return { user };
-  } catch (error) {
-    return { error };
-  }
-}
-
-export async function isAuthenticated(context) {
-  const cookies = nookies.get(context);
-  const sessionCookie = cookies.session || '';
-
-  try {
-    const { uid } = await validateCookie(sessionCookie);
-
-    if (!uid) {
-      nookies.destroy(context, 'session');
-      return false;
+    if (!userDoc.exists) {
+      throw new Error('User not found');
     }
 
-    const { user } = await getUser(uid);
-
-    if (!user) {
-      nookies.destroy(context, 'session');
-
-      return false;
-    }
-
-    return user;
-  } catch (error) {
-    console.log(`isAuthenticated error:`, JSON.stringify(error));
-    nookies.destroy(context, 'session');
-
-    return false;
-  }
-}
-
-export async function getAllUsers() {
-  try {
-    const snapshot = await db.collection('users').get();
-    const users = [];
-
-    snapshot.forEach(doc => {
-      users.push({ id: doc.id, ...timestamps(doc), ...doc.data() });
-    });
-
-    return { users };
-  } catch (error) {
-    return { error };
-  }
-}
-
-export async function getAllPosts() {
-  try {
-    const snapshot = await db.collection('post').get();
-    const posts = [];
-
-    snapshot.forEach(doc => {
-      posts.push({ id: doc.id, ...timestamps(doc), ...doc.data() });
-    });
-
-    return { posts };
+    return {
+      user: {
+        ...userDoc.data(),
+        ...timestamps(userDoc),
+      },
+    };
   } catch (error) {
     return { error };
   }

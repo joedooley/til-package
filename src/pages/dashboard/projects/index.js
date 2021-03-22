@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
-import { isAuthenticated, getCollection } from '@lib/firebase/db-admin';
+import { getCollection } from '@lib/firebase/db-admin';
 import { Flex, Button } from '@components/core/html';
 import useDialog from '@hooks/useDialog';
 import CreatePostPanel from '@components/dashboard/panels/create-post';
@@ -25,7 +25,7 @@ export default function ProjectsPage({ initialData, ...rest }) {
       {data.length ? (
         <Button
           ariaLabel="Click button to add a new project"
-          onClick={() => {}}
+          onClick={togglePanel}
           css={theme => css`
             margin-top: ${theme.space[5]};
           `}
@@ -42,11 +42,9 @@ export default function ProjectsPage({ initialData, ...rest }) {
 }
 
 export async function getServerSideProps(context) {
-  const user = await isAuthenticated(context);
-  const { entries } = await getCollection('project');
-  console.log(`ProjectsPage getServerSideProps user`, user);
+  if (!context.req.cookies.session) {
+    console.log('Missing session cookie. Redirecting to the login page');
 
-  if (!user) {
     return {
       redirect: {
         destination: '/login',
@@ -55,9 +53,10 @@ export async function getServerSideProps(context) {
     };
   }
 
+  const { entries } = await getCollection('post');
+
   return {
     props: {
-      user,
       initialData: entries,
     },
   };
@@ -71,5 +70,5 @@ ProjectsPage.propTypes = {
     photoUrl: PropTypes.string.isRequired,
     provider: PropTypes.string.isRequired,
   }),
-  initialData: PropTypes.array.isRequired,
+  initialData: PropTypes.array,
 };
