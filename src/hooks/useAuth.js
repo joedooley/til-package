@@ -31,7 +31,6 @@ function useProvideAuth() {
   const logout = React.useCallback(
     e => {
       e.preventDefault();
-      dispatch({ type: 'FETCH_START' });
 
       return signout()
         .then(() => {
@@ -50,10 +49,7 @@ function useProvideAuth() {
     return firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(response => {
-        setUser(response.user);
-        return response.user;
-      });
+      .then(response => response.user);
   };
 
   return { login, logout, signup };
