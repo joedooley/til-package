@@ -6,6 +6,21 @@ import { Flex } from '@components/core/html';
 import useForm from '@components/dashboard/forms/account/profile/useForm';
 import EditProfileForm from '@components/dashboard/forms/account/profile';
 
+export async function getServerSideProps(context) {
+  if (!context.req.cookies.session) {
+    console.log('Missing session cookie. Redirecting to the login page');
+
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
+}
+
 export default function AccountPage({ user, ...rest }) {
   const { methods, handleSubmit, handleReset, isDirty } = useForm(user);
 
@@ -23,21 +38,6 @@ export default function AccountPage({ user, ...rest }) {
       </FormProvider>
     </Flex>
   );
-}
-
-export async function getServerSideProps(context) {
-  if (!context.req.cookies.session) {
-    console.log('Missing session cookie. Redirecting to the login page');
-
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-
-  return { props: {} };
 }
 
 AccountPage.propTypes = {

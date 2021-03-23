@@ -1,0 +1,8 @@
+{
+  "baseUrl": "http://localhost:4000",
+  "projectId": "onny1u",
+  "nodeVersion": "system",
+  "experimentalStudio": true,
+  "experimentalComponentTesting": true,
+  "$schema": "https://on.cypress.io/cypress.schema.json"
+}

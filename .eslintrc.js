@@ -13,6 +13,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended',
     'prettier/react',
+    'plugin:cypress/recommended',
   ],
   parser: '@babel/eslint-parser',
   parserOptions: {
@@ -22,7 +23,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['@babel', 'react', 'prettier'],
+  plugins: ['@babel', 'react', 'prettier', 'cypress'],
   rules: {
     'prettier/prettier': 'off',
     'react/react-in-jsx-scope': 'off',

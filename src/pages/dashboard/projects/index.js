@@ -7,6 +7,27 @@ import useDialog from '@hooks/useDialog';
 import CreatePostPanel from '@components/dashboard/panels/create-post';
 import EmptyState from '@components/dashboard/empty-state';
 
+export async function getServerSideProps(context) {
+  if (!context.req.cookies.session) {
+    console.log('Missing session cookie. Redirecting to the login page');
+
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  const { entries } = await getCollection('post');
+
+  return {
+    props: {
+      initialData: entries,
+    },
+  };
+}
+
 export default function ProjectsPage({ initialData, ...rest }) {
   const [data, setData] = React.useState(initialData);
   const [isOpen, togglePanel] = useDialog();
@@ -39,27 +60,6 @@ export default function ProjectsPage({ initialData, ...rest }) {
       {isOpen && <CreatePostPanel onCancel={togglePanel} />}
     </Flex>
   );
-}
-
-export async function getServerSideProps(context) {
-  if (!context.req.cookies.session) {
-    console.log('Missing session cookie. Redirecting to the login page');
-
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-
-  const { entries } = await getCollection('post');
-
-  return {
-    props: {
-      initialData: entries,
-    },
-  };
 }
 
 ProjectsPage.propTypes = {
