@@ -1,5 +1,19 @@
+import { overSome } from 'lodash';
 import { createCookie } from '@util/cookies';
 import { auth } from '@lib/firebase/firebase-admin';
+
+/**
+ * Creates function that checks for the following properties.
+ */
+const includesAuthProps = overSome([
+  'email',
+  'phoneNumber',
+  'displayName',
+  'photoURL',
+  'emailVerified',
+  'disabled',
+  'password',
+]);
 
 /**
  * Creates `uid` and `session` HTTP cookies for a Set-Cookie header.
@@ -32,12 +46,13 @@ export const validateCookie = async function (cookie) {
     throw new Error('Missing session cookie.');
   }
 
-  return auth
-    .verifySessionCookie(cookie, true)
-    .then(decodedClaims => ({ uid: decodedClaims.uid }))
-    .catch(error => {
-      console.log(`Unable to validate the session cookie:`, JSON.stringify(error));
+  return auth.verifySessionCookie(cookie, true).then(decodedClaims => ({ uid: decodedClaims.uid }));
+};
 
-      return error;
-    });
+export const updateAuthUser = (uid, data) => {
+  if (!includesAuthProps(data)) {
+    return Promise.resolve(data);
+  }
+
+  return auth.updateUser(uid, data).then(() => Promise.resolve(data));
 };

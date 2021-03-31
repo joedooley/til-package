@@ -12,4 +12,8 @@ describe('Utils | DOM', () => {
 
     expect(window.location.href).toEqual('/search');
   });
+
+  it('Runs test', () => {
+    expect(1).toEqual(1);
+  });
 });

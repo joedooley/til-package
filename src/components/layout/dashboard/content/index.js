@@ -1,14 +1,11 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
-import { useUser } from '@components/auth/user';
 import { Flex } from '@components/core/html';
 import { SkipNavContent } from '@components/core/skip-nav';
 import Breadcrumbs from '../../breadcrumbs';
 
 export default function Content({ children, siteTitle, ...rest }) {
-  const { user, loading, error } = useUser();
-
   return (
     <article
       className={rest.className}
@@ -37,16 +34,7 @@ export default function Content({ children, siteTitle, ...rest }) {
           width: 100%;
         `}
       >
-        {loading && <p>Loading...</p>}
-        {error && <p>{JSON.stringify(error)}</p>}
-
-        {user &&
-          React.Children.map(children, child =>
-            React.createElement(child.type, {
-              ...child.props,
-              user,
-            })
-          )}
+        {children}
       </Flex>
     </article>
   );

@@ -14,4 +14,6 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 const auth = admin.auth();
 
-export { db, auth };
+const FieldValue = admin.firestore.FieldValue;
+
+export { db, auth, FieldValue };

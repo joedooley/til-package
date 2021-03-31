@@ -1,10 +1,11 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
-import { FormProvider } from 'react-hook-form';
 import { Flex } from '@components/core/html';
-import useForm from '@components/dashboard/forms/account/profile/useForm';
-import EditProfileForm from '@components/dashboard/forms/account/profile';
+import EditUsernameForm from '@components/dashboard/forms/account/profile/username';
+import EditDisplayNameForm from '@components/dashboard/forms/account/profile/displayName';
+import EditEmailForm from '@components/dashboard/forms/account/profile/email';
+import EditPasswordForm from '@components/dashboard/forms/account/profile/password';
 
 export async function getServerSideProps(context) {
   if (!context.req.cookies.session) {
@@ -21,32 +22,27 @@ export async function getServerSideProps(context) {
   return { props: {} };
 }
 
-export default function AccountPage({ user, ...rest }) {
-  const { methods, handleSubmit, handleReset, isDirty } = useForm(user);
-
+export default function AccountPage(props) {
   return (
     <Flex
-      className={rest.className}
+      className={props.className}
       direction="column"
       vAlign="flex-start"
-      css={css`
+      css={theme => css`
         width: 100%;
+        & > section {
+          margin-bottom: ${theme.space[5]};
+        }
       `}
     >
-      <FormProvider {...methods}>
-        <EditProfileForm onSubmit={handleSubmit} onReset={handleReset} isDirty={isDirty} />
-      </FormProvider>
+      <EditUsernameForm />
+      <EditDisplayNameForm />
+      <EditEmailForm />
+      <EditPasswordForm />
     </Flex>
   );
 }
 
 AccountPage.propTypes = {
-  user: PropTypes.shape({
-    uid: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    photoUrl: PropTypes.string.isRequired,
-    provider: PropTypes.string.isRequired,
-  }),
-  errorCode: PropTypes.number,
+  className: PropTypes.string,
 };

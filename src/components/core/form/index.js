@@ -13,6 +13,7 @@ import Toggle from './fields/toggle';
 import Wysiwyg from './fields/wysiwyg';
 import PillSelect from './fields/pillselector';
 import PhoneInput from './fields/phone';
+import ErrorMessage from './fields/error-message';
 
 const FormContext = React.createContext();
 
@@ -49,6 +50,7 @@ Form.Toggle = Toggle;
 Form.Wysiwyg = Wysiwyg;
 Form.PillSelect = PillSelect;
 Form.PhoneInput = PhoneInput;
+Form.ErrorMessage = ErrorMessage;
 
 Form.propTypes = {
   schema: PropTypes.object.isRequired,

@@ -7,9 +7,32 @@ const handleError = (label, error) => {
   return error;
 };
 
-function login(token) {
-  return client('/api/auth/login', { body: { token } });
-}
+const loginToServer = async userCredential => {
+  const token = await userCredential.user.getIdToken();
+  const user = userCredential.user;
+
+  return client('/api/auth/login', { body: { token, user } }).then(response => response.data.user);
+};
+
+const signupWithEmail = async (email, password) => {
+  return firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then(async response => {
+      console.log(`response`, response);
+      const token = await response.user.getIdToken();
+      const user = response.user;
+
+      return client('/api/auth/signup', { body: { token, user } })
+        .then(response => {
+          console.log(`signupWithEmail client response`, response);
+
+          return response.data.user;
+        })
+        .catch(error => handleError('signup endpoint', error));
+    })
+    .catch(error => handleError('signupWithEmail', error));
+};
 
 const signInWithPhoneNumber = async (phone, redirect = '/dashboard/projects') => {
   const appVerifier = new firebase.auth.RecaptchaVerifier('login-button', { size: 'invisible' });
@@ -45,23 +68,21 @@ const signInWithPhoneNumber = async (phone, redirect = '/dashboard/projects') =>
     });
 };
 
-const signinWithProvider = type => {
-  const provider = type === 'github' ? new firebase.auth.GithubAuthProvider() : new firebase.auth.GoogleAuthProvider();
-
+const signInWithEmail = async (email, password) => {
   return firebase
     .auth()
-    .signInWithPopup(provider)
-    .then(response =>
-      response.user
-        .getIdToken()
-        .then(token =>
-          login(token)
-            .then(response => response.data.user)
-            .catch(error => handleError('login', error))
-        )
-        .catch(error => handleError('getIdToken', error))
-    )
-    .catch(error => handleError('signInWithPopup', error));
+    .signInWithEmailAndPassword(email, password)
+    .then(loginToServer)
+};
+
+const loginWithProvider = async type => {
+  const provider = type === 'github' ? new firebase.auth.GithubAuthProvider() : new firebase.auth.GoogleAuthProvider();
+
+  return firebase.auth().signInWithPopup(provider);
+};
+
+const signinWithProvider = async type => {
+  return loginWithProvider(type).then(loginToServer);
 };
 
 const signout = () => {
@@ -70,4 +91,4 @@ const signout = () => {
   });
 };
 
-export { signInWithPhoneNumber, signinWithProvider, signout };
+export { signInWithPhoneNumber, signinWithProvider, signInWithEmail, signupWithEmail, signout };

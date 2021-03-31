@@ -17,12 +17,15 @@ export function client(endpoint, { body, baseUrl, ...customConfig } = {}) {
 
     if (response.ok) {
       return data;
-    } else {
-      const error = new Error('An error occurred while fetching data.');
-      error.info = data;
-      error.status = response.status;
-
-      return Promise.reject(data);
     }
+
+    const error = new Error('An error occurred while fetching data.');
+    error.status = response.status;
+    error.url = response.url;
+    error.info = data;
+    error.code = data.code;
+    error.message = data.message;
+
+    throw error;
   });
 }

@@ -28,6 +28,7 @@
   "dependencies": {
     "@emotion/react": "^11.1.4",
     "@emotion/styled": "^11.0.0",
+    "@hookform/error-message": "^0.0.5",
     "@hookform/resolvers": "2.0.0-beta.3",
     "@reach/dialog": "^0.13.0",
     "@reach/tabs": "^0.13.0",
@@ -50,7 +51,9 @@
     "react-lorem-ipsum": "^1.4.9",
     "react-simple-wysiwyg": "^1.0.2",
     "react-table": "^7.6.3",
+    "react-toast-notifications": "git+https://github.com/pA1nD/react-toast-notifications.git",
     "swr": "^0.5.4",
+    "validator": "^13.5.2",
     "yup": "^0.32.8"
   },
   "devDependencies": {

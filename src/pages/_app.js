@@ -2,10 +2,10 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import { ThemeProvider } from '@emotion/react';
-import { UserProvider } from '@components/auth/user';
 import { AuthProvider } from '@hooks/useAuth';
 import theme from '@styles/theme';
 import GlobalCss from '@styles/global';
+import ToastProvider from '@components/core/toast';
 import SiteLayout from '@components/layout/sidebar-content';
 import DashboardLayout from '@components/layout/dashboard/sidebar-content';
 
@@ -17,13 +17,13 @@ export default function App({ Component, pageProps }) {
   return (
     <ThemeProvider theme={theme}>
       <GlobalCss theme={theme} />
-      <UserProvider isDashboard={isDashboard}>
+      <ToastProvider>
         <AuthProvider>
           <Layout>
             <Component {...pageProps} />
           </Layout>
         </AuthProvider>
-      </UserProvider>
+      </ToastProvider>
     </ThemeProvider>
   );
 }

@@ -14,7 +14,7 @@ export default function AuthDialog({ isOpen, onClose, router, ...rest }) {
   const [formType, setFormType] = React.useState(type);
   const isLogin = formType === 'login';
 
-  const { methods, handleSubmit } = useForm();
+  const { methods, handleSubmit } = useForm(formType);
 
   const handleSwitch = React.useCallback(() => {
     const nextFormType = formType === 'login' ? 'signup' : 'login';

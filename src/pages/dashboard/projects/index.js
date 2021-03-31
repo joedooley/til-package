@@ -63,12 +63,5 @@ export default function ProjectsPage({ initialData, ...rest }) {
 }
 
 ProjectsPage.propTypes = {
-  user: PropTypes.shape({
-    uid: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    photoUrl: PropTypes.string.isRequired,
-    provider: PropTypes.string.isRequired,
-  }),
   initialData: PropTypes.array,
 };

@@ -1,9 +1,9 @@
 import { auth } from '@lib/firebase/firebase-admin';
 import { setSessionCookies } from '@lib/firebase/auth/server';
-import { getUser, createUser } from '@lib/firebase/db-admin';
+import { createUser } from '@lib/firebase/db-admin';
 import { normalizeUser } from '@lib/models/user';
 
-export default async function login(req, res) {
+export default async function signup(req, res) {
   if (req.method !== 'POST') {
     return res.status(501).json({
       error: {
@@ -15,8 +15,8 @@ export default async function login(req, res) {
 
   const expiresIn = Number(process.env.SESSION_EXP);
 
-  const token = req.body.token;
   const user = normalizeUser(req.body.user);
+  const token = req.body.token;
 
   console.log(`user`, user);
 
@@ -31,27 +31,12 @@ export default async function login(req, res) {
         const { uid } = decodedIdToken;
         const sessionCookies = setSessionCookies(uid, authCookie);
 
-        return getUser(uid)
-          .then(response => {
-            console.log(`login endpoint getUser response:`, response);
+        return createUser(user).then(response => {
+          console.log(`signup endpoint createUser response:`, response);
 
-            res.setHeader('Set-Cookie', sessionCookies);
-            res.status(200).json({ data: { user: response.user } });
-          })
-          .catch(error => {
-            if (error.message !== 'User not found') {
-              console.error(`login endpoint getUser error:`, error);
-
-              throw error;
-            }
-
-            return createUser(user).then(response => {
-              console.log(`login endpoint createUser response:`, response);
-
-              res.setHeader('Set-Cookie', sessionCookies);
-              res.status(200).json({ data: { user: response.user } });
-            });
-          });
+          res.setHeader('Set-Cookie', sessionCookies);
+          res.status(200).json({ data: { user: response.user } });
+        });
       })
       .catch(error => {
         console.error(`createSessionCookie error:`, error);

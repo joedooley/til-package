@@ -3,31 +3,33 @@ import * as yup from 'yup';
 import { isEmpty } from 'lodash';
 import { useForm as useBaseForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { updateUser } from '@lib/firebase/db';
+import { client } from '@util/api-client';
 
-const formValues = user => {
+const formValues = () => {
   return {
-    name: user.name,
-    email: user.email,
+    currentPassword: '',
+    newPassword: '',
+    confirmNewPassword: '',
   };
 };
 
 const schema = yup.object().shape({
-  name: yup.string().required(),
-  email: yup.string().required(),
+  currentPassword: yup.string().required(),
+  newPassword: yup.string().required(),
+  confirmNewPassword: yup.string().required(),
 });
 
-export default function useProfileForm(user) {
+export default function usePasswordForm() {
   const [submittedData, setSubmittedData] = React.useState({});
 
   const methods = useBaseForm({
-    mode: 'onBlur',
-    defaultValues: formValues(user),
+    mode: 'onChange',
+    defaultValues: formValues(),
     resolver: yupResolver(schema),
   });
 
-  const { formState, reset } = methods;
-  const { isDirty } = formState;
+  const { formState, reset, setError, clearErrors } = methods;
+  const { isDirty, errors } = formState;
 
   React.useEffect(() => {
     if (formState.isSubmitSuccessful) {
@@ -42,14 +44,14 @@ export default function useProfileForm(user) {
 
   const onSubmit = React.useCallback(
     payload => {
-      const { uid } = user;
-      console.log(`useProfileForm payload:`, payload);
-
-      return updateUser(uid, payload)
-        .then(() => setSubmittedData(payload))
-        .catch(error => console.error('updateUser error: ', error));
+      return client('/api/user/profile/update', { body: { data: payload } })
+        .then(() => {
+          clearErrors();
+          setSubmittedData(payload);
+        })
+        .catch(error => setError('email', { type: 'server', message: error.message }));
     },
-    [user]
+    [clearErrors, setError]
   );
 
   return React.useMemo(() => {
@@ -58,6 +60,7 @@ export default function useProfileForm(user) {
       isDirty,
       handleReset,
       handleSubmit: methods.handleSubmit(payload => onSubmit(payload)),
+      errors,
     };
-  }, [handleReset, isDirty, methods, onSubmit]);
+  }, [handleReset, isDirty, methods, onSubmit, errors]);
 }

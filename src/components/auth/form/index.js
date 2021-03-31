@@ -2,8 +2,8 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { motion } from 'framer-motion';
+import { Flex, Text, Heading, Link } from '@components/core/html';
 import Form from '@components/core/form';
-import { Flex, Text, Heading } from '@components/core/html';
 import LoginButtons from '../form/login-buttons';
 import SubmitButton from '@components/core/form/submit-button';
 
@@ -74,7 +74,33 @@ export default function LoginForm({ type, onSubmit, ...rest }) {
             width: 350px;
           `}
         >
-          <Form.PhoneInput name="phone" type="text" placeholder="Phone number" required />
+          <Form.Input name="email" type="text" placeholder="Email" required />
+          <Form.Input
+            name="password"
+            type="password"
+            placeholder="Password"
+            required
+            css={theme => css`
+              margin-bottom: ${theme.space[4]};
+            `}
+          />
+
+          {isLogin && (
+            <Link
+              href="/?forgot-password"
+              title="Click to retrieve your password"
+              onClick={e => {
+                e.preventDefault();
+              }}
+              css={theme => css`
+                color: ${theme.colors.text};
+                text-decoration: underline;
+                text-underline-position: under;
+              `}
+            >
+              Forgot your password?
+            </Link>
+          )}
 
           <Flex hAlign="center">
             <SubmitButton

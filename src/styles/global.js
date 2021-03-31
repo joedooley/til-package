@@ -174,10 +174,13 @@ export default function GlobalCss() {
           font-size: ${theme.fontSizes[4]};
           padding: ${theme.space[3]} 8px;
           width: 100%;
+        }
 
-          &:focus {
-            border-color: ${theme.colors.border.primary};
-          }
+        .react-toast-notifications__toast {
+          background-color: ${theme.colors.black[400]} !important;
+          color: ${theme.colors.text} !important;
+          font-size: ${theme.fontSizes[0]};
+          line-height: ${theme.lineHeights.default};
         }
       `}
     />

@@ -3,15 +3,18 @@ import * as yup from 'yup';
 import { isEmpty } from 'lodash';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm as useBaseForm } from 'react-hook-form';
-import { signInWithPhoneNumber } from '@lib/firebase/auth/client';
+import { useAuth } from '@hooks/useAuth';
 
-const formValues = { phone: '' };
+const formValues = { email: '', password: '' };
 
 const schema = yup.object().shape({
-  phone: yup.string().required(),
+  email: yup.string().required(),
+  password: yup.string().required(),
 });
 
-export default function useLoginForm() {
+export default function useLoginForm(formType) {
+  const { loginWithEmail, signup } = useAuth();
+
   const [formStep, setFormStep] = React.useState(1);
   const [submittedData, setSubmittedData] = React.useState({});
   const [confirmationResult, setConfirmationResult] = React.useState();
@@ -29,14 +32,19 @@ export default function useLoginForm() {
     submittedData,
   ]);
 
-  const onSubmit = React.useCallback(payload => {
-    const { phone } = payload;
-    console.log(`useLoginForm payload:`, payload);
+  const loginAction = React.useCallback(
+    (email, password) => (formType === 'login' ? loginWithEmail(email, password) : signup(email, password)),
+    [formType, loginWithEmail, signup]
+  );
 
-    return signInWithPhoneNumber(phone)
-      .then(response => console.log(`response`, response))
-      .catch(error => console.error('signInWithPhoneNumber error: ', JSON.stringify(error)));
-  }, []);
+  const onSubmit = React.useCallback(
+    payload => {
+      const { email, password } = payload;
+
+      return loginAction(email, password);
+    },
+    [loginAction]
+  );
 
   return React.useMemo(() => {
     return {

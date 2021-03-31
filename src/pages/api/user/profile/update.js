@@ -1,26 +1,34 @@
-import { auth } from '@lib/firebase/firebase-admin';
-import { normalizePhone } from '@util/string';
+import { updateUser } from '@lib/firebase/db-admin';
+import { updateAuthUser } from '@lib/firebase/auth/server';
 
 export default async function updateUserProfile(req, res) {
-  if (req.method === 'POST') {
-    const normalizedPhone = normalizePhone(req.body.phone);
-    console.log(`normalizedPhone`, normalizedPhone);
-
-    await auth
-      .getUserByPhoneNumber(normalizedPhone)
-      .then(userRecord => {
-        // A user with the phone number already exists.
-        // You can also get other information related to the user from the
-        // userRecord.
-
-        console.log(`validateAccount userRecord`, userRecord.toJSON);
-        res.status(200).json({ data: userRecord.toJSON });
-      })
-      .catch(function (error) {
-        console.log('Error fetching user data:', JSON.stringify(error));
-        console.log(`validateAccount error:`, JSON.stringify(error));
-
-        res.status(401).json({ data: 'Invalid authentication' });
-      });
+  if (req.method !== 'POST') {
+    return res.status(501).json({
+      error: {
+        code: 'server/bad_request',
+        message: 'This endpoint only responds to POST',
+      },
+    });
   }
+
+  console.log(`req.body`, req.body);
+
+  const uid = req.cookies.uid;
+  const data = req.body.data;
+
+  await updateAuthUser(uid, data)
+    .then(response => {
+      return updateUser(uid, response)
+        .then(() => {
+          res.status(200).json({ data });
+        })
+        .catch(error => {
+          console.log(`updateUser error`, error);
+          return res.status(401).json(error);
+        });
+    })
+    .catch(error => {
+      console.log(`updateAuthUser error`, error);
+      res.status(401).json(error);
+    });
 }

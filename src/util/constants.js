@@ -18,6 +18,7 @@ export const propTypes = {
 
 export const app = {
   site: {
+    url: 'til.com',
     title: 'Til',
   },
   meta: {
