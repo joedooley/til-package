@@ -63,7 +63,7 @@ export default function useEmailForm() {
       isDirty,
       handleReset,
       handleSubmit: methods.handleSubmit(payload => onSubmit(payload)),
-      error: errors?.email?.message,
+      error: Object.keys(errors).length ? errors.email.message : false,
     };
   }, [errors, handleReset, isDirty, methods, onSubmit]);
 }

@@ -17,18 +17,23 @@ export default async function updateUserProfile(req, res) {
   const data = req.body.data;
 
   await updateAuthUser(uid, data)
-    .then(response => {
-      return updateUser(uid, response)
+    .then(response =>
+      updateUser(uid, response)
         .then(() => {
           res.status(200).json({ data });
         })
         .catch(error => {
-          console.log(`updateUser error`, error);
-          return res.status(401).json(error);
-        });
-    })
+          return res.status(405).json({
+            code: 'firestore/duplicate_property',
+            message: error.message,
+          });
+        })
+    )
     .catch(error => {
       console.log(`updateAuthUser error`, error);
-      res.status(401).json(error);
+      return res.status(401).json({
+        code: error.code || 'auth',
+        message: error.message,
+      });
     });
 }

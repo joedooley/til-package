@@ -111,7 +111,7 @@ export default function EditEmailForm(props) {
         {error ? (
           <ErrorMessage variant="error">{error}</ErrorMessage>
         ) : (
-          <Text>We will email you to verify the change.</Text>
+          <Text>You will be logged out after updating your password.</Text>
         )}
 
         {isDirty && (

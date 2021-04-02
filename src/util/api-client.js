@@ -19,6 +19,9 @@ export function client(endpoint, { body, baseUrl, ...customConfig } = {}) {
       return data;
     }
 
+    // console.log(`response`, response);
+    // console.log(`data`, data);
+
     const error = new Error('An error occurred while fetching data.');
     error.status = response.status;
     error.url = response.url;

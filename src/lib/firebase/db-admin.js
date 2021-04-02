@@ -1,5 +1,7 @@
 import { db, FieldValue } from '@lib/firebase/firebase-admin';
 import isEmail from 'validator/lib/isEmail';
+import isLowercase from 'validator/lib/isLowercase';
+import isAlphanumeric from 'validator/lib/isAlphanumeric';
 
 const timestamps = doc => ({
   created: doc.createTime.seconds,
@@ -38,6 +40,14 @@ export const updateUsername = async (uid, data) => {
 
   if (charCount >= 48) {
     return Promise.reject(new Error(`Please use 48 characters at maximum.`));
+  }
+
+  if (!isLowercase(username)) {
+    return Promise.reject(new Error(`Usernames must be lowercased.`));
+  }
+
+  if (!isAlphanumeric(username)) {
+    return Promise.reject(new Error(`Usernames can only have alphanumeric characters.`));
   }
 
   return db
