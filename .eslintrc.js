@@ -27,7 +27,7 @@ module.exports = {
   rules: {
     'prettier/prettier': 'off',
     'react/react-in-jsx-scope': 'off',
-    'no-console': 'warn',
+    'no-console': ['error', { allow: ['warn', 'error'] }],
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
     'react/display-name': 'off',
   },

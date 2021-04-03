@@ -7,31 +7,18 @@ const handleError = (label, error) => {
   return error;
 };
 
-const loginToServer = async userCredential => {
+const login = async userCredential => {
   const token = await userCredential.user.getIdToken();
   const user = userCredential.user;
 
   return client('/api/auth/login', { body: { token, user } }).then(response => response.data.user);
 };
 
-const signupWithEmail = async (email, password) => {
-  return firebase
-    .auth()
-    .createUserWithEmailAndPassword(email, password)
-    .then(async response => {
-      console.log(`response`, response);
-      const token = await response.user.getIdToken();
-      const user = response.user;
+const signup = async userCredential => {
+  const token = await userCredential.user.getIdToken();
+  const user = userCredential.user;
 
-      return client('/api/auth/signup', { body: { token, user } })
-        .then(response => {
-          console.log(`signupWithEmail client response`, response);
-
-          return response.data.user;
-        })
-        .catch(error => handleError('signup endpoint', error));
-    })
-    .catch(error => handleError('signupWithEmail', error));
+  return client('/api/auth/signup', { body: { token, user } }).then(response => response.data.user);
 };
 
 const signInWithPhoneNumber = async (phone, redirect = '/dashboard/projects') => {
@@ -68,11 +55,55 @@ const signInWithPhoneNumber = async (phone, redirect = '/dashboard/projects') =>
     });
 };
 
-const signInWithEmail = async (email, password) => {
+const signupWithEmail = async (email, password) => {
   return firebase
     .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then(loginToServer)
+    .createUserWithEmailAndPassword(email, password)
+    .then(async response => {
+      console.log(`response`, response);
+      const token = await response.user.getIdToken();
+      const user = response.user;
+
+      return client('/api/auth/signup', { body: { token, user } })
+        .then(response => {
+          console.log(`signupWithEmail client response`, response);
+
+          return response.data.user;
+        })
+        .catch(error => handleError('signup endpoint', error));
+    })
+    .catch(error => handleError('signupWithEmail', error));
+};
+
+const sendEmailLoginLink = email => {
+  const continueUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/login-confirmation`;
+  const actionCodeSettings = { url: continueUrl, handleCodeInApp: true };
+
+  return firebase
+    .auth()
+    .sendSignInLinkToEmail(email, actionCodeSettings)
+    .then(() => {
+      window.localStorage.setItem('emailForSignIn', email);
+    });
+};
+
+const loginWithEmailLink = email => {
+  return firebase
+    .auth()
+    .signInWithEmailLink(email, window.location.href)
+    .then(result => {
+      window.localStorage.removeItem('emailForSignIn');
+
+      return result;
+    });
+};
+
+const signInWithEmailLink = email => {
+  if (!firebase.auth().isSignInWithEmailLink(window.location.href)) {
+    return Router.push('/login');
+  }
+
+  return loginWithEmailLink(email).then(login);
 };
 
 const loginWithProvider = async type => {
@@ -82,7 +113,7 @@ const loginWithProvider = async type => {
 };
 
 const signinWithProvider = async type => {
-  return loginWithProvider(type).then(loginToServer);
+  return loginWithProvider(type).then(login);
 };
 
 const signout = () => {
@@ -91,4 +122,4 @@ const signout = () => {
   });
 };
 
-export { signInWithPhoneNumber, signinWithProvider, signInWithEmail, signupWithEmail, signout };
+export { signinWithProvider, signInWithEmailLink, sendEmailLoginLink, signupWithEmail, signout };

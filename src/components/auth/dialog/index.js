@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { AnimatePresence } from 'framer-motion';
 import { FormProvider } from 'react-hook-form';
-import useForm from '../form/useForm';
+import useForm from '../forms/login/useForm';
+import LoginForm from '../forms/login';
 import Dialog from '@components/core/dialog';
-import LoginForm from '../form';
 import Sidebar from './sidebar';
 import Logo from '@components/core/logo';
 

@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import { useToasts } from 'react-toast-notifications';
 import { useUser } from '@hooks/useUser';
-import { signinWithProvider, signInWithEmail, signupWithEmail, signout } from '@lib/firebase/auth/client';
+import {
+  signinWithProvider,
+  sendEmailLoginLink,
+  signInWithEmailLink,
+  signupWithEmail,
+  signout,
+} from '@lib/firebase/auth/client';
 
 const AuthContext = React.createContext();
 
@@ -35,8 +41,24 @@ function useProvideAuth() {
   );
 
   const loginWithEmail = React.useCallback(
-    (email, password) => {
-      return signInWithEmail(email, password)
+    email => {
+      return sendEmailLoginLink(email)
+        .then(() => {
+          addToast('Success! An email was sent with your login link.', { appearance: 'success' });
+        })
+        .catch(error => {
+          console.error('loginWithEmail error', error);
+          if (error.code !== toastId.current) {
+            toastId.current = addToast(error.message, { id: error.code, appearance: 'error', autoDismiss: false });
+          }
+        });
+    },
+    [addToast]
+  );
+
+  const loginWithEmailConfirmation = React.useCallback(
+    email => {
+      return signInWithEmailLink(email)
         .then(response => {
           console.log(`response`, response);
           mutateUser(response);
@@ -90,7 +112,7 @@ function useProvideAuth() {
     [mutateUser, addToast, router]
   );
 
-  return { login, loginWithEmail, logout, signup };
+  return { login, loginWithEmail, loginWithEmailConfirmation, logout, signup };
 }
 
 export const AuthProvider = ({ children }) => {

@@ -2,9 +2,9 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { motion } from 'framer-motion';
-import { Flex, Text, Heading, Link } from '@components/core/html';
+import { Flex, Text, Heading } from '@components/core/html';
 import Form from '@components/core/form';
-import LoginButtons from '../form/login-buttons';
+import LoginButtons from './login-buttons';
 import SubmitButton from '@components/core/form/submit-button';
 
 export default function LoginForm({ type, onSubmit, ...rest }) {
@@ -61,7 +61,7 @@ export default function LoginForm({ type, onSubmit, ...rest }) {
             margin-bottom: ${theme.space[4]};
           `}
         >
-          or use your phone number
+          or use your email address
         </Text>
 
         <Flex
@@ -75,32 +75,6 @@ export default function LoginForm({ type, onSubmit, ...rest }) {
           `}
         >
           <Form.Input name="email" type="text" placeholder="Email" required />
-          <Form.Input
-            name="password"
-            type="password"
-            placeholder="Password"
-            required
-            css={theme => css`
-              margin-bottom: ${theme.space[4]};
-            `}
-          />
-
-          {isLogin && (
-            <Link
-              href="/?forgot-password"
-              title="Click to retrieve your password"
-              onClick={e => {
-                e.preventDefault();
-              }}
-              css={theme => css`
-                color: ${theme.colors.text};
-                text-decoration: underline;
-                text-underline-position: under;
-              `}
-            >
-              Forgot your password?
-            </Link>
-          )}
 
           <Flex hAlign="center">
             <SubmitButton
