@@ -7,8 +7,8 @@ import { useAuth } from '@hooks/useAuth';
 const formValues = () => ({ phone: '' });
 const schema = yup.object().shape({ phone: yup.string().required() });
 
-export default function useLoginForm(formType) {
-  const { loginWithEmail, signup, loginWithPhone } = useAuth();
+export default function useLoginForm() {
+  const { loginWithPhone } = useAuth();
   const [submittedData, setSubmittedData] = React.useState({});
   const [verificationId, setVerificationId] = React.useState(null);
 
@@ -26,11 +26,6 @@ export default function useLoginForm(formType) {
       reset({ ...submittedData });
     }
   }, [formState, reset, submittedData, errors]);
-
-  const loginAction = React.useCallback(
-    (email, password) => (formType === 'login' ? loginWithEmail(email, password) : signup(email, password)),
-    [formType, loginWithEmail, signup]
-  );
 
   const onSubmit = React.useCallback(
     payload =>

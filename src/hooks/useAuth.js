@@ -5,9 +5,6 @@ import { useToasts } from 'react-toast-notifications';
 import { useUser } from '@hooks/useUser';
 import {
   signinWithProvider,
-  sendEmailLoginLink,
-  signInWithEmailLink,
-  signupWithEmail,
   signout,
   verifyPhoneNumber,
   signInWithVerificationCode,
@@ -64,69 +61,12 @@ function useProvideAuth() {
     (id, code) => {
       return signInWithVerificationCode(id, code)
         .then(response => {
-          console.log(`useAuth loginWithPhoneCode response`, response);
-
           mutateUser(response);
           addToast('Login Successful', { appearance: 'success' });
           router.push('/dashboard/account');
         })
         .catch(error => {
           console.error('loginWithPhoneCode error', error);
-          if (error.code !== toastId.current) {
-            toastId.current = addToast(error.message, { id: error.code, appearance: 'error', autoDismiss: false });
-          }
-        });
-    },
-    [mutateUser, addToast, router]
-  );
-
-  const loginWithEmail = React.useCallback(
-    email => {
-      return sendEmailLoginLink(email)
-        .then(() => {
-          addToast('Success! An email was sent with your login link.', { appearance: 'success' });
-        })
-        .catch(error => {
-          console.error('loginWithEmail error', error);
-          if (error.code !== toastId.current) {
-            toastId.current = addToast(error.message, { id: error.code, appearance: 'error', autoDismiss: false });
-          }
-        });
-    },
-    [addToast]
-  );
-
-  const loginWithEmailConfirmation = React.useCallback(
-    email => {
-      return signInWithEmailLink(email)
-        .then(response => {
-          console.log(`response`, response);
-          mutateUser(response);
-          addToast('Login Successful', { appearance: 'success' });
-          router.push('/dashboard/account');
-        })
-        .catch(error => {
-          mutateUser(null);
-          console.error('loginWithEmail error', error);
-          if (error.code !== toastId.current) {
-            toastId.current = addToast(error.message, { id: error.code, appearance: 'error', autoDismiss: false });
-          }
-        });
-    },
-    [addToast, mutateUser, router]
-  );
-
-  const signup = React.useCallback(
-    (email, password) => {
-      return signupWithEmail(email, password)
-        .then(response => {
-          mutateUser(response);
-          addToast('Login Successful', { appearance: 'success' });
-          router.push('/dashboard/account');
-        })
-        .catch(error => {
-          mutateUser(null);
-          console.error('signupWithEmail error', error);
           if (error.code !== toastId.current) {
             toastId.current = addToast(error.message, { id: error.code, appearance: 'error', autoDismiss: false });
           }
@@ -152,7 +92,7 @@ function useProvideAuth() {
     [mutateUser, addToast, router]
   );
 
-  return { login, loginWithEmail, loginWithEmailConfirmation, logout, signup, loginWithPhone, loginWithPhoneCode };
+  return { login, logout, loginWithPhone, loginWithPhoneCode };
 }
 
 export const AuthProvider = ({ children }) => {

@@ -47,15 +47,16 @@ export default function DeleteUser(props) {
   return (
     <StyledContainer as="section">
       <StyledHeader as="header">
-        <Heading level={5}>Danger Zone</Heading>
+        <Heading level={5}>Delete Personal Account</Heading>
         <Text align="left">
-          Deleting a user is permanant and cannot be undone. Make sure this is what you want to do.
+          Permanently remove your Personal Account and all of its contents from the platform. This action is not
+          reversible, so please continue with caution.
         </Text>
       </StyledHeader>
 
       <StyledFooter as="footer">
         <Button variant="warning" ariaLabel="Click button to delete your account">
-          Delete User
+          Delete Personal Account
         </Button>
       </StyledFooter>
     </StyledContainer>

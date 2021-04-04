@@ -7,13 +7,10 @@ import { sendEmail } from '@lib/email';
  * Creates function that checks for the following properties.
  */
 const includesAuthProps = overSome([
-  'email',
   'phoneNumber',
   'displayName',
   'photoURL',
-  'emailVerified',
   'disabled',
-  'password',
 ]);
 
 /**

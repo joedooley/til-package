@@ -14,7 +14,7 @@ export default function LoginDialog({ isOpen, onClose, router, ...rest }) {
   const [formType, setFormType] = React.useState(type);
   const isLogin = formType === 'login';
 
-  const { methods, handleSubmit, errors, verificationId } = useLoginForm(formType);
+  const { methods, handleSubmit, errors, verificationId } = useLoginForm();
 
   const handleSwitch = React.useCallback(() => {
     const nextFormType = formType === 'login' ? 'signup' : 'login';
