@@ -3,18 +3,18 @@ import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { AnimatePresence } from 'framer-motion';
 import { FormProvider } from 'react-hook-form';
-import useForm from '../forms/login/useForm';
-import LoginForm from '../forms/login';
+import useLoginForm from '../../forms/login/useForm';
+import LoginForm from '../../forms/login';
 import Dialog from '@components/core/dialog';
 import Sidebar from './sidebar';
 import Logo from '@components/core/logo';
 
-export default function AuthDialog({ isOpen, onClose, router, ...rest }) {
+export default function LoginDialog({ isOpen, onClose, router, ...rest }) {
   const type = router.pathname.replace('/', '');
   const [formType, setFormType] = React.useState(type);
   const isLogin = formType === 'login';
 
-  const { methods, handleSubmit } = useForm(formType);
+  const { methods, handleSubmit, errors, verificationId } = useLoginForm(formType);
 
   const handleSwitch = React.useCallback(() => {
     const nextFormType = formType === 'login' ? 'signup' : 'login';
@@ -30,6 +30,19 @@ export default function AuthDialog({ isOpen, onClose, router, ...rest }) {
       { shallow: false }
     );
   }, [router, formType]);
+
+  React.useEffect(() => {
+    if (verificationId !== null) {
+      router.push(
+        {
+          pathname: '/login-verification',
+          query: { verificationId: encodeURIComponent(verificationId) },
+        },
+        undefined,
+        { shallow: false }
+      );
+    }
+  }, [verificationId, router]);
 
   return (
     isOpen && (
@@ -60,6 +73,7 @@ export default function AuthDialog({ isOpen, onClose, router, ...rest }) {
             <FormProvider {...methods}>
               <LoginForm
                 type={formType}
+                errors={errors}
                 onSubmit={handleSubmit}
                 css={css`
                   padding-left: ${isLogin && '20px'};
@@ -74,7 +88,7 @@ export default function AuthDialog({ isOpen, onClose, router, ...rest }) {
   );
 }
 
-AuthDialog.propTypes = {
+LoginDialog.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   router: PropTypes.object.isRequired,

@@ -42,12 +42,16 @@ const base = ({ theme, isLoading }) => css`
 let dynamicStyle = ({ theme, variant, inverted }) => {
   if (variant === 'warning') {
     return css`
-      background-color: ${theme.colors.black[600]};
+      background-color: ${theme.colors.error.primary};
+      color: ${theme.colors.white};
       outline-color: none;
 
-      &:hover,
+      &:hover {
+        background-color: ${theme.colors.error.hover};
+      }
+
       &:focus {
-        background-color: ${theme.colors.black[400]};
+        background-color: ${theme.colors.error.focus};
       }
     `;
   }

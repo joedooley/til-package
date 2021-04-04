@@ -7,7 +7,7 @@ import Form from '@components/core/form';
 import LoginButtons from './login-buttons';
 import SubmitButton from '@components/core/form/submit-button';
 
-export default function LoginForm({ type, onSubmit, ...rest }) {
+export default function LoginForm({ type, errors, onSubmit, ...rest }) {
   const isLogin = type === 'login';
   const heading = isLogin ? 'Login to your account' : 'Create Account';
   const submitBtnLabel = isLogin ? 'Login' : 'Signup';
@@ -74,7 +74,8 @@ export default function LoginForm({ type, onSubmit, ...rest }) {
             width: 350px;
           `}
         >
-          <Form.Input name="email" type="text" placeholder="Email" required />
+          <Form.PhoneInput name="phone" placeholder="Phone Number" required />
+          <Form.ErrorMessage errors={errors} name="phone" />
 
           <Flex hAlign="center">
             <SubmitButton
@@ -98,5 +99,6 @@ export default function LoginForm({ type, onSubmit, ...rest }) {
 
 LoginForm.propTypes = {
   type: PropTypes.oneOf(['login', 'signup']).isRequired,
+  errors: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
 };

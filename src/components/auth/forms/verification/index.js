@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styled from '@emotion/styled';
+import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { FormProvider } from 'react-hook-form';
 import { Flex, Text, Button, Heading, Link } from '@components/core/html';
@@ -7,8 +7,8 @@ import useForm from './useForm';
 import Form from '@components/core/form';
 import Logo from '@components/core/logo';
 
-export default function LoginConfirmationForm(props) {
-  const { methods, handleSubmit, errors } = useForm();
+export default function LoginVerificationForm({ verificationId, ...rest }) {
+  const { methods, handleSubmit, errors } = useForm(verificationId);
 
   return (
     <FormProvider {...methods}>
@@ -19,6 +19,7 @@ export default function LoginConfirmationForm(props) {
         direction="column"
         hAlign="flex-start"
         vAlign="flex-start"
+        className={rest.className}
         css={theme => css`
           background-color: ${theme.colors.black[400]};
           margin-left: auto;
@@ -32,9 +33,9 @@ export default function LoginConfirmationForm(props) {
             margin: 40px auto 60px;
           `}
         />
-        <Text align="left">Please re-enter your email address to finish logging in.</Text>
-        <Form.Input className="formgroup" name="email" type="text" placeholder="Email address" required />
-        <Form.ErrorMessage errors={errors} name="email" />
+        <Text align="left">Please enter the verification code that was sent to your mobile device.</Text>
+        <Form.Input name="code" placeholder="Verification Code" required />
+        <Form.ErrorMessage errors={errors} name="code" />
 
         <Flex className="button-group">
           <Button onClick={handleSubmit} ariaLabel="Click button to finish logging in">
@@ -46,4 +47,6 @@ export default function LoginConfirmationForm(props) {
   );
 }
 
-LoginConfirmationForm.propTypes = {};
+LoginVerificationForm.propTypes = {
+  verificationId: PropTypes.any,
+};

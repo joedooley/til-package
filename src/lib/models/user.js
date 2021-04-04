@@ -31,7 +31,7 @@ export const normalizeUser = user => {
     uid: user.uid,
     email: user.email,
     emailVerified: user.emailVerified,
-    username: emailToUsername(user.email),
+    username: user.email ? emailToUsername(user.email) : '',
     displayName: user.displayName ?? '',
     phoneNumber: user.phoneNumber ?? '',
     photoURL: user.photoURL ?? '',

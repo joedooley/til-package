@@ -9,6 +9,8 @@ import {
   signInWithEmailLink,
   signupWithEmail,
   signout,
+  verifyPhoneNumber,
+  signInWithVerificationCode,
 } from '@lib/firebase/auth/client';
 
 const AuthContext = React.createContext();
@@ -32,6 +34,44 @@ function useProvideAuth() {
         })
         .catch(error => {
           console.error('signinWithProvider error', error);
+          if (error.code !== toastId.current) {
+            toastId.current = addToast(error.message, { id: error.code, appearance: 'error', autoDismiss: false });
+          }
+        });
+    },
+    [mutateUser, addToast, router]
+  );
+
+  const loginWithPhone = React.useCallback(
+    phone => {
+      return verifyPhoneNumber(phone)
+        .then(response => {
+          addToast('Success! A text message has been sent to your device.', { appearance: 'success' });
+
+          return response;
+        })
+        .catch(error => {
+          console.error('loginWithPhone error', error);
+          if (error.code !== toastId.current) {
+            toastId.current = addToast(error.message, { id: error.code, appearance: 'error', autoDismiss: false });
+          }
+        });
+    },
+    [addToast]
+  );
+
+  const loginWithPhoneCode = React.useCallback(
+    (id, code) => {
+      return signInWithVerificationCode(id, code)
+        .then(response => {
+          console.log(`useAuth loginWithPhoneCode response`, response);
+
+          mutateUser(response);
+          addToast('Login Successful', { appearance: 'success' });
+          router.push('/dashboard/account');
+        })
+        .catch(error => {
+          console.error('loginWithPhoneCode error', error);
           if (error.code !== toastId.current) {
             toastId.current = addToast(error.message, { id: error.code, appearance: 'error', autoDismiss: false });
           }
@@ -112,7 +152,7 @@ function useProvideAuth() {
     [mutateUser, addToast, router]
   );
 
-  return { login, loginWithEmail, loginWithEmailConfirmation, logout, signup };
+  return { login, loginWithEmail, loginWithEmailConfirmation, logout, signup, loginWithPhone, loginWithPhoneCode };
 }
 
 export const AuthProvider = ({ children }) => {

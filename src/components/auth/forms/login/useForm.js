@@ -4,12 +4,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm as useBaseForm } from 'react-hook-form';
 import { useAuth } from '@hooks/useAuth';
 
-const formValues = () => ({ email: '' });
-const schema = yup.object().shape({ email: yup.string().required() });
+const formValues = () => ({ phone: '' });
+const schema = yup.object().shape({ phone: yup.string().required() });
 
 export default function useLoginForm(formType) {
-  const { loginWithEmail, signup } = useAuth();
+  const { loginWithEmail, signup, loginWithPhone } = useAuth();
   const [submittedData, setSubmittedData] = React.useState({});
+  const [verificationId, setVerificationId] = React.useState(null);
 
   const methods = useBaseForm({
     mode: 'onChange',
@@ -20,25 +21,35 @@ export default function useLoginForm(formType) {
   const { formState, reset, setError, clearErrors } = methods;
   const { errors } = formState;
 
+  React.useEffect(() => {
+    if (formState.isSubmitSuccessful && !errors?.phone) {
+      reset({ ...submittedData });
+    }
+  }, [formState, reset, submittedData, errors]);
+
   const loginAction = React.useCallback(
     (email, password) => (formType === 'login' ? loginWithEmail(email, password) : signup(email, password)),
     [formType, loginWithEmail, signup]
   );
 
   const onSubmit = React.useCallback(
-    payload => {
-      const { email, password } = payload;
-
-      return loginAction(email, password);
-    },
-    [loginAction]
+    payload =>
+      loginWithPhone(payload.phone)
+        .then(response => {
+          clearErrors();
+          setSubmittedData(payload);
+          setVerificationId(response);
+        })
+        .catch(error => setError('phone', { type: 'server', message: error.message })),
+    [clearErrors, loginWithPhone, setError]
   );
 
   return React.useMemo(() => {
     return {
       methods,
       handleSubmit: methods.handleSubmit(payload => onSubmit(payload)),
-      submittedData,
+      errors,
+      verificationId,
     };
-  }, [methods, onSubmit, submittedData]);
+  }, [methods, onSubmit, errors, verificationId]);
 }

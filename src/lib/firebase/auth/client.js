@@ -1,6 +1,7 @@
 import Router from 'next/router';
 import firebase from '@lib/firebase/firebase';
 import { client } from '@util/api-client';
+import { normalizePhone } from '@util/string';
 
 const handleError = (label, error) => {
   console.error(`${label} error:`, JSON.stringify(error));
@@ -21,12 +22,37 @@ const signup = async userCredential => {
   return client('/api/auth/signup', { body: { token, user } }).then(response => response.data.user);
 };
 
-const signInWithPhoneNumber = async (phone, redirect = '/dashboard/projects') => {
-  const appVerifier = new firebase.auth.RecaptchaVerifier('login-button', { size: 'invisible' });
+const verifyPhoneNumber = async phone => {
   const provider = new firebase.auth.PhoneAuthProvider();
+  const appVerifier = new firebase.auth.RecaptchaVerifier('login-button', { size: 'invisible' });
+  const phoneNumber = normalizePhone(phone);
+
+  // return provider.verifyPhoneNumber(phoneNumber, appVerifier);
+
+  return firebase
+    .auth()
+    .signInWithPhoneNumber(phoneNumber, appVerifier)
+    .then(response => {
+      console.log(`signInWithPhoneNumber response`, response);
+      console.log(`confirmationResult.verificationId`, response.verificationId);
+
+      return response.verificationId;
+    });
+};
+
+const signInWithVerificationCode = (id, code) => {
+  const phoneCredential = firebase.auth.PhoneAuthProvider.credential(id, code);
+
+  return firebase.auth().signInWithCredential(phoneCredential).then(login);
+};
+
+const signInWithPhoneNumber = async phone => {
+  const provider = new firebase.auth.PhoneAuthProvider();
+  const appVerifier = new firebase.auth.RecaptchaVerifier('login-button', { size: 'invisible' });
+  const phoneNumber = normalizePhone(phone);
 
   return provider
-    .verifyPhoneNumber(phone, appVerifier)
+    .verifyPhoneNumber(phoneNumber, appVerifier)
     .then(verificationId => {
       const verificationCode = window.prompt('Please enter the verification code that was sent to your mobile device.');
 
@@ -35,19 +61,7 @@ const signInWithPhoneNumber = async (phone, redirect = '/dashboard/projects') =>
     .then(phoneCredential => {
       console.log(`phoneCredential`, phoneCredential);
 
-      return firebase.auth().signInWithCredential(phoneCredential);
-    })
-    .then(async userCredential => {
-      console.log(`userCredential`, userCredential);
-      const token = await userCredential.user.getIdToken();
-      const loginResponse = await login(token);
-
-      console.log(`token`, token);
-      console.log(`loginResponse`, loginResponse);
-
-      if (loginResponse.data === 'ok') {
-        return Router.push(redirect);
-      }
+      return firebase.auth().signInWithCredential(phoneCredential).then(login);
     })
     .catch(error => {
       appVerifier.reset('login-button');
@@ -122,4 +136,13 @@ const signout = () => {
   });
 };
 
-export { signinWithProvider, signInWithEmailLink, sendEmailLoginLink, signupWithEmail, signout };
+export {
+  signinWithProvider,
+  signInWithEmailLink,
+  sendEmailLoginLink,
+  signupWithEmail,
+  signout,
+  signInWithPhoneNumber,
+  verifyPhoneNumber,
+  signInWithVerificationCode,
+};

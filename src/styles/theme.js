@@ -2,6 +2,7 @@ const breakpoints = ['320px', '480px', '768px', '1024px', '1140px', '1600px'];
 
 const colors = {
   text: 'var(--text-color)',
+  white: 'var(--white)',
   brand: {
     primary: 'var(--primary)',
     hover: 'var(--primary-hover)',

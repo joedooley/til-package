@@ -23,6 +23,8 @@ export default function GlobalCss() {
           --text-color: hsla(var(--base-text), 87%, 100%);
           --text-color-disabled: hsla(var(--base-text), 30%, 100%);
 
+          --white: hsla(var(--base-text), 100%, 100%);
+
           --primary: hsla(var(--base-primary), 42%, 100%);
           --primary-hover: hsla(var(--base-primary), 37%, 100%);
           --primary-focus: hsla(var(--base-primary), 32%, 100%);
@@ -101,7 +103,11 @@ export default function GlobalCss() {
         }
 
         h5 {
+          color: ${theme.colors.black[900]};
+          font-size: 11px;
+          line-height: 17px;
           margin-bottom: ${theme.space[3]};
+          text-transform: uppercase;
         }
 
         h6 {

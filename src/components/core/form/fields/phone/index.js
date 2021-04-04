@@ -6,13 +6,8 @@ import Adornment from '../../adornment';
 import CharacterCount from '../../character-count';
 import Field from '../field';
 
-//Example: 0(999) 999 99 99
 const maskPhoneNumber = phone => {
-  // const x = phone.replace(/\D/g, '').match(/(\d?)(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-  // const x = phone.replace(/\D/g, '').match(/(\d?)(\d{0,3})(\d{0,3})(\d{0,4})/);
   const x = phone.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-
-  // return !x[3] ? x[1] + x[2] : `${x[1]}(${x[2]}) ${x[3]}${x[4] ? ` ${x[4]}` : ''}${x[5] ? ` ${x[5]}` : ''}`;
   return !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
 };
 
@@ -27,7 +22,7 @@ const PhoneInput = React.forwardRef(({ name, label, prefix, ...rest }, _ref) => 
     e => {
       const value = maskPhoneNumber(e.target.value);
 
-      setValue(name, e.target.value.replace(/[- )(]/g,''));
+      setValue(name, e.target.value.replace(/[- )(]/g, ''));
       onChange(value);
     },
     [name, onChange, setValue]

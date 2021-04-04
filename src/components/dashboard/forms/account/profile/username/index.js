@@ -102,8 +102,6 @@ const Container = styled(Flex)(
 export default function EditUsernameForm(props) {
   const { methods, handleSubmit, handleReset, isDirty, error } = useForm();
 
-  console.log(`error`, error);
-
   return (
     <Container as="section" direction="column" vAlign="flex-start" className={props.className}>
       <Flex as="header">

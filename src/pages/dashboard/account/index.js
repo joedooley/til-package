@@ -4,8 +4,8 @@ import { css } from '@emotion/react';
 import { Flex } from '@components/core/html';
 import EditUsernameForm from '@components/dashboard/forms/account/profile/username';
 import EditDisplayNameForm from '@components/dashboard/forms/account/profile/displayName';
-import EditEmailForm from '@components/dashboard/forms/account/profile/email';
-import EditPasswordForm from '@components/dashboard/forms/account/profile/password';
+import EditPhoneForm from '@components/dashboard/forms/account/profile/email';
+import DeleteUser from '@components/dashboard/forms/account/profile/deleteUser';
 
 export async function getServerSideProps(context) {
   if (!context.req.cookies.session) {
@@ -37,8 +37,8 @@ export default function AccountPage(props) {
     >
       <EditUsernameForm />
       <EditDisplayNameForm />
-      <EditEmailForm />
-      <EditPasswordForm />
+      <EditPhoneForm />
+      <DeleteUser />
     </Flex>
   );
 }

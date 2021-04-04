@@ -50,40 +50,10 @@ export const validateCookie = async function (cookie) {
   return auth.verifySessionCookie(cookie, true).then(decodedClaims => ({ uid: decodedClaims.uid }));
 };
 
-export const validateEmail = email => {
-  const actionCodeSettings = {
-    url: 'http://localhost:4002/dashboard/account',
-    handleCodeInApp: false,
-  };
-
-  return auth
-    .generateEmailVerificationLink(email, actionCodeSettings)
-    .then(response => {
-      const subject = 'Verify your email address';
-      const message = `Paste the url at the bottom of the email into a web browser to verify your email address.\n\n${response}`;
-      const html = `<a href=${response}>Click here</a> to verify your email address.`;
-
-      console.log('validateEmail response', response);
-
-      return sendEmail(email, subject, message, html);
-    })
-    .catch(error => {
-      console.error('validateEmail error', error);
-    });
-};
-
 export const updateAuthUser = async (uid, data) => {
   if (!includesAuthProps(data)) {
     return Promise.resolve(data);
   }
-
-  await validateEmail('joe@developingdesigns.com')
-    .then(response => {
-      console.log('validateEmail response', response);
-    })
-    .catch(error => {
-      console.error('validateEmail error', error);
-    });
 
   return auth.updateUser(uid, data).then(() => Promise.resolve(data));
 };
