@@ -19,3 +19,13 @@ export const normalizePhone = str => {
 export const emailToUsername = str => {
   return str.replace(/[.]/g, '').replace('@', '-');
 };
+
+/**
+ * Create username from phone number.
+ *
+ * @param {string} str - Phone number.
+ * @returns {string} - Username.
+ */
+ export const phoneToUsername = str => {
+  return str.replace('+', '');
+};
