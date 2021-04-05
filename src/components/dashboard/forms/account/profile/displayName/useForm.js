@@ -46,7 +46,7 @@ export default function useDisplayNameForm() {
 
   const onSubmit = React.useCallback(
     payload => {
-      return client('/api/user/profile/update', { body: { data: payload } })
+      return client('/api/user/update', { body: { data: payload } })
         .then(() => {
           clearErrors();
           mutateUser({ ...user, displayName: payload.displayName });
@@ -63,7 +63,7 @@ export default function useDisplayNameForm() {
       isDirty,
       handleReset,
       handleSubmit: methods.handleSubmit(payload => onSubmit(payload)),
-      error: errors?.displayName?.message,
+      errors,
     };
   }, [errors, handleReset, isDirty, methods, onSubmit]);
 }

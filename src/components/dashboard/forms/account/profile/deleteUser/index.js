@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { Flex, Heading, Button, Text } from '@components/core/html';
+import useDialog from '@hooks/useDialog';
+import DeleteUserDialog from './dialog';
 
 const StyledContainer = styled(Flex)(
   ({ theme }) => css`
@@ -44,22 +46,28 @@ const StyledFooter = styled(Flex)(
 );
 
 export default function DeleteUser(props) {
-  return (
-    <StyledContainer as="section">
-      <StyledHeader as="header">
-        <Heading level={5}>Delete Personal Account</Heading>
-        <Text align="left">
-          Permanently remove your Personal Account and all of its contents from the platform. This action is not
-          reversible, so please continue with caution.
-        </Text>
-      </StyledHeader>
+  const [isOpen, toggleDialog] = useDialog();
 
-      <StyledFooter as="footer">
-        <Button variant="warning" ariaLabel="Click button to delete your account">
-          Delete Personal Account
-        </Button>
-      </StyledFooter>
-    </StyledContainer>
+  return (
+    <>
+      <StyledContainer as="section">
+        <StyledHeader as="header">
+          <Heading level={5}>Delete Personal Account</Heading>
+          <Text align="left">
+            Permanently remove your Personal Account and all of its contents from the platform. This action is not
+            reversible, so please continue with caution.
+          </Text>
+        </StyledHeader>
+
+        <StyledFooter as="footer">
+          <Button variant="warning" ariaLabel="Click button to delete your account" onClick={toggleDialog}>
+            Delete Personal Account
+          </Button>
+        </StyledFooter>
+      </StyledContainer>
+
+      {isOpen ? <DeleteUserDialog isOpen={isOpen} onClose={toggleDialog} /> : null}
+    </>
   );
 }
 

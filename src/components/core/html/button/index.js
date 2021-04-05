@@ -10,16 +10,16 @@ const base = ({ theme, isLoading }) => css`
   appearance: none;
   background-color: ${theme.colors.brand.primary};
   border: none;
-  box-shadow: ${theme.shadows.small};
+  box-shadow: none;
   border-radius: ${theme.radii[2]};
-  color: ${theme.colors.text};
+  color: ${theme.colors.white};
   cursor: ${isLoading ? 'not-allowed' : 'pointer'};
   display: flex;
   font-size: ${theme.fontSizes[2]};
   font-weight: ${theme.fontWeights.bold};
   justify-content: center;
   line-height: ${theme.lineHeights.default};
-  outline-color: ${theme.colors.brand.focus};
+  outline: none;
   padding: ${theme.space[2]} ${theme.space[4]};
   transition: background-color 300ms ease-in-out, color 150ms linear;
 
@@ -43,7 +43,6 @@ let dynamicStyle = ({ theme, variant, inverted }) => {
   if (variant === 'warning') {
     return css`
       background-color: ${theme.colors.error.primary};
-      color: ${theme.colors.white};
       outline-color: none;
 
       &:hover {
@@ -61,21 +60,18 @@ let dynamicStyle = ({ theme, variant, inverted }) => {
       background-color: transparent;
       border: ${inverted ? theme.borders.dark : theme.borders.primary};
       border-radius: ${theme.radii[6]};
-      color: ${inverted ? theme.colors.text : theme.colors.brand.primary};
+      color: ${inverted ? theme.colors.white : theme.colors.brand.primary};
       padding: 11px;
 
       &:hover {
         background-color: ${theme.colors.brand.hover};
         border: ${inverted && theme.borders.transparent};
-        color: ${theme.colors.text};
       }
 
       &:focus {
         background-color: ${theme.colors.brand.focus};
         border: ${inverted && theme.borders.transparent};
         border-radius: 30px;
-        color: ${theme.colors.text};
-        outline: none;
       }
     `;
   }

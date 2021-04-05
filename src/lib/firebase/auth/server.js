@@ -6,12 +6,7 @@ import { sendEmail } from '@lib/email';
 /**
  * Creates function that checks for the following properties.
  */
-const includesAuthProps = overSome([
-  'phoneNumber',
-  'displayName',
-  'photoURL',
-  'disabled',
-]);
+const includesAuthProps = overSome(['phoneNumber', 'displayName', 'photoURL', 'disabled']);
 
 /**
  * Creates `uid` and `session` HTTP cookies for a Set-Cookie header.
@@ -54,3 +49,5 @@ export const updateAuthUser = async (uid, data) => {
 
   return auth.updateUser(uid, data).then(() => Promise.resolve(data));
 };
+
+export const deleteAuthUser = async uid => auth.deleteUser(uid);

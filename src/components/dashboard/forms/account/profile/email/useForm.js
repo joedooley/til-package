@@ -46,7 +46,7 @@ export default function useEmailForm() {
 
   const onSubmit = React.useCallback(
     payload => {
-      return client('/api/user/profile/update', { body: { data: payload } })
+      return client('/api/user/update', { body: { data: payload } })
         .then(() => {
           clearErrors();
           mutateUser({ ...user, email: payload.email });
@@ -63,7 +63,7 @@ export default function useEmailForm() {
       isDirty,
       handleReset,
       handleSubmit: methods.handleSubmit(payload => onSubmit(payload)),
-      error: Object.keys(errors).length ? errors.email.message : false,
+      errors,
     };
   }, [errors, handleReset, isDirty, methods, onSubmit]);
 }

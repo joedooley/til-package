@@ -44,7 +44,7 @@ export default function usePasswordForm() {
 
   const onSubmit = React.useCallback(
     payload => {
-      return client('/api/user/profile/update', { body: { data: payload } })
+      return client('/api/user/update', { body: { data: payload } })
         .then(() => {
           clearErrors();
           setSubmittedData(payload);

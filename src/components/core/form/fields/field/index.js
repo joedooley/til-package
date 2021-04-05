@@ -22,7 +22,6 @@ export default function Field({ name, label, children, ...rest }) {
       css={theme => css`
         display: flex;
         flex-direction: column;
-        margin-bottom: 10px;
         position: relative;
         width: 100%;
 

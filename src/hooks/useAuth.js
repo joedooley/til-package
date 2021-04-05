@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import { useToasts } from 'react-toast-notifications';
 import { useUser } from '@hooks/useUser';
-import {
-  signinWithProvider,
-  signout,
-  verifyPhoneNumber,
-  signInWithVerificationCode,
-} from '@lib/firebase/auth/client';
+import { signinWithProvider, signout, verifyPhoneNumber, signInWithVerificationCode } from '@lib/firebase/auth/client';
 
 const AuthContext = React.createContext();
 
@@ -23,8 +18,6 @@ function useProvideAuth() {
     provider => {
       return signinWithProvider(provider)
         .then(response => {
-          console.log(`useAuth login response`, response);
-
           mutateUser(response);
           addToast('Login Successful', { appearance: 'success' });
           router.push('/dashboard/account');

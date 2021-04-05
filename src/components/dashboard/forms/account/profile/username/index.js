@@ -8,12 +8,6 @@ import { Flex, Heading, Button, Text } from '@components/core/html';
 import useForm from './useForm';
 import Form from '@components/core/form';
 
-const ErrorMessage = styled(Text)(
-  ({ theme }) => css`
-    color: ${theme.colors.error.primary};
-  `
-);
-
 const Container = styled(Flex)(
   ({ theme }) => css`
     background-color: ${theme.colors.black[400]};
@@ -90,17 +84,12 @@ const Container = styled(Flex)(
         margin: 13px ${theme.space[3]};
         text-align: left;
       }
-
-      ${ErrorMessage} {
-        color: ${theme.colors.error.primary};
-        text-align: left;
-      }
     }
   `
 );
 
 export default function EditUsernameForm(props) {
-  const { methods, handleSubmit, handleReset, isDirty, error } = useForm();
+  const { methods, handleSubmit, handleReset, isDirty, errors } = useForm();
 
   return (
     <Container as="section" direction="column" vAlign="flex-start" className={props.className}>
@@ -130,8 +119,8 @@ export default function EditUsernameForm(props) {
       </FormProvider>
 
       <Flex as="footer" hAlign="space-between">
-        {error ? (
-          <ErrorMessage variant="error">{error}</ErrorMessage>
+        {errors?.username ? (
+          <Form.ErrorMessage errors={errors} name="username" />
         ) : (
           <Text>Please use 48 characters at maximum.</Text>
         )}

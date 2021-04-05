@@ -11,8 +11,6 @@ export default async function updateUserProfile(req, res) {
     });
   }
 
-  console.log(`req.body`, req.body);
-
   const uid = req.cookies.uid;
   const data = req.body.data;
 

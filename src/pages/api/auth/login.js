@@ -18,8 +18,6 @@ export default async function login(req, res) {
   const token = req.body.token;
   const user = normalizeUser(req.body.user);
 
-  console.log(`user`, user);
-
   await auth.verifyIdToken(token).then(decodedIdToken => {
     if (new Date().getTime() / 1000 - decodedIdToken.auth_time >= 10) {
       res.status(401).json({ data: 'Recent sign in required!' });
@@ -33,8 +31,6 @@ export default async function login(req, res) {
 
         return getUser(uid)
           .then(response => {
-            console.log(`login endpoint getUser response:`, response);
-
             res.setHeader('Set-Cookie', sessionCookies);
             res.status(200).json({ data: { user: response.user } });
           })
@@ -46,8 +42,6 @@ export default async function login(req, res) {
             }
 
             return createUser(user).then(response => {
-              console.log(`login endpoint createUser response:`, response);
-
               res.setHeader('Set-Cookie', sessionCookies);
               res.status(200).json({ data: { user: response.user } });
             });

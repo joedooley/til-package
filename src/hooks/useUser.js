@@ -14,7 +14,7 @@ export const useUser = () => {
   const isDashboard = router.pathname.includes('dashboard');
   const { data, error, mutate: mutateUser } = useSWR(isDashboard ? '/api/user/me' : null, fetchUser);
 
-  const userData = React.useCallback(
+  const userData = React.useMemo(
     () => ({
       user: data,
       loading: !error && !data,
@@ -32,5 +32,5 @@ export const useUser = () => {
     }
   }, [isDashboard, error, router, mutateUser]);
 
-  return userData();
+  return userData;
 };

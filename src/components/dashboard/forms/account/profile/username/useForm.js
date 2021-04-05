@@ -46,7 +46,7 @@ export default function useUsernameForm() {
 
   const onSubmit = React.useCallback(
     payload => {
-      return client('/api/user/profile/update', { body: { data: payload } })
+      return client('/api/user/update', { body: { data: payload } })
         .then(() => {
           clearErrors();
           mutateUser({ ...user, username: payload.username });
@@ -63,7 +63,7 @@ export default function useUsernameForm() {
       isDirty,
       handleReset,
       handleSubmit: methods.handleSubmit(payload => onSubmit(payload)),
-      error: Object.keys(errors).length ? errors.username.message : false,
+      errors,
     };
   }, [errors, handleReset, isDirty, methods, onSubmit]);
 }

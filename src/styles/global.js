@@ -21,6 +21,7 @@ export default function GlobalCss() {
           --base-text: 0, 0%;
 
           --text-color: hsla(var(--base-text), 87%, 100%);
+          --text-color-light: hsla(var(--base-text), 53%, 100%);
           --text-color-disabled: hsla(var(--base-text), 30%, 100%);
 
           --white: hsla(var(--base-text), 100%, 100%);
@@ -137,7 +138,7 @@ export default function GlobalCss() {
         }
 
         p {
-          color: ${theme.colors.text};
+          color: ${theme.colors.textlight};
           font-weight: ${theme.fontWeights.normal};
           font-size: ${theme.fontSizes[2]};
           line-height: ${theme.lineHeights.default};
@@ -145,9 +146,10 @@ export default function GlobalCss() {
         }
 
         label {
-          color: ${theme.colors.text};
-          font-size: ${theme.fontSizes[0]};
+          color: ${theme.colors.textlight};
+          font-size: ${theme.fontSizes[3]};
           line-height: ${theme.lineHeights.default};
+          margin-bottom: 5px;
 
           .required {
             color: ${theme.colors.error.primary};

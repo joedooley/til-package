@@ -95,6 +95,10 @@ export const updateUser = async (uid, data) => {
   return db.collection('users').doc(uid).update(data);
 };
 
+export const deleteUser = async uid => {
+  return await db.collection('users').doc(uid).delete();
+};
+
 export async function getCollection(name) {
   try {
     const snapshot = await db.collection(name).get();
