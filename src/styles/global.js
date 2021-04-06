@@ -44,6 +44,11 @@ export default function GlobalCss() {
           outline-color: ${theme.colors.border.primary};
         }
 
+        ::selection {
+          background-color: ${theme.colors.brand.focus};
+          color: ${theme.colors.white};
+        }
+
         html,
         body,
         button {

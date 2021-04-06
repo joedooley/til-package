@@ -7,7 +7,7 @@ export default function VerificationDialog({ isOpen, onClose, verificationId, ..
   return (
     isOpen && (
       <Dialog {...rest} onClose={onClose} ariaLabel="Dialog with login options" width="400px">
-        <LoginVerificationForm verificationId={verificationId} />
+        <LoginVerificationForm onCancel={onClose} verificationId={verificationId} />
       </Dialog>
     )
   );

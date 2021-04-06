@@ -66,12 +66,14 @@ let dynamicStyle = ({ theme, variant, inverted }) => {
       &:hover {
         background-color: ${theme.colors.brand.hover};
         border: ${inverted && theme.borders.transparent};
+        color: ${theme.colors.white};
       }
 
       &:focus {
         background-color: ${theme.colors.brand.focus};
         border: ${inverted && theme.borders.transparent};
         border-radius: 30px;
+        color: ${theme.colors.white};
       }
     `;
   }

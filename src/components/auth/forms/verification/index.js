@@ -2,12 +2,12 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { FormProvider } from 'react-hook-form';
-import { Flex, Text, Button, Heading, Link } from '@components/core/html';
+import { Flex, Text, Button, Spacer } from '@components/core/html';
 import useForm from './useForm';
 import Form from '@components/core/form';
 import Logo from '@components/core/logo';
 
-export default function LoginVerificationForm({ verificationId, ...rest }) {
+export default function LoginVerificationForm({ onCancel, verificationId, ...rest }) {
   const { methods, handleSubmit, errors } = useForm(verificationId);
 
   return (
@@ -34,10 +34,23 @@ export default function LoginVerificationForm({ verificationId, ...rest }) {
           `}
         />
         <Text align="left">Please enter the verification code that was sent to your mobile device.</Text>
-        <Form.Input name="code" placeholder="Verification Code" required />
+        <Form.Input name="code" placeholder="Verification Code" required autofocus />
         <Form.ErrorMessage errors={errors} name="code" />
 
-        <Flex className="button-group">
+        <Flex
+          className="button-group"
+          css={css`
+            justify-content: center;
+            margin-top: 30px;
+            width: 100%;
+          `}
+        >
+          <Button onClick={onCancel} variant="warning" ariaLabel="Click button to delete your account">
+            Cancel
+          </Button>
+
+          <Spacer x={4} />
+
           <Button onClick={handleSubmit} ariaLabel="Click button to finish logging in">
             Login
           </Button>
@@ -48,5 +61,6 @@ export default function LoginVerificationForm({ verificationId, ...rest }) {
 }
 
 LoginVerificationForm.propTypes = {
+  onCancel: PropTypes.func.isRequired,
   verificationId: PropTypes.any,
 };
