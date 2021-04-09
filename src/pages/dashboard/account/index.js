@@ -7,20 +7,20 @@ import EditDisplayNameForm from '@components/dashboard/forms/account/profile/dis
 import EditPhoneForm from '@components/dashboard/forms/account/profile/email';
 import DeleteUser from '@components/dashboard/forms/account/profile/deleteUser';
 
-export async function getServerSideProps(context) {
-  if (!context.req.cookies.session) {
-    console.log('Missing session cookie. Redirecting to the login page');
+// export async function getServerSideProps(context) {
+//   if (!context.req.cookies.session) {
+//     console.log('Missing session cookie. Redirecting to the login page');
 
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+//     return {
+//       redirect: {
+//         destination: '/login',
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  return { props: {} };
-}
+//   return { props: {} };
+// }
 
 export default function AccountPage(props) {
   return (

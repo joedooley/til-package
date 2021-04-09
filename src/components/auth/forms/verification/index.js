@@ -34,7 +34,7 @@ export default function LoginVerificationForm({ onCancel, verificationId, ...res
           `}
         />
         <Text align="left">Please enter the verification code that was sent to your mobile device.</Text>
-        <Form.Input name="code" placeholder="Verification Code" required autofocus />
+        <Form.Input name="code" placeholder="Verification Code" required autoFocus />
         <Form.ErrorMessage errors={errors} name="code" />
 
         <Flex

@@ -4,20 +4,20 @@ import { css } from '@emotion/react';
 import { getCollection } from '@lib/firebase/db-admin';
 import { Flex, Button } from '@components/core/html';
 import useDialog from '@hooks/useDialog';
-import CreatePostPanel from '@components/dashboard/panels/create-post';
+import CreateOrgDialog from '@components/dashboard/organizations/dialog';
 import EmptyState from '@components/dashboard/empty-state';
 
 export async function getStaticProps() {
-  const { entries } = await getCollection('post');
+  const { entries } = await getCollection('organizations');
 
   return {
     props: { initialData: entries },
   };
 }
 
-export default function ProjectsPage({ initialData, ...rest }) {
+export default function OrganizationsPage({ initialData, ...rest }) {
   const [data, setData] = React.useState(initialData);
-  const [isOpen, togglePanel] = useDialog();
+  const [isOpen, toggleDialog] = useDialog();
 
   console.log(`data`, data);
 
@@ -33,22 +33,22 @@ export default function ProjectsPage({ initialData, ...rest }) {
       {data.length ? (
         <Button
           ariaLabel="Click button to add a new project"
-          onClick={togglePanel}
+          onClick={toggleDialog}
           css={theme => css`
             margin-top: ${theme.space[5]};
           `}
         >
-          New Project
+          New Organization
         </Button>
       ) : (
-        <EmptyState onActionClick={togglePanel} heading="Add a project" btnLabel="Create project" />
+        <EmptyState onActionClick={toggleDialog} heading="Create an organization" btnLabel="Create Organization" />
       )}
 
-      {isOpen && <CreatePostPanel onCancel={togglePanel} />}
+      {isOpen && <CreateOrgDialog isOpen={isOpen} onClose={toggleDialog} />}
     </Flex>
   );
 }
 
-ProjectsPage.propTypes = {
+OrganizationsPage.propTypes = {
   initialData: PropTypes.array,
 };

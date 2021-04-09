@@ -26,6 +26,16 @@ export const emailToUsername = str => {
  * @param {string} str - Phone number.
  * @returns {string} - Username.
  */
- export const phoneToUsername = str => {
+export const phoneToUsername = str => {
   return str.replace('+', '');
+};
+
+/**
+ * Create slug from alphanumeric name.
+ *
+ * @param {string} str - Alphanumeric name.
+ * @returns {string} - Slug.
+ */
+export const toSlug = str => {
+  return str.toLowerCase().replace(/[ ]/g, '-');
 };

@@ -39,7 +39,7 @@ export const normalizeUser = user => {
 
   return {
     uid: user.uid,
-    email: user.email,
+    email: user.email ?? '',
     username: createUsername(user),
     displayName: user.displayName ?? '',
     phoneNumber: user.phoneNumber ?? '',
@@ -51,5 +51,6 @@ export const normalizeUser = user => {
     multiFactor: user.multiFactor,
     createdAt: user.createdAt,
     lastLoginAt: user.lastLoginAt,
+    memberships: [],
   };
 };
