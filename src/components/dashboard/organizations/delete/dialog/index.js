@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import DeleteUserForm from '../form';
+import DeleteOrganizationForm from '../form';
 import Dialog from '@components/core/dialog';
 
 export default function ConfirmationDialog({ isOpen, onClose, ...rest }) {
@@ -9,10 +9,10 @@ export default function ConfirmationDialog({ isOpen, onClose, ...rest }) {
       <Dialog
         {...rest}
         onClose={onClose}
-        ariaLabel="Dialog with confirmation form to delete personal account"
+        ariaLabel="Dialog with confirmation form to delete organization"
         width="500px"
       >
-        <DeleteUserForm onCancel={onClose} />
+        <DeleteOrganizationForm onCancel={onClose} />
       </Dialog>
     )
   );

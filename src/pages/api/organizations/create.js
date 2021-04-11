@@ -10,14 +10,14 @@ export default async function createHandler(req, res) {
     });
   }
 
+  const uid = req.cookies.uid;
   const data = req.body.data;
-  const user = req.body.user;
 
-  await createOrganization(data, user)
+  await createOrganization(data, uid)
     .then(response => {
       console.log(`createOrganization response`, JSON.stringify(response));
 
-      return res.status(200).json({ data });
+      return res.status(200).json({ data: response });
     })
     .catch(error => {
       console.log(`createOrganization error`, JSON.stringify(error));

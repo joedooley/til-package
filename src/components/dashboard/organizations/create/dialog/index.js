@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { css } from '@emotion/react';
 import CreateOrganizationForm from '../form';
 import Dialog from '@components/core/dialog';
 

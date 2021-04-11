@@ -2,15 +2,12 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { FormProvider } from 'react-hook-form';
-import { useUser } from '@hooks/useUser';
 import { Box, Flex, Text, Button, Heading, Spacer } from '@components/core/html';
 import useForm from './useForm';
 import Form from '@components/core/form';
 
 export default function CreateOrganizationForm({ onCancel, ...rest }) {
-  const { user, mutateUser } = useUser();
-
-  const { methods, handleSubmit, errors } = useForm(user, mutateUser);
+  const { methods, handleSubmit, errors } = useForm(onCancel);
 
   return (
     <FormProvider {...methods}>
@@ -68,7 +65,7 @@ export default function CreateOrganizationForm({ onCancel, ...rest }) {
 
           <Spacer x={4} />
 
-          <Button onClick={handleSubmit} ariaLabel="Click button to create your organization" >
+          <Button onClick={handleSubmit} ariaLabel="Click button to create your organization">
             Save
           </Button>
         </Flex>

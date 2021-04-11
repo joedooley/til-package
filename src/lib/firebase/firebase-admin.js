@@ -16,4 +16,4 @@ const auth = admin.auth();
 
 const FieldValue = admin.firestore.FieldValue;
 
-export { db, auth, FieldValue };
+export { db, auth, FieldValue, admin };

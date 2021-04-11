@@ -39,3 +39,14 @@ export const phoneToUsername = str => {
 export const toSlug = str => {
   return str.toLowerCase().replace(/[ ]/g, '-');
 };
+
+export const getCookieValue = key => {
+  const cookies = document.cookie;
+  const pieces = cookies
+    .split(';')
+    .map(cookie => cookie.replace(/[ ]/g, ''))
+    .filter(cookie => cookie.includes(`${key}=`))
+    .join();
+
+  return pieces.split('=')[1];
+};

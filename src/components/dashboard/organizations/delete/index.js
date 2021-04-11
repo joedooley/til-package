@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { Flex, Heading, Button, Text } from '@components/core/html';
 import useDialog from '@hooks/useDialog';
-import DeleteUserDialog from './dialog';
+import DeleteOrganizationDialog from './dialog';
 
 const StyledContainer = styled(Flex)(
   ({ theme }) => css`
@@ -45,30 +45,30 @@ const StyledFooter = styled(Flex)(
   `
 );
 
-export default function DeleteUser(props) {
+export default function DeleteOrganization(props) {
   const [isOpen, toggleDialog] = useDialog();
 
   return (
     <>
-      <StyledContainer as="section">
+      <StyledContainer {...props} as="section">
         <StyledHeader as="header">
-          <Heading level={5}>Delete Personal Account</Heading>
+          <Heading level={5}>Delete Organization</Heading>
           <Text align="left">
-            Permanently remove your Personal Account and all of its contents from the platform. This action is not
+            Permanently remove your Organization and all of its contents from the platform. This action is not
             reversible, so please continue with caution.
           </Text>
         </StyledHeader>
 
         <StyledFooter as="footer">
-          <Button variant="warning" ariaLabel="Click button to delete your account" onClick={toggleDialog}>
-            Delete Personal Account
+          <Button variant="warning" ariaLabel="Click button to delete your organization" onClick={toggleDialog}>
+            Delete Organization
           </Button>
         </StyledFooter>
       </StyledContainer>
 
-      {isOpen ? <DeleteUserDialog isOpen={isOpen} onClose={toggleDialog} /> : null}
+      {isOpen ? <DeleteOrganizationDialog isOpen={isOpen} onClose={toggleDialog} /> : null}
     </>
   );
 }
 
-DeleteUser.propTypes = {};
+DeleteOrganization.propTypes = {};

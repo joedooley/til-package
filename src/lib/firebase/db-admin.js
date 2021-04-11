@@ -1,8 +1,10 @@
 import isEmail from 'validator/lib/isEmail';
 import isLowercase from 'validator/lib/isLowercase';
 import isAlphanumeric from 'validator/lib/isAlphanumeric';
-import { db, FieldValue } from '@lib/firebase/firebase-admin';
-import { organization } from '@lib/models/organization';
+import { db } from '@lib/firebase/firebase-admin';
+import { organization, makeConverter } from '@lib/models/organization';
+import { member } from '@lib/models/organization/member';
+import { membership } from '@lib/models/organization/membership';
 
 const timestamps = doc => ({
   created: doc.createTime.seconds,
@@ -115,9 +117,11 @@ export async function getCollection(name) {
   }
 }
 
-export async function getUserDocs(name) {
+export async function getUserCollection(uid, name) {
+  const userRef = db.doc(`users/${uid}`);
+
   try {
-    const snapshot = await db.collection(name).get();
+    const snapshot = await userRef.collection(name).get();
     const entries = [];
 
     snapshot.forEach(doc => {
@@ -146,37 +150,73 @@ export async function getOrganization(id) {
   };
 }
 
-export const createOrganization = async (data, user) => {
-  const org = organization(data, user);
-  const newOrgRef = db.doc(`organizations/${org.id}`);
-  const userRef = db.doc(`users/${user.uid}`);
+export async function getOrganizations(name, uid) {
+  const user = await getUser(uid);
+  const orgConverter = makeConverter(user);
 
-  console.log(`org`, org);
+  try {
+    const snapshot = await db.collection(name).withConverter(orgConverter).get();
+    const entries = [];
+
+    snapshot.forEach(doc => {
+      entries.push({ id: doc.id, ...timestamps(doc), ...doc.data() });
+    });
+
+    return { entries };
+  } catch (error) {
+    return { error };
+  }
+}
+
+export const createOrganization = async (data, uid) => {
+  const org = organization(data);
+  const userRef = db.doc(`users/${uid}`);
+  const newOrgRef = db.doc(`organizations/${org.id}`);
+  const newMemberRef = newOrgRef.collection('members').doc(uid);
+  const newMembershipRef = userRef.collection('memberships').doc(org.id);
 
   try {
     const newOrg = await db.runTransaction(async transaction => {
-      const newOrgDoc = await transaction.get(newOrgRef);
       const userDoc = await transaction.get(userRef);
+      const newOrgDoc = await transaction.get(newOrgRef);
 
       if (newOrgDoc.exists) {
         return Promise.reject(new Error(`${org.name} is already in use`));
       }
 
-      await transaction.create(newOrgDoc, org);
-      await transaction.update(userDoc, { memberships: {} });
+      const user = userDoc.data();
 
-      return transaction.get(newOrgDoc).then(doc => {
-        transaction.create(newOrgDoc, org);
+      org.ownerInfo = user;
+      const newMember = member(org, user);
+      const newMembership = membership(org, user);
 
-        console.log(`doc`, doc);
-        console.log(`doc.data()`, doc.data());
+      await transaction.create(newOrgRef, org);
+      await transaction.create(newMemberRef, newMember);
+      await transaction.create(newMembershipRef, newMembership);
 
-        return Promise.resolve(org);
-      });
+      return org;
     });
 
+    console.log(`Transaction value`, newOrg);
     console.log('Transaction success!');
+
+    return newOrg;
   } catch (e) {
     console.log('Transaction failure:', e);
+
+    throw e;
   }
+};
+
+export const deleteOrganization = async (uid, id) => {
+  const batch = db.batch();
+
+  const userRef = db.doc(`users/${uid}`);
+  const orgRef = db.doc(`organizations/${id}`);
+  const newMemberRef = orgRef.collection('members').doc(uid);
+  const newMembershipRef = userRef.collection('memberships').doc(id);
+
+  batch.delete(orgRef).delete(newMemberRef).delete(newMembershipRef);
+
+  return await batch.commit();
 };

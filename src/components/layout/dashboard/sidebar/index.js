@@ -106,8 +106,8 @@ const items = [
     heading: 'Organizations',
     items: [
       {
-        href: '/dashboard/orgs',
-        value: 'Content Board',
+        href: '/dashboard/organizations',
+        value: 'All Organizations',
       },
     ],
   },

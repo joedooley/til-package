@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMemberships } from '@hooks/useMemberships';
 import { client } from '@util/api-client';
 
 const formValues = () => ({ name: '', billingEmail: '', billingContact: '' });
@@ -12,8 +13,9 @@ const schema = yup.object().shape({
   billingContact: yup.string().required(),
 });
 
-export default function useCreateOrganizationForm(user, mutateUser) {
+export default function useCreateOrganizationForm(closeDialog) {
   const router = useRouter();
+  const { mutate: mutateMemberships } = useMemberships();
   const [submittedData, setSubmittedData] = React.useState({});
 
   const methods = useForm({
@@ -33,20 +35,17 @@ export default function useCreateOrganizationForm(user, mutateUser) {
 
   const onSubmit = React.useCallback(
     payload => {
-      return client('/api/organizations/create', { body: { data: { ...payload }, user } })
+      return client('/api/organizations/create', { body: { data: { ...payload } } })
         .then(response => {
-          console.log(`response`, response);
-
           clearErrors();
           setSubmittedData(payload);
+          router.push(`/dashboard/organizations/${response.data.id}`);
+          mutateMemberships();
+          closeDialog();
         })
-        .catch(error => {
-          console.error(`/api/organizations/create error`, error);
-
-          return setError('code', { type: 'server', message: error.message });
-        });
+        .catch(error => setError('name', { type: 'server', message: error.message }));
     },
-    [user, clearErrors, setError]
+    [clearErrors, setError, mutateMemberships, router, closeDialog]
   );
 
   return React.useMemo(() => {

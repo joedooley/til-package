@@ -1,36 +1,26 @@
 import * as React from 'react';
 import useSWR from 'swr';
-import { useRouter } from 'next/router';
 import { client } from '@util/api-client';
 
-const fetchOrganizations = () => {
-  console.log(`fetchOrganizations called`);
+export const fetchOrganizations = url => {
+  console.log(`Fetching org: ${url}`);
 
-  return client('/api/user/me').then(response => response.data.user);
+  return client(url).then(response => response.data);
 };
 
-export const useOrganizations = () => {
-  const router = useRouter();
-  const isDashboard = router.pathname.includes('dashboard');
-  const { data, error, mutate: mutateUser } = useSWR(isDashboard ? '/api/user/me' : null, fetchOrganizations);
-
-  const userData = React.useMemo(
-    () => ({
-      user: data,
-      loading: !error && !data,
-      mutateUser,
-    }),
-    [data, error, mutateUser]
+export const useOrganizations = id => {
+  const { data, error, mutate } = useSWR(
+    () => (id !== undefined ? `/api/organizations/${id}` : null),
+    fetchOrganizations
   );
 
-  React.useEffect(() => {
-    if (isDashboard && error) {
-      console.log(`JSON.stringify(error)`, JSON.stringify(error));
-
-      mutateUser(null, false);
-      router.replace('/login');
-    }
-  }, [isDashboard, error, router, mutateUser]);
-
-  return userData;
+  return React.useMemo(
+    () => ({
+      data,
+      error,
+      loading: !error && !data,
+      mutate,
+    }),
+    [data, error, mutate]
+  );
 };

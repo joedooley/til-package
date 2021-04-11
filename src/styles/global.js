@@ -161,6 +161,28 @@ export default function GlobalCss() {
           }
         }
 
+        pre {
+          white-space: pre-wrap;
+        }
+
+        code,
+        pre code {
+          background-color: ${theme.colors.black[700]};
+          border-radius: 0.2rem;
+          box-decoration-break: clone;
+          color: ${theme.colors.text};
+          display: block;
+          font-family: monospace;
+          font-size: inherit;
+          line-height: 24px;
+          max-width: 100%;
+          min-width: 100px;
+          padding: 0.1rem 0.3rem 0.2rem;
+          word-wrap: break-word;
+          -webkit-overflow-scrolling: touch;
+          overflow-x: scroll;
+        }
+
         ::placeholder,
         select,
         input,

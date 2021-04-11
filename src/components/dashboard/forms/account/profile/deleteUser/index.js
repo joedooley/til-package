@@ -50,7 +50,7 @@ export default function DeleteUser(props) {
 
   return (
     <>
-      <StyledContainer as="section">
+      <StyledContainer {...props} as="section">
         <StyledHeader as="header">
           <Heading level={5}>Delete Personal Account</Heading>
           <Text align="left">
