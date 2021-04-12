@@ -14,11 +14,7 @@ export default async function createHandler(req, res) {
   const data = req.body.data;
 
   await createOrganization(data, uid)
-    .then(response => {
-      console.log(`createOrganization response`, JSON.stringify(response));
-
-      return res.status(200).json({ data: response });
-    })
+    .then(response => res.status(200).json({ data: response }))
     .catch(error => {
       console.log(`createOrganization error`, JSON.stringify(error));
 

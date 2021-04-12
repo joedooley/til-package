@@ -10,19 +10,16 @@ export default async function getHandler(req, res) {
     });
   }
 
-  console.log(`req.query`, req.query);
   const id = req.query.id;
 
   await getOrganization(id)
-    .then(response => {
-      return res.status(200).json({ ...response });
-    })
+    .then(response => res.status(200).json({ ...response }))
     .catch(error => {
       console.log(`getOrganization error`, JSON.stringify(error));
 
-      return res.status(405).json({
-        code: error.code || 'server/unknown_error',
-        message: error.message,
+      return res.status(404).json({
+        code: error.code || 'api/not_found',
+        message: error.message || 'Resource not found',
       });
     });
 }

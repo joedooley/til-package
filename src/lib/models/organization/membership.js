@@ -1,8 +1,23 @@
+import * as yup from 'yup';
 import { admin } from '@lib/firebase/firebase-admin';
+import { validate } from '@util/object';
 
 const ROLES = {
   owner: 'owner',
   member: 'member',
+};
+
+const schema = yup
+  .object({
+    name: yup.string().required(),
+  })
+  .noUnknown();
+
+export const updateMembership = payload => {
+  const fields = { name: payload.name };
+  return validate(schema, fields).then(data => {
+    return { ...data, last_updated: admin.firestore.Timestamp.now() };
+  });
 };
 
 /**
@@ -10,7 +25,7 @@ const ROLES = {
  *
  * @param {object} data - Organization.
  * @param {object} user - User.
- * @return {object} - Organization model.
+ * @return {object} - Membership model.
  */
 export const membership = (data, user) => {
   return {
@@ -19,46 +34,5 @@ export const membership = (data, user) => {
     photoURL: data.photoURL,
     role: data.owner.uid === user.uid ? ROLES.owner : ROLES.member,
     since: admin.firestore.Timestamp.now(),
-  };
-};
-
-/**
- * Membership class representing a user that belongs to an Organization.
- *
- * @param {object} data - Organization.
- * @param {object} user - User.
- *
- * @export
- * @class Membership
- */
-export class Membership {
-  constructor(data, user) {
-    this.id = data.id;
-    this.name = data.name;
-    this.photoURL = data.photoURL;
-    this.role = data.owner === user.uid ? ROLES.owner : ROLES.member;
-  }
-
-  toString() {
-    return `${this.id}, ${this.name}, ${this.photoURL}, ${this.role}`;
-  }
-}
-
-export const converter = user => {
-  return {
-    toFirestore: function (membership) {
-      return {
-        id: membership.id,
-        name: membership.name,
-        role: membership.role,
-        photoURL: membership.photoURL,
-      };
-    },
-
-    fromFirestore: function (snapshot, options) {
-      const data = snapshot.data(options);
-
-      return new Membership(data, user);
-    },
   };
 };

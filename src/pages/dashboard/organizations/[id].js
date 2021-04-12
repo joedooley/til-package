@@ -3,17 +3,27 @@ import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { useOrganizations } from '@hooks/useOrganizations';
-import { Flex, Heading, Button, Link, Spacer, Text } from '@components/core/html';
+import { Flex, Heading, Spacer } from '@components/core/html';
+import EditOrganization from '@components/dashboard/organizations/edit';
 import DeleteOrganization from '@components/dashboard/organizations/delete';
+import OrganizationTabs from '@components/dashboard/organizations/tabs';
 
 export default function OrganizationPage(props) {
   const router = useRouter();
-  const { data, loading } = useOrganizations(router.query?.id);
+  const { data, loading, error } = useOrganizations(router.query?.id);
 
   console.log(`router`, router);
 
   if (loading) {
     return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return (
+      <pre>
+        <code>{JSON.stringify(error)}</code>
+      </pre>
+    );
   }
 
   return (
@@ -25,11 +35,35 @@ export default function OrganizationPage(props) {
         width: 100%;
       `}
     >
-      <Heading level={1}>{`${data.name} settings`}</Heading>
-      <DeleteOrganization />
-      <pre>
-        <code>{JSON.stringify(data)}</code>
-      </pre>
+      <Heading
+        level={1}
+        css={theme => css`
+          color: ${theme.colors.white};
+          font-size: 25px;
+          font-weight: ${theme.fontWeights.semiBold};
+        `}
+      >
+        {`${data.name} settings`}
+      </Heading>
+
+      <OrganizationTabs
+        tab1={
+          <Flex
+            css={css`
+              align-items: flex-start;
+              flex-direction: column;
+              justify-content: flex-start;
+            `}
+          >
+            <EditOrganization />
+
+            <Spacer y="20px" />
+
+            <DeleteOrganization />
+          </Flex>
+        }
+        tab2={<DeleteOrganization />}
+      />
     </Flex>
   );
 }

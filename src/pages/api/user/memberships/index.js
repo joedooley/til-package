@@ -13,11 +13,7 @@ export default async function getHandler(req, res) {
   const uid = req.cookies.uid;
 
   await getUserCollection(uid, 'memberships')
-    .then(response => {
-      console.log(`getUserCollection response`, JSON.stringify(response));
-
-      return res.status(200).json({ data: response.entries });
-    })
+    .then(response => res.status(200).json({ data: response.entries }))
     .catch(error => {
       console.log(`getUserCollection error`, JSON.stringify(error));
 

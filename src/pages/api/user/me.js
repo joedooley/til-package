@@ -22,11 +22,7 @@ export default async function getCurrentUser(req, res) {
 
   await validateCookie(req.cookies.session)
     .then(({ uid }) => getUser(uid))
-    .then(response => {
-      const { user } = response;
-
-      res.status(200).json({ data: { user } });
-    })
+    .then(response => res.status(200).json({ data: { ...response.user } }))
     .catch(error => {
       console.error(`validateCookie error:`, JSON.stringify(error));
 

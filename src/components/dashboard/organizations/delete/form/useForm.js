@@ -41,7 +41,7 @@ export default function useDeleteOrganizationForm(org, phrase) {
     payload => {
       const id = org?.id;
 
-      return client('/api/organizations/delete', { body: { id } })
+      return client(`/api/organizations/${id}/delete`, { body: {} })
         .then(() => {
           clearErrors();
           setSubmittedData(payload);

@@ -2,9 +2,9 @@ import isEmail from 'validator/lib/isEmail';
 import isLowercase from 'validator/lib/isLowercase';
 import isAlphanumeric from 'validator/lib/isAlphanumeric';
 import { db } from '@lib/firebase/firebase-admin';
-import { organization, makeConverter } from '@lib/models/organization';
+import { organization, updateOrg } from '@lib/models/organization';
+import { membership, updateMembership } from '@lib/models/organization/membership';
 import { member } from '@lib/models/organization/member';
-import { membership } from '@lib/models/organization/membership';
 
 const timestamps = doc => ({
   created: doc.createTime.seconds,
@@ -150,24 +150,6 @@ export async function getOrganization(id) {
   };
 }
 
-export async function getOrganizations(name, uid) {
-  const user = await getUser(uid);
-  const orgConverter = makeConverter(user);
-
-  try {
-    const snapshot = await db.collection(name).withConverter(orgConverter).get();
-    const entries = [];
-
-    snapshot.forEach(doc => {
-      entries.push({ id: doc.id, ...timestamps(doc), ...doc.data() });
-    });
-
-    return { entries };
-  } catch (error) {
-    return { error };
-  }
-}
-
 export const createOrganization = async (data, uid) => {
   const org = organization(data);
   const userRef = db.doc(`users/${uid}`);
@@ -208,15 +190,31 @@ export const createOrganization = async (data, uid) => {
   }
 };
 
+export const updateOrganization = async (uid, id, payload) => {
+  const updates = {
+    org: await updateOrg(payload),
+    membership: await updateMembership(payload),
+  };
+
+  const batch = db.batch();
+  const orgRef = db.doc(`organizations/${id}`);
+  const membershipRef = db.doc(`users/${uid}/memberships/${id}`);
+
+  console.log(`updates`, updates);
+
+  batch.update(orgRef, updates.org).update(membershipRef, updates.membership);
+
+  return batch.commit();
+};
+
 export const deleteOrganization = async (uid, id) => {
   const batch = db.batch();
 
-  const userRef = db.doc(`users/${uid}`);
   const orgRef = db.doc(`organizations/${id}`);
-  const newMemberRef = orgRef.collection('members').doc(uid);
-  const newMembershipRef = userRef.collection('memberships').doc(id);
+  const memberRef = db.doc(`organizations/${id}/members/${uid}`);
+  const membershipRef = db.doc(`users/${uid}/memberships/${id}`);
 
-  batch.delete(orgRef).delete(newMemberRef).delete(newMembershipRef);
+  batch.delete(orgRef).delete(memberRef).delete(membershipRef);
 
   return await batch.commit();
 };

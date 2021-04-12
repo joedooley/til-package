@@ -162,6 +162,7 @@ export default function GlobalCss() {
         }
 
         pre {
+          margin: 0;
           white-space: pre-wrap;
         }
 

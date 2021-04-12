@@ -20,7 +20,7 @@ export default async function deleteOrgHandler(req, res) {
   }
 
   const uid = req.cookies.uid;
-  const id = req.body.id;
+  const id = req.query.id;
 
   await deleteOrganization(uid, id)
     .then(response => {

@@ -6,7 +6,7 @@ import { client } from '@util/api-client';
 const fetchUser = () => {
   console.log(`getUser called`);
 
-  return client('/api/user/me').then(response => response.data.user);
+  return client('/api/user/me').then(response => response.data);
 };
 
 export const useUser = () => {
