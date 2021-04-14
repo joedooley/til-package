@@ -12,6 +12,10 @@ const StyledTabs = styled(Flex)(
     flex-direction: column;
     width: 100%;
 
+    [data-reach-tabs] {
+      width: 100%;
+    }
+
     [data-reach-tab-list] {
       border-bottom: ${theme.borders.secondary};
       border-bottom-width: 2px;
@@ -19,7 +23,7 @@ const StyledTabs = styled(Flex)(
     }
 
     [data-reach-tab] {
-      color: ${theme.colors.text};
+      color: ${theme.colors.black[750]};
       font-size: ${theme.fontSizes[0]};
       margin-bottom: -2px;
       margin-right: 24px;

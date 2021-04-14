@@ -4,7 +4,7 @@ import isAlphanumeric from 'validator/lib/isAlphanumeric';
 import { db } from '@lib/firebase/firebase-admin';
 import { organization, updateOrg } from '@lib/models/organization';
 import { membership, updateMembership } from '@lib/models/organization/membership';
-import { member } from '@lib/models/organization/member';
+import { member, updateMember } from '@lib/models/organization/member';
 
 const timestamps = doc => ({
   created: doc.createTime.seconds,
@@ -75,7 +75,7 @@ export const updateEmail = async (uid, data) => {
 
   return db
     .collection('users')
-    .where('username', '==', email)
+    .where('email', '==', email)
     .get()
     .then(query => {
       if (!query.empty) {
@@ -87,6 +87,23 @@ export const updateEmail = async (uid, data) => {
 };
 
 export const updateUser = async (uid, data) => {
+  if (data.displayName) {
+    const members = [];
+    const querySnapshot = await db.collectionGroup('members').where('uid', '==', uid).get();
+
+    console.log(`querySnapshot`, querySnapshot);
+
+    querySnapshot.forEach(doc => {
+      console.log(`doc`, doc);
+      console.log(doc.id, ' => ', doc.data());
+      members.push({ id: doc.id, ...timestamps(doc), ...doc.data() });
+    });
+
+    console.log(`members`, members);
+
+    return members;
+  }
+
   if (data.username) {
     return updateUsername(uid, data);
   }
@@ -94,6 +111,19 @@ export const updateUser = async (uid, data) => {
   if (data.email) {
     return updateEmail(uid, data);
   }
+
+  // const updates = {
+  //   user: await updateOrg(data),
+  //   member: await updateMember(data),
+  // };
+
+  // const batch = db.batch();
+  // const orgRef = db.doc(`organizations/${id}`);
+  // const membershipRef = db.doc(`users/${uid}/memberships/${id}`);
+
+  // batch.update(orgRef, updates.org).update(membershipRef, updates.membership);
+
+  console.log(`updateUser data:`, data);
 
   return db.collection('users').doc(uid).update(data);
 };
@@ -135,58 +165,73 @@ export async function getUserCollection(uid, name) {
 }
 
 export async function getOrganization(id) {
-  const ref = db.doc(`organizations/${id}`);
-  const doc = await ref.get();
-
-  if (!doc.exists) {
-    throw new Error('Organization not found');
-  }
-
-  return {
-    data: {
-      ...doc.data(),
-      ...timestamps(doc),
-    },
-  };
-}
-
-export const createOrganization = async (data, uid) => {
-  const org = organization(data);
-  const userRef = db.doc(`users/${uid}`);
-  const newOrgRef = db.doc(`organizations/${org.id}`);
-  const newMemberRef = newOrgRef.collection('members').doc(uid);
-  const newMembershipRef = userRef.collection('memberships').doc(org.id);
+  const entries = [];
 
   try {
-    const newOrg = await db.runTransaction(async transaction => {
-      const userDoc = await transaction.get(userRef);
-      const newOrgDoc = await transaction.get(newOrgRef);
+    const querySnapshot = await db.collection('organizations').where('slug', '==', id).get();
 
-      if (newOrgDoc.exists) {
-        return Promise.reject(new Error(`${org.name} is already in use`));
-      }
+    querySnapshot.forEach(doc => {
+      entries.push({ id: doc.id, ...timestamps(doc), ...doc.data() });
+    });
 
-      const user = userDoc.data();
+    return {
+      data: {
+        ...entries[0],
+      },
+    };
+  } catch (error) {
+    console.log('Transaction failure:', JSON.stringify(error));
 
-      org.ownerInfo = user;
-      const newMember = member(org, user);
-      const newMembership = membership(org, user);
+    throw error;
+  }
+}
 
-      await transaction.create(newOrgRef, org);
-      await transaction.create(newMemberRef, newMember);
-      await transaction.create(newMembershipRef, newMembership);
+// export async function getOrganization(id) {
+//   const ref = db.doc(`organizations/${id}`);
+//   const doc = await ref.get();
+
+//   if (!doc.exists) {
+//     throw new Error('Organization not found');
+//   }
+
+//   return {
+//     data: {
+//       ...doc.data(),
+//       ...timestamps(doc),
+//     },
+//   };
+// }
+
+export const createOrganization = async (data, uid) => {
+  const userRef = db.doc(`users/${uid}`);
+
+  try {
+    const userDoc = await userRef.get();
+    const user = userDoc.data();
+
+    const batch = db.batch();
+
+    const newOrgRef = db.collection('organizations').doc();
+    const newOrgId = newOrgRef.id;
+    const org = organization(newOrgId, data, user);
+
+    batch.create(newOrgRef, org);
+
+    const newMemberRef = db.doc(`organizations/${newOrgId}/members/${uid}`);
+    batch.create(newMemberRef, member(org, user));
+
+    const newMembershipRef = db.doc(`users/${uid}/memberships/${newOrgId}`);
+    batch.create(newMembershipRef, membership(org, user));
+
+    return batch.commit().then(() => {
+      console.log('Successfully executed batch.');
 
       return org;
     });
+  } catch (error) {
+    console.error(`createOrganization error`, JSON.stringify(error));
 
-    console.log(`Transaction value`, newOrg);
-    console.log('Transaction success!');
-
-    return newOrg;
-  } catch (e) {
-    console.log('Transaction failure:', e);
-
-    throw e;
+    throw error;
   }
 };
 
@@ -199,8 +244,6 @@ export const updateOrganization = async (uid, id, payload) => {
   const batch = db.batch();
   const orgRef = db.doc(`organizations/${id}`);
   const membershipRef = db.doc(`users/${uid}/memberships/${id}`);
-
-  console.log(`updates`, updates);
 
   batch.update(orgRef, updates.org).update(membershipRef, updates.membership);
 
@@ -218,3 +261,40 @@ export const deleteOrganization = async (uid, id) => {
 
   return await batch.commit();
 };
+
+export async function updateMemberDocs(uid, data) {
+  const entries = [];
+  const batch = db.batch();
+
+  try {
+    const querySnapshot = await db.collectionGroup('members').where('uid', '==', uid).get();
+
+    querySnapshot.forEach(doc => {
+      batch.update(doc, updateMember(data));
+      entries.push({ id: doc.id, ...timestamps(doc), ...doc.data() });
+    });
+
+    return { entries };
+  } catch (error) {
+    return { error };
+  }
+}
+
+export async function getOrgMembers(id) {
+  const membersRef = db.collection(`organizations/${id}/members`);
+
+  try {
+    const snapshot = await membersRef.get();
+    const entries = [];
+
+    snapshot.forEach(doc => {
+      const member = doc.data();
+
+      entries.push({ name: member.displayName, role: member.role, since: member.since.toDate() });
+    });
+
+    return { entries };
+  } catch (error) {
+    return { error };
+  }
+}

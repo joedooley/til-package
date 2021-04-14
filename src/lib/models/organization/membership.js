@@ -16,7 +16,7 @@ const schema = yup
 export const updateMembership = payload => {
   const fields = { name: payload.name };
   return validate(schema, fields).then(data => {
-    return { ...data, last_updated: admin.firestore.Timestamp.now() };
+    return { ...data, last_updated: admin.firestore.Timestamp.fromDate(new Date()) };
   });
 };
 
@@ -30,9 +30,10 @@ export const updateMembership = payload => {
 export const membership = (data, user) => {
   return {
     id: data.id,
+    slug: data.slug,
     name: data.name,
     photoURL: data.photoURL,
-    role: data.owner.uid === user.uid ? ROLES.owner : ROLES.member,
-    since: admin.firestore.Timestamp.now(),
+    role: data.owner === user.uid ? ROLES.owner : ROLES.member,
+    since: admin.firestore.Timestamp.fromDate(new Date()),
   };
 };

@@ -17,8 +17,8 @@ export default function OrganizationsList({ items, ...rest }) {
     >
       {items.map(x => (
         <Link
-          key={x.id}
-          href={`/dashboard/organizations/${x.id}`}
+          key={x.slug}
+          href={`/dashboard/organizations/${x.slug}`}
           css={theme => css`
             background-color: rgb(42, 42, 42);
             border: 2px solid transparent;

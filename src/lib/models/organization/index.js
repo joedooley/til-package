@@ -23,22 +23,14 @@ export const updateOrg = payload =>
  * @param {object} data - Organization form payload.
  * @return {object} - Organization model.
  */
-export const organization = data => {
+export const organization = (id, data, user) => {
   return {
-    id: toSlug(data.name),
+    id,
+    slug: toSlug(data.name),
     name: data.name,
     billingEmail: data.billingEmail,
     billingContact: data.billingContact,
     photoURL: data.photoURL ?? '',
-    owner: {},
-
-    get ownerInfo() {
-      return this.owner.name;
-    },
-
-    set ownerInfo(user) {
-      this.owner.uid = user.uid;
-      this.owner.name = user.displayName;
-    },
+    owner: user.uid,
   };
 };

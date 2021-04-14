@@ -3,16 +3,23 @@ import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { useOrganizations } from '@hooks/useOrganizations';
+import { useOrgMembers } from '@hooks/useOrgMembers';
 import { Flex, Heading, Spacer } from '@components/core/html';
 import EditOrganization from '@components/dashboard/organizations/edit';
 import DeleteOrganization from '@components/dashboard/organizations/delete';
 import OrganizationTabs from '@components/dashboard/organizations/tabs';
+import { TempTable } from '@components/dashboard/organizations/members';
 
 export default function OrganizationPage(props) {
   const router = useRouter();
   const { data, loading, error } = useOrganizations(router.query?.id);
+  const { members, membersLoading, membersError } = useOrgMembers(data?.id);
 
   console.log(`router`, router);
+  console.log(`members`, members);
+  console.log(`membersLoading`, membersLoading);
+  console.log(`membersError`, membersError);
+  console.log(`data`, data);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -62,7 +69,7 @@ export default function OrganizationPage(props) {
             <DeleteOrganization />
           </Flex>
         }
-        tab2={<DeleteOrganization />}
+        tab2={<TempTable data={members} />}
       />
     </Flex>
   );

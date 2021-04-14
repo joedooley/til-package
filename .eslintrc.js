@@ -30,6 +30,7 @@ module.exports = {
     'no-console': ['error', { allow: ['warn', 'error'] }],
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
     'react/display-name': 'off',
+    'react/jsx-key': 'off',
   },
   settings: {
     react: {

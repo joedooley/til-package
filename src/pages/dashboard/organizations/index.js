@@ -19,37 +19,42 @@ export default function OrganizationsPage(props) {
     return <p>Loading...</p>;
   }
 
-  if (isOpen) {
-    return <CreateOrgDialog isOpen={isOpen} onClose={toggleDialog} />;
-  }
-
-  if (!data.length) {
-    return <EmptyState onActionClick={toggleDialog} heading="Create an organization" btnLabel="Create Organization" />;
+  if (!data || !data.length) {
+    return (
+      <>
+        {isOpen && <CreateOrgDialog isOpen={isOpen} onClose={toggleDialog} />}
+        <EmptyState onActionClick={toggleDialog} heading="Create an organization" btnLabel="Create Organization" />
+      </>
+    );
   }
 
   return (
-    <Flex
-      direction="column"
-      vAlign="flex-start"
-      className={props.className}
-      css={css`
-        width: 100%;
-      `}
-    >
-      <Button
-        ariaLabel="Click button to add a new project"
-        onClick={toggleDialog}
-        css={theme => css`
-          margin-top: ${theme.space[5]};
+    <>
+      <Flex
+        direction="column"
+        vAlign="flex-start"
+        className={props.className}
+        css={css`
+          width: 100%;
         `}
       >
-        New Organization
-      </Button>
+        <Button
+          ariaLabel="Click button to add a new project"
+          onClick={toggleDialog}
+          css={theme => css`
+            margin-top: ${theme.space[5]};
+          `}
+        >
+          New Organization
+        </Button>
 
-      <Spacer y={4} />
+        <Spacer y={4} />
 
-      <OrgList items={data} />
-    </Flex>
+        <OrgList items={data} />
+      </Flex>
+
+      {isOpen && <CreateOrgDialog isOpen={isOpen} onClose={toggleDialog} />}
+    </>
   );
 }
 

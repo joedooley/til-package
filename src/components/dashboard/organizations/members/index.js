@@ -1,63 +1,173 @@
+/* eslint-disable react/prop-types */
 import '@reach/tabs/styles.css';
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs';
 import { css } from '@emotion/react';
-import { Flex } from '@components/core/html';
+import { utcToDate } from '@util/date';
+import { useTable, useFlexLayout } from 'react-table';
 
-const StyledTabs = styled(Flex)(
+const StyledTable = styled.div(
   ({ theme }) => css`
-    color: ${theme.colors.text};
-    flex-direction: column;
-    width: 100%;
+    box-shadow: ${theme.shadows.modal};
+    display: block;
+    overflow: auto;
 
-    [data-reach-tab-list] {
-      border-bottom: ${theme.borders.secondary};
-      border-bottom-width: 2px;
-      margin-bottom: 30px;
-    }
+    .table {
+      border-spacing: 0;
+      border: 1px solid black;
 
-    [data-reach-tab] {
-      color: ${theme.colors.text};
-      font-size: ${theme.fontSizes[0]};
-      margin-bottom: -2px;
-      margin-right: 24px;
-      padding-bottom: ${theme.space[2]};
-
-      &:focus {
-        outline: none;
+      .thead {
+        background-color: ${theme.colors.black[600]};
+        overflow-y: auto;
+        overflow-x: hidden;
       }
-    }
 
-    [data-reach-tab][data-selected] {
-      border-bottom-color: ${theme.colors.brand.primary};
-      border-bottom-width: 2px;
-      color: ${theme.colors.white};
+      .th {
+        color: ${theme.colors.black[750]};
+        font-size: ${theme.fontSizes[3]};
+        font-weight: ${theme.fontWeights.bold};
+        margin: 0;
+        padding: ${theme.space[3]} ${theme.space[4]};
+      }
+
+      .tbody {
+        background-color: ${theme.colors.black[400]};
+        border-bottom: ${theme.borders.secondary};
+        border-bottom-color: ${theme.colors.black[700]};
+        max-height: 250px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+
+      .tr {
+        border-bottom: 1px solid ${theme.colors.black[700]};
+
+        &:last-child {
+          border-bottom: 0;
+        }
+      }
+
+      .td {
+        color: ${theme.colors.black[750]};
+        font-size: ${theme.fontSizes[3]};
+        margin: 0;
+        padding: ${theme.space[4]};
+
+        p {
+          color: ${theme.colors.black[750]};
+          font-size: ${theme.fontSizes[3]};
+          margin-bottom: 0;
+        }
+
+        .role {
+          text-transform: capitalize;
+        }
+      }
+
+      .tfoot {
+        background-color: ${theme.colors.black[400]};
+        color: ${theme.colors.black[700]};
+        font-size: ${theme.fontSizes[3]};
+        padding: ${theme.space[4]};
+      }
     }
   `
 );
 
-export default function OrganizationMembersTable({ tab1, tab2, ...rest }) {
-  const [tabIndex, setTabIndex] = React.useState(0);
+export default function OrganizationMembersTable({ columns, data, ...rest }) {
+  const tableOptions = React.useMemo(
+    () => ({
+      defaultColumn: {
+        minWidth: 30,
+        width: 150,
+        maxWidth: 200,
+      },
+    }),
+    []
+  );
+
+  const { getTableProps, headerGroups, rows, prepareRow } = useTable(
+    {
+      columns,
+      data,
+      ...tableOptions,
+    },
+    useFlexLayout
+  );
 
   return (
-    <StyledTabs className={rest.className}>
-      <Tabs onChange={index => setTabIndex(index)}>
-        <TabList>
-          <Tab>General</Tab>
-          <Tab>Team</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>{tab1}</TabPanel>
-          <TabPanel>{tab2}</TabPanel>
-        </TabPanels>
-      </Tabs>
-    </StyledTabs>
+    <StyledTable className={rest.className}>
+      <div {...getTableProps()} className="table">
+        <div className="thead">
+          {headerGroups.map(headerGroup => (
+            <div {...headerGroup.getHeaderGroupProps({})} className="tr">
+              {headerGroup.headers.map(column => (
+                <div {...column.getHeaderProps()} className="th">
+                  {column.render('Header')}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        <div className="tbody">
+          {rows.map(row => {
+            prepareRow(row);
+            return (
+              <div {...row.getRowProps()} className="tr">
+                {row.cells.map(cell => {
+                  return (
+                    <div {...cell.getCellProps()} className="td">
+                      {cell.render('Cell')}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+
+        {data?.length && <div className="tfoot">{`${data.length} user`}</div>}
+      </div>
+    </StyledTable>
   );
 }
 
+export const TempTable = ({ data, ...rest }) => {
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Name',
+        accessor: 'name',
+        width: 150,
+      },
+      {
+        Header: 'Role',
+        accessor: 'role',
+        width: 80,
+        Cell: ({ row }) => <p className="role">{row.values.role}</p>,
+      },
+      {
+        Header: 'Since',
+        accessor: 'since',
+        width: 80,
+        Cell: ({ row }) => utcToDate(row.values.since),
+      },
+    ],
+    []
+  );
+
+  const members = React.useMemo(() => data, [data]);
+
+  return <OrganizationMembersTable {...rest} columns={columns} data={members} />;
+};
+
 OrganizationMembersTable.propTypes = {
-  tab1: PropTypes.node,
-  tab2: PropTypes.node,
+  columns: PropTypes.array,
+  data: PropTypes.array,
+};
+
+TempTable.propTypes = {
+  data: PropTypes.array,
 };
