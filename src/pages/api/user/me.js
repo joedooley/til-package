@@ -1,4 +1,4 @@
-import { getUser } from '@lib/firebase/db-admin';
+import { getUser } from '@lib/db/service/user';
 import { validateCookie, setSessionCookies } from '@lib/firebase/auth/server';
 
 export default async function getCurrentUser(req, res) {

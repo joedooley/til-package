@@ -1,7 +1,7 @@
 import { auth } from '@lib/firebase/firebase-admin';
 import { setSessionCookies } from '@lib/firebase/auth/server';
-import { getUser, createUser } from '@lib/firebase/db-admin';
-import { normalizeUser } from '@lib/models/user';
+import { getUser, createUser } from '@lib/db/service/user';
+import { normalizeUser } from '@lib/db/models/user';
 
 export default async function login(req, res) {
   if (req.method !== 'POST') {

@@ -1,7 +1,6 @@
 import { overSome } from 'lodash';
 import { createCookie } from '@util/cookies';
 import { auth } from '@lib/firebase/firebase-admin';
-import { sendEmail } from '@lib/email';
 
 /**
  * Creates function that checks for the following properties.

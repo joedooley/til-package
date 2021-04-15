@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
-import { getCollection } from '@lib/firebase/db-admin';
+import { getCollection } from '@lib/db/service';
 import { Flex, Button } from '@components/core/html';
 import useDialog from '@hooks/useDialog';
 import CreatePostPanel from '@components/dashboard/panels/create-post';

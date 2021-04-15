@@ -1,4 +1,4 @@
-import { updateOrganization } from '@lib/firebase/db-admin';
+import { updateOrganization } from '@lib/db/service/organization';
 
 export default async function updateOrgHandler(req, res) {
   if (req.method !== 'POST') {

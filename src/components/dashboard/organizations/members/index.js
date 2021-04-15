@@ -150,9 +150,15 @@ export const TempTable = ({ data, ...rest }) => {
       },
       {
         Header: 'Since',
-        accessor: 'since',
+        accessor: 'created',
         width: 80,
-        Cell: ({ row }) => utcToDate(row.values.since),
+        Cell: ({ row }) => utcToDate(row.values.created, false),
+      },
+      {
+        Header: 'Updated',
+        accessor: 'updated',
+        width: 80,
+        Cell: ({ row }) => utcToDate(row.values.updated, false),
       },
     ],
     []

@@ -1,4 +1,4 @@
-import { deleteUser } from '@lib/firebase/db-admin';
+import { deleteUser } from '@lib/db/service/user';
 import { deleteAuthUser, setSessionCookies } from '@lib/firebase/auth/server';
 
 export default async function deleteAccount(req, res) {

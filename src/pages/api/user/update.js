@@ -1,4 +1,4 @@
-import { updateUser } from '@lib/firebase/db-admin';
+import { updateUser } from '@lib/db/service/user';
 import { updateAuthUser } from '@lib/firebase/auth/server';
 
 export default async function updateUserProfile(req, res) {
@@ -17,7 +17,8 @@ export default async function updateUserProfile(req, res) {
   await updateAuthUser(uid, data)
     .then(response =>
       updateUser(uid, response)
-        .then(() => {
+        .then(response => {
+          console.log(`updateUser response:`, response);
           res.status(200).json({ data });
         })
         .catch(error => {

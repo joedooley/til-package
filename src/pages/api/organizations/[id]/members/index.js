@@ -1,4 +1,4 @@
-import { getOrgMembers } from '@lib/firebase/db-admin';
+import { getOrgMembers } from '@lib/db/service/organization';
 
 export default async function getOrgMembersHandler(req, res) {
   if (req.method !== 'GET') {

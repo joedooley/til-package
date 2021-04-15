@@ -1,4 +1,4 @@
-import { deleteOrganization } from '@lib/firebase/db-admin';
+import { deleteOrganization } from '@lib/db/service/organization';
 
 export default async function deleteOrgHandler(req, res) {
   if (req.method !== 'POST') {

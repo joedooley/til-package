@@ -1,4 +1,4 @@
-import { getOrganization } from '@lib/firebase/db-admin';
+import { getOrganization } from '@lib/db/service/organization';
 
 export default async function getHandler(req, res) {
   if (req.method !== 'GET') {
@@ -15,7 +15,7 @@ export default async function getHandler(req, res) {
   await getOrganization(id)
     .then(response => res.status(200).json({ ...response }))
     .catch(error => {
-      console.log(`getOrganization error`, JSON.stringify(error));
+      console.error(`getOrganization error`, JSON.stringify(error));
 
       return res.status(404).json({
         code: error.code || 'api/not_found',

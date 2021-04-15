@@ -1,4 +1,4 @@
-import { getUserCollection } from '@lib/firebase/db-admin';
+import { getUserCollection } from '@lib/db/service/user'
 
 export default async function getHandler(req, res) {
   if (req.method !== 'GET') {

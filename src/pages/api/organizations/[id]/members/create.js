@@ -1,6 +1,6 @@
 import { createOrganization } from '@lib/db/service/organization';
 
-export default async function createHandler(req, res) {
+export default async function createMemberHandler(req, res) {
   if (req.method !== 'POST') {
     return res.status(501).json({
       error: {

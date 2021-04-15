@@ -13,13 +13,7 @@ import { TempTable } from '@components/dashboard/organizations/members';
 export default function OrganizationPage(props) {
   const router = useRouter();
   const { data, loading, error } = useOrganizations(router.query?.id);
-  const { members, membersLoading, membersError } = useOrgMembers(data?.id);
-
-  console.log(`router`, router);
-  console.log(`members`, members);
-  console.log(`membersLoading`, membersLoading);
-  console.log(`membersError`, membersError);
-  console.log(`data`, data);
+  const { members } = useOrgMembers(data?.id);
 
   if (loading) {
     return <p>Loading...</p>;

@@ -1,7 +1,7 @@
 import { auth } from '@lib/firebase/firebase-admin';
 import { setSessionCookies } from '@lib/firebase/auth/server';
-import { createUser } from '@lib/firebase/db-admin';
-import { normalizeUser } from '@lib/models/user';
+import { createUser } from '@lib/db/service/user';
+import { normalizeUser } from '@lib/db/models/user';
 
 export default async function signup(req, res) {
   if (req.method !== 'POST') {
@@ -18,11 +18,9 @@ export default async function signup(req, res) {
   const user = normalizeUser(req.body.user);
   const token = req.body.token;
 
-  console.log(`user`, user);
-
   await auth.verifyIdToken(token).then(decodedIdToken => {
     if (new Date().getTime() / 1000 - decodedIdToken.auth_time >= 10) {
-      res.status(401).json({ data: 'Recent sign in required!' });
+      return res.status(401).json({ data: 'Recent sign in required!' });
     }
 
     return auth
@@ -32,15 +30,13 @@ export default async function signup(req, res) {
         const sessionCookies = setSessionCookies(uid, authCookie);
 
         return createUser(user).then(response => {
-          console.log(`signup endpoint createUser response:`, response);
-
           res.setHeader('Set-Cookie', sessionCookies);
-          res.status(200).json({ data: { user: response.user } });
+          return res.status(200).json({ data: { user: response.user } });
         });
       })
       .catch(error => {
         console.error(`createSessionCookie error:`, error);
-        res.status(401).json({ data: 'Invalid authentication' });
+        return res.status(401).json({ data: 'Invalid authentication' });
       });
   });
 }

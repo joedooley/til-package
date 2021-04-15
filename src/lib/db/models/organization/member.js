@@ -15,7 +15,8 @@ const schema = yup
   .noUnknown();
 
 export const updateMember = payload => {
-  const fields = { name: payload.name };
+  const fields = { displayName: payload.displayName };
+
   return validate(schema, fields).then(data => {
     return { ...data, last_updated: admin.firestore.Timestamp.fromDate(new Date()) };
   });
