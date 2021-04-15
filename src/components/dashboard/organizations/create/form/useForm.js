@@ -39,7 +39,7 @@ export default function useCreateOrganizationForm(closeDialog) {
         .then(response => {
           clearErrors();
           setSubmittedData(payload);
-          router.push(`/dashboard/organizations/${response.data.id}`);
+          router.push(`/dashboard/organizations/${response.data.slug}`);
           mutateMemberships();
           closeDialog();
         })
