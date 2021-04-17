@@ -1,21 +1,26 @@
 import * as yup from 'yup';
-import { admin } from '@lib/firebase/firebase-admin';
 import { toSlug } from '@util/string';
 import { validate } from '@util/object';
 
-let schema = yup
+const schema = yup
   .object({
-    name: yup.string().required(),
+    name: yup.string(),
+    slug: yup.string(),
     billingEmail: yup.string(),
     billingContact: yup.string(),
     photoURL: yup.string().default(''),
   })
   .noUnknown();
 
-export const updateOrg = payload =>
-  validate(schema, payload).then(data => {
-    return { ...data, last_updated: admin.firestore.Timestamp.now() };
-  });
+export const updateOrg = payload => {
+  const updates = { ...payload };
+
+  if (updates.name) {
+    updates.slug = toSlug(updates.name);
+  }
+
+  return validate(schema, updates);
+};
 
 /**
  * Create organization.

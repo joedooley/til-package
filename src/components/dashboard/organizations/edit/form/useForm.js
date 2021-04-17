@@ -48,14 +48,18 @@ export default function useEditOrganizationForm(org) {
       const id = org?.id;
 
       return client(`/api/organizations/${id}/update`, { body: { data: payload } })
-        .then(() => {
+        .then(response => {
           clearErrors();
           setSubmittedData(payload);
           mutateMemberships();
+
+          if (response.data.slug !== router.query.slug) {
+            router.push(`/dashboard/organizations/${response.data.slug}`);
+          }
         })
         .catch(error => setError('server', { type: 'server', message: error.message }));
     },
-    [org, mutateMemberships, clearErrors, setError]
+    [org?.id, clearErrors, mutateMemberships, router, setError]
   );
 
   return React.useMemo(() => {

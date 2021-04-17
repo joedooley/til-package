@@ -1,5 +1,4 @@
 import * as yup from 'yup';
-import { admin } from '@lib/firebase/firebase-admin';
 import { validate } from '@util/object';
 
 const ROLES = {
@@ -7,17 +6,21 @@ const ROLES = {
   member: 'member',
 };
 
-const schema = yup
-  .object({
-    name: yup.string().required(),
-  })
-  .noUnknown();
-
 export const updateMembership = payload => {
-  const fields = { name: payload.name };
-  return validate(schema, fields).then(data => {
-    return { ...data, last_updated: admin.firestore.Timestamp.fromDate(new Date()) };
-  });
+  const updates = {};
+
+  if (payload.name) {
+    updates.name = payload.name;
+    updates.slug = payload.slug;
+  }
+
+  if (payload.photoURL) {
+    updates.photoURL = payload.photoURL;
+  }
+
+  const schema = yup.object({ name: yup.string(), slug: yup.string(), photoURL: yup.string() }).noUnknown();
+
+  return validate(schema, updates);
 };
 
 /**
@@ -34,6 +37,5 @@ export const membership = (data, user) => {
     name: data.name,
     photoURL: data.photoURL,
     role: data.owner === user.uid ? ROLES.owner : ROLES.member,
-    since: admin.firestore.Timestamp.fromDate(new Date()),
   };
 };

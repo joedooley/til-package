@@ -55,18 +55,22 @@ export const createOrganization = async (data, uid) => {
 };
 
 export const updateOrganization = async (uid, id, payload) => {
-  const updates = {
-    org: await updateOrg(payload),
-    membership: await updateMembership(payload),
-  };
+  const updatedOrg = await updateOrg(payload);
+  const updatedMembership = await updateMembership(updatedOrg);
 
   const batch = db.batch();
   const orgRef = db.doc(`organizations/${id}`);
   const membershipRef = db.doc(`users/${uid}/memberships/${id}`);
 
-  batch.update(orgRef, updates.org).update(membershipRef, updates.membership);
+  return batch
+    .update(orgRef, updatedOrg)
+    .update(membershipRef, updatedMembership)
+    .commit()
+    .then(async () => {
+      const orgDoc = await orgRef.get();
 
-  return batch.commit();
+      return orgDoc.data();
+    });
 };
 
 export const deleteOrganization = async (uid, id) => {

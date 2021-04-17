@@ -24,7 +24,7 @@ export default async function updateOrgHandler(req, res) {
   const data = req.body.data;
 
   await updateOrganization(uid, id, data)
-    .then(response => res.status(200).json({ data: { writeTime: response[0].writeTime.toDate() } }))
+    .then(response => res.status(200).json({ data: response }))
     .catch(error => {
       if (error.name === 'ValidationError') {
         return res.status(400).json({
