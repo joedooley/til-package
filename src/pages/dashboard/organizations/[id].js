@@ -8,7 +8,7 @@ import { Flex, Heading, Spacer } from '@components/core/html';
 import EditOrganization from '@components/dashboard/organizations/edit';
 import DeleteOrganization from '@components/dashboard/organizations/delete';
 import OrganizationTabs from '@components/dashboard/organizations/tabs';
-import { TempTable } from '@components/dashboard/organizations/members';
+import OrgMembersTable from '@components/dashboard/organizations/members';
 
 export default function OrganizationPage(props) {
   const router = useRouter();
@@ -63,7 +63,7 @@ export default function OrganizationPage(props) {
             <DeleteOrganization />
           </Flex>
         }
-        tab2={<TempTable data={members} />}
+        tab2={<OrgMembersTable data={members} />}
       />
     </Flex>
   );

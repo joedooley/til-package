@@ -1,211 +1,129 @@
-/* eslint-disable react/jsx-key */
-/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import '@reach/tabs/styles.css';
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import { useTable, useSortBy, useFilters, usePagination, useExpanded } from 'react-table';
-import Pagination from './pagination';
-import SortIcon from 'public/assets/icons/table/sort.svg';
+import { useTable, useFlexLayout } from 'react-table';
 
-const base = ({ theme }) => css`
-  border-spacing: 0;
-  margin-bottom: ${theme.space[3]};
-  overflow: hidden;
-  width: 100%;
+const StyledTable = styled.div(
+  ({ theme }) => css`
+    box-shadow: ${theme.shadows.modal};
+    display: block;
+    overflow: auto;
 
-  thead {
-    box-shadow: ${theme.shadows.thead};
-  }
+    .table {
+      border-spacing: 0;
+      border: 1px solid black;
 
-  .th-wrap {
-    align-items: center;
-    display: flex;
+      .thead {
+        background-color: ${theme.colors.black[600]};
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
 
-    & > span {
-      margin-right: ${theme.space[1]};
+      .th {
+        color: ${theme.colors.black[750]};
+        font-size: ${theme.fontSizes[3]};
+        font-weight: ${theme.fontWeights.bold};
+        margin: 0;
+        padding: ${theme.space[3]} ${theme.space[4]};
+      }
+
+      .tbody {
+        background-color: ${theme.colors.black[400]};
+        border-bottom: ${theme.borders.secondary};
+        border-bottom-color: ${theme.colors.black[700]};
+        max-height: 250px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+
+      .tr {
+        border-bottom: 1px solid ${theme.colors.black[700]};
+
+        &:last-child {
+          border-bottom: 0;
+        }
+      }
+
+      .td {
+        color: ${theme.colors.black[750]};
+        font-size: ${theme.fontSizes[3]};
+        margin: 0;
+        padding: ${theme.space[4]};
+
+        p {
+          color: ${theme.colors.black[750]};
+          font-size: ${theme.fontSizes[3]};
+          margin-bottom: 0;
+        }
+
+        .role {
+          text-transform: capitalize;
+        }
+      }
+
+      .tfoot {
+        background-color: ${theme.colors.black[400]};
+        color: ${theme.colors.black[700]};
+        font-size: ${theme.fontSizes[3]};
+        padding: ${theme.space[4]};
+      }
     }
+  `
+);
 
-    .sortable {
-      color: ${theme.colors.brand.primary};
-      display: flex;
-    }
-  }
-
-  th,
-  td {
-    border-bottom: ${theme.borders.primary};
-    margin: 0;
-    text-align: left;
-
-    &:first-of-type {
-      padding-left: ${theme.space[4]};
-    }
-  }
-
-  th {
-    color: ${theme.colors.text};
-    font-weight: ${theme.fontWeights.bold};
-    font-size: ${theme.fontSizes[0]};
-    line-height: 18px;
-    text-transform: uppercase;
-    padding-bottom: 6px;
-    padding-right: 0;
-    padding-top: 6px;
-
-    &:last-of-type {
-      padding-right: 60px;
-    }
-  }
-
-  .th-wrap {
-    align-items: center;
-    display: flex;
-
-    & > span {
-      margin-right: 6px;
-    }
-
-    .sortable {
-      color: ${theme.colors.brand.primary};
-      display: flex;
-    }
-  }
-
-  td {
-    color: ${theme.colors.text};
-    font-size: ${theme.fontSizes[2]};
-    line-height: ${theme.lineHeights.default};
-    padding-bottom: 10px;
-    padding-top: 10px;
-  }
-
-  a {
-    font-size: ${theme.fontSizes[2]};
-    font-weight: ${theme.fontWeights.bold};
-  }
-`;
-
-const StyledTable = styled('table')`
-  ${base}
-`;
-
-const StyledPagination = styled(Pagination)(props => ({
-  paddingLeft: props.theme.space[4],
-  paddingRight: props.theme.space[4],
-}));
-
-export default function Table({ columns, data, defaultColumn = {}, options = {}, updateData, skipPageReset, ...rest }) {
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    prepareRow,
-    rows,
-    page,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    state: { pageIndex },
-  } = useTable(
+export default function Table({ columns, data, options, ...rest }) {
+  const { getTableProps, headerGroups, rows, prepareRow } = useTable(
     {
       columns,
       data,
-      defaultColumn,
-      filterTypes: options.filterTypes,
-      disableFilters: options?.disableFilters,
-      disableSortBy: options?.sorting?.sortBy?.length === 0,
-      autoResetPage: !skipPageReset,
-      updateData,
-      initialState: {
-        hiddenColumns: options.initialState?.hiddenColumns || [],
-        sortBy: options.sorting.sortBy,
-        pageSize: options.pageSize || 20,
-        pageIndex: options.pageIndex || 0,
-        filters: options.initialState?.filters || [],
-      },
+      ...options,
     },
-    useFilters,
-    useSortBy,
-    useExpanded,
-    usePagination
+    useFlexLayout
   );
 
-  const tableData = options.usePagination ? page : rows;
-
   return (
-    <>
-      <StyledTable {...getTableProps()} {...rest}>
-        <thead>
+    <StyledTable className={rest.className}>
+      <div {...getTableProps()} className="table">
+        <div className="thead">
           {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => {
-                return (
-                  <th
-                    {...column.getHeaderProps([
-                      {
-                        style: column.style,
-                        className: column.className,
-                      },
-                      { ...column?.getSortByToggleProps() },
-                    ])}
-                  >
-                    <div className="th-wrap">
-                      <span className="header">{column.render('Header')}</span>
-                      {column.canSort && (
-                        <span className="sortable">
-                          <SortIcon />
-                        </span>
-                      )}
-                      {!options.disableFilters && column.canFilter ? (
-                        <div className="filterable">{column.render('Filter')}</div>
-                      ) : null}
-                    </div>
-                  </th>
-                );
-              })}
-            </tr>
+            <div {...headerGroup.getHeaderGroupProps({})} className="tr">
+              {headerGroup.headers.map(column => (
+                <div {...column.getHeaderProps()} className="th">
+                  {column.render('Header')}
+                </div>
+              ))}
+            </div>
           ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {tableData.map(row => {
+        </div>
+
+        <div className="tbody">
+          {rows.map(row => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map(cell => (
-                  <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                ))}
-              </tr>
+              <div {...row.getRowProps()} className="tr">
+                {row.cells.map(cell => {
+                  return (
+                    <div {...cell.getCellProps()} className="td">
+                      {cell.render('Cell')}
+                    </div>
+                  );
+                })}
+              </div>
             );
           })}
-        </tbody>
-      </StyledTable>
+        </div>
 
-      {options.usePagination && (
-        <StyledPagination
-          gotoPage={gotoPage}
-          canPreviousPage={canPreviousPage}
-          previousPage={previousPage}
-          nextPage={nextPage}
-          canNextPage={canNextPage}
-          pageCount={pageCount}
-          pageIndex={pageIndex}
-          pageOptions={pageOptions}
-        />
-      )}
-    </>
+        {data?.length && <div className="tfoot">{`${data.length} user`}</div>}
+      </div>
+    </StyledTable>
   );
 }
 
 Table.propTypes = {
-  columns: PropTypes.array.isRequired,
-  data: PropTypes.any,
-  defaultColumn: PropTypes.object,
+  columns: PropTypes.array,
+  data: PropTypes.array,
   options: PropTypes.object,
-  updateData: PropTypes.func,
-  skipPageReset: PropTypes.bool,
 };
