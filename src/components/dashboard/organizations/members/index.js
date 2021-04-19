@@ -3,9 +3,14 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { utcToDate } from '@util/date';
+import { Flex, Heading, Button } from '@components/core/html';
+import useDialog from '@hooks/useDialog';
 import Table from '@components/core/table';
+import CreateOrgMemberDialog from '@components/dashboard/organizations/members/create/dialog';
 
-export default function OrgMembersTable({ data, ...rest }) {
+export default function OrgMembersTable({ id, data, ...rest }) {
+  const [isOpen, toggleDialog] = useDialog();
+
   const options = React.useMemo(
     () => ({
       defaultColumn: {
@@ -48,9 +53,37 @@ export default function OrgMembersTable({ data, ...rest }) {
 
   const members = React.useMemo(() => data, [data]);
 
-  return <Table {...rest} columns={columns} data={members} options={options} />;
+  return (
+    <>
+      <Flex
+        css={theme => css`
+          flex-direction: column;
+
+          & > div {
+            width: 100%;
+
+            &:first-of-type {
+              justify-content: flex-end;
+              margin-bottom: ${theme.space[3]};
+            }
+          }
+        `}
+      >
+        <Flex>
+          <Button onClick={toggleDialog} ariaLabel="Click button to open dialog with a user invitation form">
+            Invite User
+          </Button>
+        </Flex>
+
+        <Table {...rest} columns={columns} data={members} options={options} />
+      </Flex>
+
+      {isOpen && <CreateOrgMemberDialog id={id} isOpen={isOpen} onClose={toggleDialog} />}
+    </>
+  );
 }
 
 OrgMembersTable.propTypes = {
+  id: PropTypes.string,
   data: PropTypes.array,
 };

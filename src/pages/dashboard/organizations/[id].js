@@ -12,8 +12,8 @@ import OrgMembersTable from '@components/dashboard/organizations/members';
 
 export default function OrganizationPage(props) {
   const router = useRouter();
-  const { data, loading, error } = useOrganizations(router.query?.id);
-  const { members } = useOrgMembers(data?.id);
+  const { data: organization, loading, error } = useOrganizations(router.query?.id);
+  const { members } = useOrgMembers(organization?.id);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -44,7 +44,7 @@ export default function OrganizationPage(props) {
           font-weight: ${theme.fontWeights.semiBold};
         `}
       >
-        {`${data.name} settings`}
+        {`${organization.name} settings`}
       </Heading>
 
       <OrganizationTabs
@@ -63,7 +63,7 @@ export default function OrganizationPage(props) {
             <DeleteOrganization />
           </Flex>
         }
-        tab2={<OrgMembersTable data={members} />}
+        tab2={<OrgMembersTable id={organization?.id} data={members} />}
       />
     </Flex>
   );

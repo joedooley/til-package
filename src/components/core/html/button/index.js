@@ -104,11 +104,7 @@ const StyledComponent = styled(motion.button)`
 
 const buttonVariants = (variant, disabled) => {
   if (disabled || variant === 'unstyled') {
-    return {
-      hover: { scale: 1 },
-      pressed: { scale: 1 },
-      rest: { scale: 1 },
-    };
+    return {};
   }
 
   return {

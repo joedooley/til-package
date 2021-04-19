@@ -1,9 +1,11 @@
 import * as yup from 'yup';
 import { validate } from '@util/object';
 
-const ROLES = {
+export const ROLES = {
   owner: 'owner',
   member: 'member',
+  admin: 'admin',
+  developer: 'developer',
 };
 
 export const updateMember = payload => {

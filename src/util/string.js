@@ -40,6 +40,12 @@ export const toSlug = str => {
   return str.toLowerCase().replace(/[ ]/g, '-');
 };
 
+/**
+ * Get cookie value from document.cookie string.
+ *
+ * @param {string} key - Cookie name.
+ * @returns {string} - Cookie value.
+ */
 export const getCookieValue = key => {
   const cookies = document.cookie;
   const pieces = cookies
@@ -49,4 +55,32 @@ export const getCookieValue = key => {
     .join();
 
   return pieces.split('=')[1];
+};
+
+/**
+ * Create search keywords for typeahead components to enable Firestore
+ * search by keyword queries.
+ *
+ * @param {string} value - Keyword
+ * @returns {array} - Keyword array
+ */
+export const createSearchKeywords = value => {
+  let prevKey = '';
+  const keywords = [];
+  const wordArr = value.toLowerCase().replace(/ /g, '').split(' ');
+
+  for (const word of wordArr) {
+    const charArr = word.toLowerCase().split('');
+
+    for (const char of charArr) {
+      const keyword = prevKey + char;
+
+      keywords.push(keyword);
+      prevKey = keyword;
+    }
+
+    prevKey = '';
+  }
+
+  return keywords;
 };

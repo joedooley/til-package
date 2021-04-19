@@ -4,8 +4,8 @@ import { css } from '@emotion/react';
 import { getCollection } from '@lib/db/service';
 import { Flex, Button } from '@components/core/html';
 import useDialog from '@hooks/useDialog';
-import CreatePostPanel from '@components/dashboard/panels/create-post';
 import EmptyState from '@components/dashboard/empty-state';
+import CreatePostPanel from '@components/dashboard/projects/create/panels';
 
 export async function getStaticProps() {
   const { entries } = await getCollection('post');

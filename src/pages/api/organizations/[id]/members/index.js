@@ -10,8 +10,6 @@ export default async function getOrgMembersHandler(req, res) {
     });
   }
 
-  console.log(`req.query`, req.query);
-
   const id = req.query.id;
 
   await getOrgMembers(id)

@@ -6,3 +6,5 @@ export const getTimestamps = (doc, pretty = false) => ({
 });
 
 export const validate = async (schema, data) => schema.validate(data, { strict: true });
+
+export const map = value => Object.entries(value).map(([id, name]) => ({ id, name }));

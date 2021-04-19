@@ -124,3 +124,21 @@ export async function getUserCollection(uid, name) {
     return { error };
   }
 }
+
+export async function searchUsers(query) {
+  const { docs } = await db
+    .collection('users')
+    .where('searchKeywords', 'array-contains', query.trim().toLowerCase())
+    .get();
+
+  return docs.map(doc => {
+    const data = doc.data();
+
+    return {
+      uid: data.uid,
+      displayName: data.displayName,
+      username: data.username,
+      email: data.email,
+    };
+  });
+}

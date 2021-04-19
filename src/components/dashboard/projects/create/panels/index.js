@@ -4,12 +4,12 @@ import { css } from '@emotion/react';
 import { FormProvider } from 'react-hook-form';
 import { Heading } from '@components/core/html';
 import Panel from '@components/core/panel';
-import useForm from '../../forms/create-post/useForm';
-import CreatePostForm from '../../forms/create-post';
+import useCreatePostForm from '../forms/useForm';
+import CreatePostForm from '../forms';
 
 export default function CreatePostPanel({ onCancel, ...rest }) {
   const panelRef = React.useRef();
-  const { methods, handleSubmit } = useForm();
+  const { methods, handleSubmit } = useCreatePostForm();
 
   return (
     <FormProvider {...methods}>

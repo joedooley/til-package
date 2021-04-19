@@ -2,10 +2,10 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { Flex } from '@components/core/html';
-import EditUsernameForm from '@components/dashboard/forms/account/profile/username';
-import EditDisplayNameForm from '@components/dashboard/forms/account/profile/displayName';
-import EditPhoneForm from '@components/dashboard/forms/account/profile/email';
-import DeleteUser from '@components/dashboard/forms/account/profile/deleteUser';
+import EditUsernameForm from '@components/dashboard/account/username';
+import EditDisplayNameForm from '@components/dashboard/account/displayName';
+import EditPhoneForm from '@components/dashboard/account/email';
+import DeleteUser from '@components/dashboard/account/deleteUser';
 
 export default function AccountPage(props) {
   return (

@@ -1,4 +1,4 @@
-import { emailToUsername, phoneToUsername } from '@util/string';
+import { emailToUsername, phoneToUsername, createSearchKeywords } from '@util/string';
 
 /**
  * Create username from email or phone.
@@ -35,12 +35,13 @@ const normalizeProviders = providers =>
  * @return {object} - User model.
  */
 export const normalizeUser = user => {
+  const username = createUsername(user);
   const providers = normalizeProviders(user.providerData);
 
   return {
     uid: user.uid,
     email: user.email ?? '',
-    username: createUsername(user),
+    username,
     displayName: user.displayName ?? '',
     phoneNumber: user.phoneNumber ?? '',
     photoURL: user.photoURL ?? '',
@@ -51,6 +52,6 @@ export const normalizeUser = user => {
     multiFactor: user.multiFactor,
     createdAt: user.createdAt,
     lastLoginAt: user.lastLoginAt,
-    memberships: [],
+    searchKeywords: createSearchKeywords(username),
   };
 };
