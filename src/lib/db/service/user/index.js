@@ -3,6 +3,7 @@ import isLowercase from 'validator/lib/isLowercase';
 import isAlphanumeric from 'validator/lib/isAlphanumeric';
 import { db } from '@lib/firebase/firebase-admin';
 import { getTimestamps } from '@util/object';
+import { createSearchKeywords } from '@util/string';
 import { updateMembers } from '../member';
 
 export async function getUser(uid) {
@@ -57,7 +58,7 @@ export const updateUsername = async (uid, batch, data) => {
         return Promise.reject(new Error(`${username} is already in use`));
       }
 
-      batch.update(userRef, data);
+      batch.update(userRef, { username, searchKeywords: createSearchKeywords(username) });
     });
 };
 
@@ -78,7 +79,7 @@ export const updateEmail = async (uid, batch, data) => {
         return Promise.reject(new Error(`${email} is already in use`));
       }
 
-      batch.update(userRef, data);
+      batch.update(userRef, { email });
     });
 };
 
@@ -97,9 +98,8 @@ export const updateUser = async (uid, data) => {
 
   if (data.displayName) {
     await updateMembers(uid, batch, data);
+    batch.update(userRef, { displayName: data.displayName });
   }
-
-  batch.update(userRef, data);
 
   return batch.commit();
 };
