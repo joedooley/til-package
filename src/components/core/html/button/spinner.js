@@ -9,7 +9,7 @@ export default function Spinner({ fill = 'white' }) {
     },
     visible: {
       rotate: 360,
-      transition: { loop: Infinity, ease: 'linear', duration: 1 },
+      transition: { repeatType: 'loop', ease: 'linear', duration: 1 },
     },
   };
 
