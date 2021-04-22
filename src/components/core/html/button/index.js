@@ -16,7 +16,7 @@ const base = ({ theme, isLoading }) => css`
   cursor: ${isLoading ? 'not-allowed' : 'pointer'};
   display: flex;
   font-size: ${theme.fontSizes[2]};
-  font-weight: ${theme.fontWeights.bold};
+  font-weight: 400;
   justify-content: center;
   line-height: ${theme.lineHeights.default};
   outline: none;
@@ -33,9 +33,10 @@ const base = ({ theme, isLoading }) => css`
 
   &:disabled,
   &:disabled:hover {
-    background: ${theme.colors.disabled.bg};
-    color: ${theme.colors.disabled.text};
+    background: ${theme.colors.brand.disabled};
+    color: ${theme.colors.white};
     cursor: not-allowed;
+    opacity: 0.75;
   }
 `;
 
@@ -109,7 +110,7 @@ const buttonVariants = (variant, disabled) => {
 
   return {
     hover: clicked => ({
-      scale: clicked ? 1 : 1.05,
+      scale: clicked ? 1 : 1,
     }),
     pressed: {
       scale: 0.95,

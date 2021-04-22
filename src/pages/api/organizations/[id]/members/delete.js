@@ -1,6 +1,6 @@
-import { createMember } from '@lib/db/service/member';
+import { deleteMembers } from '@lib/db/service/member';
 
-export default async function createOrgMemberHandler(req, res) {
+export default async function deleteOrgMembersHandler(req, res) {
   if (req.method !== 'POST') {
     return res.status(501).json({
       error: {
@@ -10,13 +10,13 @@ export default async function createOrgMemberHandler(req, res) {
     });
   }
 
-  const org = req.body.org;
-  const user = req.body.user;
+  const orgId = req.body.orgId;
+  const ids = req.body.ids;
 
-  await createMember(org, user)
+  await deleteMembers(orgId, ids)
     .then(response => res.status(200).json({ data: response }))
     .catch(error => {
-      console.log(`createMember error`, JSON.stringify(error));
+      console.log(`deleteMembers error`, JSON.stringify(error));
 
       return res.status(405).json({
         code: error.code || 'server/unknown_error',

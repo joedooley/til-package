@@ -1,30 +1,22 @@
 import { db } from '@lib/firebase/firebase-admin';
-import { organization } from '@lib/db/models/organization';
 import { membership } from '@lib/db/models/organization/membership';
 import { member, updateMember } from '@lib/db/models/organization/member';
 
-export const createMember = async (data, uid) => {
-  const userRef = db.doc(`users/${uid}`);
+export const createMember = async (org, user) => {
+  const uid = user.uid;
+  const orgId = org.id;
+  const batch = db.batch();
 
   try {
-    const userDoc = await userRef.get();
-    const user = userDoc.data();
+    const newMember = member(org, user);
+    const newMemberRef = db.doc(`organizations/${orgId}/members/${uid}`);
+    const newMembershipRef = db.doc(`users/${uid}/memberships/${orgId}`);
 
-    const batch = db.batch();
-
-    const newOrgRef = db.collection('organizations').doc();
-    const newOrgId = newOrgRef.id;
-    const org = organization(newOrgId, data, user);
-
-    batch.create(newOrgRef, org);
-
-    const newMemberRef = db.doc(`organizations/${newOrgId}/members/${uid}`);
-    batch.create(newMemberRef, member(org, user));
-
-    const newMembershipRef = db.doc(`users/${uid}/memberships/${newOrgId}`);
-    batch.create(newMembershipRef, membership(org, user));
-
-    return batch.commit().then(() => org);
+    return batch
+      .create(newMemberRef, newMember)
+      .create(newMembershipRef, membership(org, user))
+      .commit()
+      .then(() => newMember);
   } catch (error) {
     console.error(`createMember error`, JSON.stringify(error));
 
@@ -45,3 +37,24 @@ export async function updateMembers(uid, batch, data) {
       });
     });
 }
+
+export const deleteMember = async (orgId, uid) => {
+  const batch = db.batch();
+  const memberRef = db.doc(`organizations/${orgId}/members/${uid}`);
+  const membershipRef = db.doc(`users/${uid}/memberships/${orgId}`);
+
+  return batch.delete(memberRef).delete(membershipRef).commit();
+};
+
+export const deleteMembers = async (orgId, ids) => {
+  const batch = db.batch();
+
+  ids.forEach(uid => {
+    const memberRef = db.doc(`organizations/${orgId}/members/${uid}`);
+    const membershipRef = db.doc(`users/${uid}/memberships/${orgId}`);
+
+    batch.delete(memberRef).delete(membershipRef);
+  });
+
+  return batch.commit();
+};

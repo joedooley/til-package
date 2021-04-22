@@ -1,6 +1,6 @@
 import { getOrganization } from '@lib/db/service/organization';
 
-export default async function getHandler(req, res) {
+export default async function getOrgHandler(req, res) {
   if (req.method !== 'GET') {
     return res.status(501).json({
       error: {

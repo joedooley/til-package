@@ -10,8 +10,6 @@ export default async function searchUsersHandler(req, res) {
     });
   }
 
-  console.log(`req.query`, req.query);
-
   const query = req.query?.s || '';
 
   if (query === '') {

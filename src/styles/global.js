@@ -203,13 +203,32 @@ export default function GlobalCss() {
         input,
         select,
         textarea {
-          background: transparent;
+          background-color: hsla(var(--base-text), 15%, 100%);
           border: ${theme.borders.secondary};
           border-radius: ${theme.radii[2]};
           color: ${theme.colors.text};
           font-size: ${theme.fontSizes[4]};
           padding: ${theme.space[3]} 8px;
           width: 100%;
+        }
+
+        [type='checkbox'] {
+          appearance: none;
+          height: 1em;
+          width: 1em;
+
+          &:hover {
+            border-color: ${theme.colors.brand.primary};
+          }
+
+          &:checked {
+            background-color: ${theme.colors.brand.primary};
+            background-image: url(/assets/icons/checkmark.svg);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            background-size: 100% 100%;
+            border-color: transparent;
+          }
         }
 
         .react-toast-notifications__toast {

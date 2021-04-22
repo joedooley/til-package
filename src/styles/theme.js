@@ -8,6 +8,7 @@ const colors = {
     primary: 'var(--primary)',
     hover: 'var(--primary-hover)',
     focus: 'var(--primary-focus)',
+    disabled: 'rgb(36 180 126)',
   },
   error: {
     primary: 'var(--error)',

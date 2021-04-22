@@ -54,6 +54,7 @@
     "react-lorem-ipsum": "^1.4.9",
     "react-simple-wysiwyg": "^1.0.2",
     "react-table": "^7.6.3",
+    "react-tiny-popover": "^6.0.5",
     "react-toast-notifications": "git+https://github.com/pA1nD/react-toast-notifications.git",
     "swr": "^0.5.4",
     "validator": "^13.5.2",

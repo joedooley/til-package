@@ -33,7 +33,7 @@ const Wrapper = styled.div(
 const Input = styled.input(
   ({ theme }) => css`
     border-radius: ${theme.radii[2]};
-    padding-left: 34px;
+    padding: 6px 10px 6px 36px;
 
     &:focus {
       border: ${theme.borders.primary};
@@ -68,10 +68,10 @@ const Menu = styled('ul')(
 );
 
 const Item = styled('li')(
-  ({ theme, isHighlighted, notFound }) => css`
+  ({ theme, isHighlighted, notFound, isMember }) => css`
     background: ${isHighlighted ? theme.colors.black[600] : theme.colors.black[500]};
     color: ${theme.colors.text};
-    cursor: ${!notFound ? 'pointer' : 'not-allowed'};
+    cursor: ${isMember || notFound ? 'not-allowed' : 'pointer'};
     font-size: ${theme.fontSizes[3]};
     font-weight: ${theme.fontWeights.normal};
     line-height: ${theme.lineHeights.default};
@@ -81,7 +81,7 @@ const Item = styled('li')(
     width: 100%;
 
     &:hover {
-      background: ${!notFound ? theme.colors.black[600] : theme.colors.black[500]};
+      background: ${isMember || notFound ? theme.colors.black[500] : theme.colors.black[600]};
     }
 
     p {
@@ -102,7 +102,7 @@ const Item = styled('li')(
   `
 );
 
-const Typeahead = React.forwardRef((props, ref) => {
+const Typeahead = React.forwardRef(({ onChange, currentMembers, ...rest }, ref) => {
   const cancelToken = React.useRef(null);
   const [state, setState] = React.useState({ data: undefined, loading: false, error: false });
   const [inputItems, setInputItems] = React.useState([]);
@@ -120,9 +120,10 @@ const Typeahead = React.forwardRef((props, ref) => {
 
   const itemToString = React.useCallback(item => (item ? item.username : ''), []);
 
+  const currentMembersIds = currentMembers.map(member => member.uid);
+
   const {
     isOpen,
-    getLabelProps,
     getMenuProps,
     getInputProps,
     getComboboxProps,
@@ -137,46 +138,63 @@ const Typeahead = React.forwardRef((props, ref) => {
       if (!state.loading) {
         getUsers(inputValue)
           .then(response => {
-            if (inputValue.length > 0 && response.data.length === 0) {
-              setInputItems([]);
-              return setNotFound(true);
+            if (response.data.length > 0) {
+              setNotFound(false);
+              setInputItems(
+                response.data.filter(item => itemToString(item).toLowerCase().startsWith(inputValue.toLowerCase()))
+              );
+
+              return;
             }
 
-            setInputItems(
-              response.data.filter(item => itemToString(item).toLowerCase().startsWith(inputValue.toLowerCase()))
-            );
+            if (inputValue.length > 0) {
+              setNotFound(true);
+              setInputItems([]);
+            }
 
-            setNotFound(false);
+            if (inputValue.length === 0) {
+              setNotFound(false);
+              setInputItems([]);
+            }
           })
           .catch(error => setState({ loading: false, error: error.message }));
       }
     },
   });
 
+  React.useEffect(() => {
+    onChange(selectedItem);
+
+    return () => onChange(selectedItem);
+  }, [onChange, selectedItem]);
+
   return (
     <div
-      css={theme => css`
+      className={rest.className}
+      css={css`
         position: relative;
       `}
     >
-      <label {...getLabelProps()}>Search by username:</label>
       <Wrapper {...getComboboxProps()}>
         <UserIcon />
         <Input
           {...getInputProps({
             ref,
             refKey: 'ref',
-            ...props,
+            ...rest,
           })}
         />
 
         {state.loading && <Spinner />}
 
-        {selectedItem && (
+        {selectedItem && !state.loading && (
           <ToggleButton
             type="button"
             tabIndex={-1}
-            onClick={() => reset()}
+            onClick={() => {
+              reset();
+              setNotFound(false);
+            }}
             ariaLabel="Clear selection"
             variant="unstyled"
           >
@@ -186,29 +204,35 @@ const Typeahead = React.forwardRef((props, ref) => {
       </Wrapper>
 
       <Menu isOpen={isOpen} {...getMenuProps()}>
-        {notFound && (
+        {notFound && selectedItem === null && (
           <Item notFound={notFound} {...getItemProps({ index: 0, disabled: true })}>
             Could not find account. Has the user already signed up?
           </Item>
         )}
         {!isOpen
           ? null
-          : inputItems.map((item, index) => (
-              <Item
-                key={`${item?.username}${index}`}
-                {...getItemProps({
-                  item,
-                  index,
-                  isHighlighted: highlightedIndex === index,
-                })}
-              >
-                <p>{item?.username}</p>
-                <p>
-                  {item.displayName && <span>{`${item.displayName} • `}</span>}
-                  <span>Invite member</span>
-                </p>
-              </Item>
-            ))}
+          : inputItems.map((item, index) => {
+              const isMember = currentMembersIds.includes(item.uid);
+
+              return (
+                <Item
+                  isMember={isMember}
+                  key={`${item?.username}${index}`}
+                  {...getItemProps({
+                    item,
+                    index,
+                    isHighlighted: highlightedIndex === index,
+                    disabled: isMember,
+                  })}
+                >
+                  <p>{item?.username}</p>
+                  <p>
+                    {item.displayName && <span>{`${item.displayName} • `}</span>}
+                    <span>{isMember ? 'Already in this organization' : 'Invite member'}</span>
+                  </p>
+                </Item>
+              );
+            })}
       </Menu>
     </div>
   );
@@ -216,6 +240,9 @@ const Typeahead = React.forwardRef((props, ref) => {
 
 Typeahead.displayName = 'Typeahead';
 
-Typeahead.propTypes = {};
+Typeahead.propTypes = {
+  onChange: PropTypes.func,
+  currentMembers: PropTypes.array,
+};
 
 export default Typeahead;

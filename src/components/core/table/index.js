@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
-import '@reach/tabs/styles.css';
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import { useTable, useFlexLayout } from 'react-table';
+import { useTable, useFlexLayout, useRowSelect } from 'react-table';
+import IndeterminateCheckbox from './components/checkbox';
 
 const StyledTable = styled.div(
   ({ theme }) => css`
@@ -48,6 +48,7 @@ const StyledTable = styled.div(
       }
 
       .td {
+        align-self: center;
         color: ${theme.colors.black[750]};
         font-size: ${theme.fontSizes[3]};
         margin: 0;
@@ -74,15 +75,41 @@ const StyledTable = styled.div(
   `
 );
 
-export default function Table({ columns, data, options, ...rest }) {
-  const { getTableProps, headerGroups, rows, prepareRow } = useTable(
+export default function Table({ columns, data, options = {}, onRowSelect, ...rest }) {
+  const {
+    getTableProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    state: { selectedRowIds },
+  } = useTable(
     {
       columns,
       data,
       ...options,
     },
-    useFlexLayout
+    useFlexLayout,
+    useRowSelect,
+    hooks => {
+      hooks.visibleColumns.push(columns => [
+        {
+          id: 'selection',
+          width: 20,
+          Header: ({ getToggleAllRowsSelectedProps }) => <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />,
+          Cell: ({ row }) => <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />,
+        },
+        ...columns,
+      ]);
+    }
   );
+
+  React.useEffect(() => {
+    if (typeof onRowSelect === 'function') {
+      onRowSelect(Object.keys(selectedRowIds));
+
+      return () => onRowSelect(Object.keys(selectedRowIds));
+    }
+  }, [onRowSelect, selectedRowIds]);
 
   return (
     <StyledTable className={rest.className}>
@@ -116,7 +143,7 @@ export default function Table({ columns, data, options, ...rest }) {
           })}
         </div>
 
-        {data?.length && <div className="tfoot">{`${data.length} user`}</div>}
+        {data?.length && <div className="tfoot">{`Members: ${data.length}`}</div>}
       </div>
     </StyledTable>
   );
@@ -126,4 +153,5 @@ Table.propTypes = {
   columns: PropTypes.array,
   data: PropTypes.array,
   options: PropTypes.object,
+  onRowSelect: PropTypes.func,
 };

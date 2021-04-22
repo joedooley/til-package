@@ -1,9 +1,10 @@
+import '@reach/dialog/styles.css';
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { motion } from 'framer-motion';
 import { DialogOverlay, DialogContent } from '@reach/dialog';
-import '@reach/dialog/styles.css';
+import ClearIcon from 'public/assets/icons/clear-icon.svg';
 import CloseIcon from 'public/assets/icons/close-icon.svg';
 import { Button } from '@components/core/html';
 import VisuallyHidden from '@components/core/visually-hidden';
@@ -21,7 +22,7 @@ const Dialog = React.forwardRef(
         onDismiss={onClose}
         initialFocusRef={ref}
         css={css`
-          background: transparent;
+          background: rgba(0, 0, 0, 0.75);
         `}
       >
         <motion.div initial="hidden" animate="visible" exit="exit" transition={{ duration: 0.5 }} variants={variants}>
@@ -31,7 +32,8 @@ const Dialog = React.forwardRef(
               background-color: ${theme.colors.black[400]};
               border-radius: ${theme.radii[2]};
               box-shadow: ${theme.shadows.modal};
-              margin: auto;
+              /* margin: 15vh auto; */
+              margin: 0 auto;
               min-height: ${height ?? 'auto'};
               padding: 20px;
               position: relative;

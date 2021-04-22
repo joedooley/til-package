@@ -2,16 +2,19 @@ import { db } from '@lib/firebase/firebase-admin';
 import { getTimestamps } from '@util/object';
 
 export async function getCollection(name) {
-  try {
-    const snapshot = await db.collection(name).get();
-    const entries = [];
+  const { docs } = await db.collection(name).get();
 
-    snapshot.forEach(doc => {
-      entries.push({ id: doc.id, ...getTimestamps(doc), ...doc.data() });
-    });
+  const entries = docs.map(doc => {
+    const data = doc.data();
 
-    return { entries };
-  } catch (error) {
-    return { error };
-  }
+    return {
+      data: {
+        id: doc.id,
+        ...data,
+        ...getTimestamps(doc, true),
+      },
+    };
+  });
+
+  return { entries };
 }

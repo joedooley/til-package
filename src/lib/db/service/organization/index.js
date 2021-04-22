@@ -5,24 +5,21 @@ import { membership, updateMembership } from '@lib/db/models/organization/member
 import { member } from '@lib/db/models/organization/member';
 
 export async function getOrganization(id) {
-  const entries = [];
+  const { docs } = await db.collection('organizations').where('slug', '==', id).get();
 
-  try {
-    const querySnapshot = await db.collection('organizations').where('slug', '==', id).get();
-
-    querySnapshot.forEach(doc => {
-      entries.push({ id: doc.id, ...getTimestamps(doc, true), ...doc.data() });
-    });
+  const orgs = docs.map(doc => {
+    const data = doc.data();
 
     return {
       data: {
-        ...entries[0],
+        id: doc.id,
+        ...data,
+        ...getTimestamps(doc, true),
       },
     };
-  } catch (error) {
-    console.error('Transaction failure:', JSON.stringify(error));
-    throw error;
-  }
+  });
+
+  return orgs[0];
 }
 
 export const createOrganization = async (data, uid) => {
@@ -38,15 +35,15 @@ export const createOrganization = async (data, uid) => {
     const newOrgId = newOrgRef.id;
     const org = organization(newOrgId, data, user);
 
-    batch.create(newOrgRef, org);
-
     const newMemberRef = db.doc(`organizations/${newOrgId}/members/${uid}`);
-    batch.create(newMemberRef, member(org, user));
-
     const newMembershipRef = db.doc(`users/${uid}/memberships/${newOrgId}`);
-    batch.create(newMembershipRef, membership(org, user));
 
-    return batch.commit().then(() => org);
+    return batch
+      .create(newOrgRef, org)
+      .create(newMemberRef, member(org, user))
+      .create(newMembershipRef, membership(org, user))
+      .commit()
+      .then(() => org);
   } catch (error) {
     console.error(`createOrganization error`, JSON.stringify(error));
 
@@ -80,31 +77,22 @@ export const deleteOrganization = async (uid, id) => {
   const memberRef = db.doc(`organizations/${id}/members/${uid}`);
   const membershipRef = db.doc(`users/${uid}/memberships/${id}`);
 
-  batch.delete(orgRef).delete(memberRef).delete(membershipRef);
-
-  return batch.commit();
+  return batch.delete(orgRef).delete(memberRef).delete(membershipRef).commit();
 };
 
 export async function getOrgMembers(id) {
-  const membersRef = db.collection(`organizations/${id}/members`);
+  const { docs } = await db.collection(`organizations/${id}/members`).get();
 
-  try {
-    const snapshot = await membersRef.get();
-    const entries = [];
+  const entries = docs.map(doc => {
+    const member = doc.data();
 
-    snapshot.forEach(doc => {
-      const member = doc.data();
+    return {
+      uid: member.uid,
+      name: member.displayName,
+      role: member.role,
+      ...getTimestamps(doc, true),
+    };
+  });
 
-      entries.push({
-        name: member.displayName,
-        role: member.role,
-        since: member.since.toDate(),
-        ...getTimestamps(doc, true),
-      });
-    });
-
-    return { entries };
-  } catch (error) {
-    return { error };
-  }
+  return { entries };
 }
