@@ -6,16 +6,6 @@ module.exports = {
   productionBrowserSourceMaps: true,
   experimental: { optimizeFonts: true },
 
-  async redirects() {
-    return [
-      {
-        source: '/dashboard',
-        destination: '/dashboard/projects',
-        permanent: true,
-      },
-    ];
-  },
-
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
